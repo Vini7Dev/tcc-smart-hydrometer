@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import { CreateAdminController } from '@modules/users/useCases/CreateAdminController'
+import { CreateAdminController } from '@modules/users/useCases/createUser/CreateAdminController'
 
 const createAdminController = new CreateAdminController()
 

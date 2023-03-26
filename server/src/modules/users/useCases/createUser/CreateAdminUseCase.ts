@@ -1,9 +1,9 @@
 import { injectable, inject } from 'tsyringe'
 
 import { ADMIN_ACCOUNT_TYPE } from '@utils/constants'
-import { IUsersRepository } from '../repositories/IUsersRepository'
 import { IHashProvider } from '@shared/containers/providers/HashProvider/models/IHashProvider'
 import { AppError } from '@shared/errors/AppError'
+import { IUsersRepository } from '@modules/users/repositories/IUsersRepository'
 
 interface IUseCaseProps {
   name: string
