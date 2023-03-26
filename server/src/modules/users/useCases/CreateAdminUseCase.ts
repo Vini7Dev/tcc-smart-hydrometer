@@ -3,6 +3,7 @@ import { injectable, inject } from 'tsyringe'
 import { ADMIN_ACCOUNT_TYPE } from '@utils/constants'
 import { IUsersRepository } from '../repositories/IUsersRepository'
 import { IHashProvider } from '@shared/containers/providers/HashProvider/models/IHashProvider'
+import { AppError } from '@shared/errors/AppError'
 
 interface IUseCaseProps {
   name: string
@@ -10,6 +11,8 @@ interface IUseCaseProps {
   password: string
   avatar_file?: string
 }
+
+const EMAIL_ALREADY_EXISTS_ERROR = 'Email already exists!'
 
 @injectable()
 export class CreateAdminUseCase {
@@ -30,7 +33,7 @@ export class CreateAdminUseCase {
     const userWithSameEmail = await this.usersRepository.findByEmail(email)
 
     if (userWithSameEmail) {
-      throw new Error('Email already exists!')
+      throw new AppError(EMAIL_ALREADY_EXISTS_ERROR)
     }
 
     const passwordHash = await this.hashProvider.generateHash(password)

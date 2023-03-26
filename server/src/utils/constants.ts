@@ -1,2 +1,10 @@
 // Database
 export const ADMIN_ACCOUNT_TYPE = 'ADMIN'
+
+// HTTP status code
+export const HTTP_STATUS_CODE = {
+  SUCCESS_DEFAULT: 200,
+  CREATED: 201,
+  ERROR_DEFAULT: 400,
+  INTERNAL_SERVER_ERROR: 500,
+}

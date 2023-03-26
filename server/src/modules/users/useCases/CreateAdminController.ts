@@ -1,3 +1,4 @@
+import { HTTP_STATUS_CODE } from '@utils/constants'
 import { Request, Response } from 'express'
 import { container } from 'tsyringe'
 
@@ -15,6 +16,6 @@ export class CreateAdminController {
       password,
     })
 
-    return response.json(useCaseResponse).status(201)
+    return response.status(HTTP_STATUS_CODE.CREATED).json(useCaseResponse)
   }
 }
