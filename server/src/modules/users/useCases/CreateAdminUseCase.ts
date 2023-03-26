@@ -2,6 +2,7 @@ import { injectable, inject } from 'tsyringe'
 
 import { ADMIN_ACCOUNT_TYPE } from '@utils/constants'
 import { IUsersRepository } from '../repositories/IUsersRepository'
+import { IHashProvider } from '@shared/containers/providers/HashProvider/models/IHashProvider'
 
 interface IUseCaseProps {
   name: string
@@ -14,7 +15,10 @@ interface IUseCaseProps {
 export class CreateAdminUseCase {
   constructor (
     @inject('UsersRepository')
-    private usersRepository: IUsersRepository
+    private usersRepository: IUsersRepository,
+
+    @inject('HashProvider')
+    private hashProvider: IHashProvider,
   ) {}
 
   public async execute({
@@ -23,10 +27,18 @@ export class CreateAdminUseCase {
     password,
     avatar_file,
   }: IUseCaseProps) {
+    const userWithSameEmail = await this.usersRepository.findByEmail(email)
+
+    if (userWithSameEmail) {
+      throw new Error('Email already exists!')
+    }
+
+    const passwordHash = await this.hashProvider.generateHash(password)
+
     const createdUser = await this.usersRepository.create({
       name,
       email,
-      password,
+      password: passwordHash,
       avatar_file,
       account_type: ADMIN_ACCOUNT_TYPE
     })

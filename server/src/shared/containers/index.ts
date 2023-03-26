@@ -1,3 +1,5 @@
+import './providers'
+
 import { container } from 'tsyringe'
 
 import { UsersRepository } from '@modules/users/infra/prisma/repositories/UsersRepository'
