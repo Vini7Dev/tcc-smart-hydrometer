@@ -21,6 +21,6 @@
     "schema": "src/shared/infra/prisma/schema.prisma"
   },
   "scripts": {
-    "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/shared/infra/http/sever.ts"
+    "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/shared/infra/http/server.ts"
   }
 }
