@@ -25,10 +25,10 @@ server.use(
     _next: NextFunction,
   ): Response => {
     if (error instanceof AppError) {
-      return response
-        .status(error.code)
-        .json({ error: error.message });
+      return response.status(error.code).json({ error: error.message });
     }
+
+    console.error(error)
 
     return response
       .status(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR)
