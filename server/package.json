@@ -10,7 +10,13 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "@prisma/client": "^4.11.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "prisma": "^4.11.0"
+  },
+  "prisma": {
+    "schema": "src/shared/infra/prisma/schema.prisma"
   },
   "scripts": {
     "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/shared/infra/http/sever.ts"

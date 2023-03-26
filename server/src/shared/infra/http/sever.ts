@@ -1,6 +1,8 @@
+import 'dotenv/config'
+
 import express from 'express'
 
-const SERVER_PORT = 3333
+const SERVER_PORT = process.env.SERVER_PORT ?? 3333
 
 const server = express()
 
