@@ -12,7 +12,7 @@ model Users {
   name          String
   email         String
   password      String
-  avatar_file   String
+  avatar_file   String?
   account_type  AccountType @default(CUSTOMER)
   created_at    DateTime    @default(now())
   updated_at    DateTime    @default(now())
