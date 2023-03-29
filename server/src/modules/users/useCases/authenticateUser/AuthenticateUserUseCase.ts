@@ -40,7 +40,7 @@ export class AuthenticateUserUseCase {
       throw new AppError(INVALID_CREDENTIALS_ERROR, HTTP_STATUS_CODE.UNAUTHORIZED)
     }
 
-    const { token: { secret, expiresIn } } = authConfig
+    const { secret, expiresIn } = authConfig.token
 
     const token = sign({}, secret, {
       subject: findedUser.id,

@@ -2,6 +2,7 @@ import 'dotenv/config'
 
 import { PrismaClient } from '@prisma/client'
 import { BCryptHashProvider } from '@shared/containers/providers/HashProvider/implementations/BCryptHashProvider'
+import { ADMIN_ACCOUNT_TYPE } from '@utils/constants'
 
 const prisma = new PrismaClient()
 
@@ -33,6 +34,7 @@ export const createAdmin = async () => {
       name: SEED_ADMIN_NAME,
       email: SEED_ADMIN_EMAIL,
       password: passwordHash,
+      account_type: ADMIN_ACCOUNT_TYPE,
     }
   })
 
