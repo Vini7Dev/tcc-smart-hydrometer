@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { celebrate, Segments, Joi } from 'celebrate'
 
-import { CreateAdminController } from '@modules/users/useCases/createUser/CreateAdminController'
+import { CreateAdminController } from '@modules/users/useCases/createAdminUser/CreateAdminController'
 
 const createAdminController = new CreateAdminController()
 
