@@ -1,5 +1,6 @@
 // Database
 export const ADMIN_ACCOUNT_TYPE = 'ADMIN'
+export const CUSTOMER_ACCOUNT_TYPE = 'CUSTOMER'
 
 // HTTP status code
 export const HTTP_STATUS_CODE = {

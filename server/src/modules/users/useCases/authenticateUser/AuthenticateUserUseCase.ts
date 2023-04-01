@@ -51,6 +51,7 @@ export class AuthenticateUserUseCase {
       user: {
         name: findedUser.name,
         email: findedUser.email,
+        account_type: findedUser.account_type
       },
       token
     }
