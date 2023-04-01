@@ -10,6 +10,7 @@ const PASSWORD_ATTRIBUTE_TO_REMOVE = 'password'
 export class CreateAdminController {
   public async handle(request: Request, response: Response) {
     const { name, email, password } = request.body
+    const avatarFileName = request.file?.filename
 
     const createAdminUseCase = container.resolve(CreateAdminUseCase)
 
@@ -17,6 +18,7 @@ export class CreateAdminController {
       name,
       email,
       password,
+      avatarFileName,
     })
 
     const createdAdminWithoutPassword = removeObjectAttributes({

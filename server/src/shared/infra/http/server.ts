@@ -7,13 +7,18 @@ import express, { NextFunction, Request, Response } from 'express'
 
 import { appRoutes } from './routes/index.routes'
 import { AppError } from '@shared/errors/AppError'
+import { uploadConfig } from '@configs/upload'
 import { HTTP_STATUS_CODE } from '@utils/constants'
 
 const SERVER_PORT = process.env.SERVER_PORT ?? 3333
 
+const { uploadsFolder } = uploadConfig
+
 const server = express()
 
 server.use(express.json())
+
+server.use('/files', express.static(uploadsFolder))
 
 server.use(appRoutes)
 

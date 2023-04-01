@@ -10,6 +10,7 @@ const PASSWORD_ATTRIBUTE_TO_REMOVE = 'password'
 export class CreateCustomerController {
   public async handle(request: Request, response: Response) {
     const { name, email, password } = request.body
+    const avatarFileName = request.file?.filename
 
     const createCustomerUseCase = container.resolve(CreateCustomerUseCase)
 
@@ -17,6 +18,7 @@ export class CreateCustomerController {
       name,
       email,
       password,
+      avatarFileName,
     })
 
     const createdCustomerWithoutPassword = removeObjectAttributes({
