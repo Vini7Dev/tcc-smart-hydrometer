@@ -2,7 +2,7 @@
 temp/
 
 # Uploads folder
-uploads/*
+uploads/
 
 # Logs
 logs
