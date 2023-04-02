@@ -8,6 +8,17 @@ const LIST_FIRST_PAGE = 0
 const LIST_DEFAULT_PER_PAGE = 5
 
 export class NewsRepository extends AppRepository implements INewsRepository {
+  public async findById(id: string): Promise<News | null> {
+    const findedNews = await this.client.news.findFirst({
+      where: { id },
+      include: {
+        news_images: true
+      }
+    })
+
+    return findedNews
+  }
+
   public async list({
     page = LIST_FIRST_PAGE,
     perPage = LIST_DEFAULT_PER_PAGE,
