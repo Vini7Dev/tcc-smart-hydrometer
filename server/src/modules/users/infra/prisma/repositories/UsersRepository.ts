@@ -1,5 +1,6 @@
 import { ICreateUserDTO } from '@modules/users/dtos/ICreateUserDTO'
 import { IListUsersDTO } from '@modules/users/dtos/IListUsersDTO'
+import { IUpdateUserDTO } from '@modules/users/dtos/IUpdateUserDTO'
 import { IUsersRepository } from '@modules/users/repositories/IUsersRepository'
 import { AppRepository } from '@shared/infra/prisma/repositories/AppRepository'
 import { buildRepositoryFiltersObject } from '@utils/buildRepositoryFiltersObject'
@@ -61,5 +62,26 @@ export class UsersRepository extends AppRepository implements IUsersRepository {
     })
 
     return createdUser
+  }
+
+  public async update({
+    id,
+    name,
+    email,
+    password,
+    avatar_file,
+  }: IUpdateUserDTO): Promise<User> {
+    const updatedUser = await this.client.users.update({
+      data: {
+        name,
+        email,
+        password,
+        avatar_file,
+        updated_at: new Date()
+      },
+      where: { id }
+    })
+
+    return updatedUser
   }
 }

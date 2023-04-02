@@ -4,6 +4,14 @@ import { AppRepository } from '@shared/infra/prisma/repositories/AppRepository'
 import { ForgotPasswordToken } from '../entities/ForgotPasswordToken'
 
 export class ForgotPasswordTokensRepository extends AppRepository implements IForgotPasswordTokensRepository {
+  public async findById(id: string): Promise<ForgotPasswordToken | null> {
+    const findedForgotPasswordToken = await this.client.forgotPasswordTokens.findFirst({
+      where: { id }
+    })
+
+    return findedForgotPasswordToken
+  }
+
   public async findByUserId(userId: string): Promise<ForgotPasswordToken | null> {
     const findedForgotPasswordToken = await this.client.forgotPasswordTokens.findFirst({
       where: {
