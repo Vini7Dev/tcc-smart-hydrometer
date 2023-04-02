@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import { ForgotPasswordController } from '@modules/users/useCases/forgotPasswordUseCase/ForgotPasswordController'
+import { ForgotPasswordController } from '@modules/users/useCases/forgotPassword/ForgotPasswordController'
 
 const forgotPasswordController = new ForgotPasswordController()
 
