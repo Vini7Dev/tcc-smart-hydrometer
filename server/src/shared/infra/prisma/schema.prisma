@@ -7,6 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum AccountType {
+  CUSTOMER
+  ADMIN
+}
+
 model Users {
   id            String      @id @default(uuid())
   name          String
@@ -17,10 +22,14 @@ model Users {
   created_at    DateTime    @default(now())
   updated_at    DateTime    @default(now())
 
+  forgotPasswordToken  ForgotPasswordTokens?
+
   @@map("users")
 }
 
-enum AccountType {
-  CUSTOMER
-  ADMIN
+model ForgotPasswordTokens {
+  id          String    @id @default(uuid())
+  user_id     String    @unique
+  user        Users     @relation(fields: [user_id], references: [id])
+  created_at  DateTime  @default(now())
 }

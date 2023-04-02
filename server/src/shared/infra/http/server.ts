@@ -30,16 +30,16 @@ server.use(
     _next: NextFunction,
   ): Response => {
     if (error instanceof AppError) {
-      return response.status(error.code).json({ error: error.message });
+      return response.status(error.code).json({ error: error.message })
     }
 
     console.error(error)
 
     return response
       .status(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR)
-      .json({ error: `Internal Server Error: ${error.message}` });
+      .json({ error: `Internal Server Error: ${error.message}` })
   },
-);
+)
 
 server.listen(SERVER_PORT, () => {
   console.log(`===> Server started on port ${SERVER_PORT}`)
