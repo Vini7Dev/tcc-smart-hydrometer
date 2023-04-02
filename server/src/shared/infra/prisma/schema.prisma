@@ -33,3 +33,21 @@ model ForgotPasswordTokens {
   user        Users     @relation(fields: [user_id], references: [id])
   created_at  DateTime  @default(now())
 }
+
+model News {
+  id          String        @id @default(uuid())
+  title       String
+  text        String
+  news_images NewsImages[]
+
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @default(now())
+}
+
+model NewsImages {
+  id          String @id @default(uuid())
+  news_id     String
+  news        News @relation(fields: [news_id], references: [id])
+  image_file  String
+  created_at  DateTime  @default(now())
+}

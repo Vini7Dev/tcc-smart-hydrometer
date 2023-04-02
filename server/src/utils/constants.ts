@@ -2,6 +2,7 @@
 export const ADMIN_ACCOUNT_TYPE = 'ADMIN'
 export const CUSTOMER_ACCOUNT_TYPE = 'CUSTOMER'
 export const AVATAR_FILE_UPLOAD_FIELD = 'avatar_file'
+export const NEWS_IMAGE_FILE_UPLOAD_FIELD = 'image_file'
 
 // HTTP status code
 export const HTTP_STATUS_CODE = {
