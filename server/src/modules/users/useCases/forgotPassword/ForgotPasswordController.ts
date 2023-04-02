@@ -13,7 +13,7 @@ export class ForgotPasswordController {
     const forgotPasswordResponse = await forgotPasswordUseCase.execute({ email })
 
     return response
-      .status(HTTP_STATUS_CODE.SUCCESS_DEFAULT)
+      .status(HTTP_STATUS_CODE.CREATED)
       .json(forgotPasswordResponse)
   }
 }

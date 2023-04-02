@@ -6,7 +6,7 @@ import { AppRepository } from '@shared/infra/prisma/repositories/AppRepository'
 import { buildRepositoryFiltersObject } from '@utils/buildRepositoryFiltersObject'
 import { User } from '../entities/User'
 
-const LIST_FIRST_PAGE = 1
+const LIST_FIRST_PAGE = 0
 const LIST_DEFAULT_PER_PAGE = 50
 
 export class UsersRepository extends AppRepository implements IUsersRepository {

@@ -24,7 +24,7 @@ export class ResetPasswordController {
     })
 
     return response
-      .status(HTTP_STATUS_CODE.SUCCESS_DEFAULT)
+      .status(HTTP_STATUS_CODE.CREATED)
       .json(updatedUserWithoutPassword)
   }
 }
