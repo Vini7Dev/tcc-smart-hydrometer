@@ -12,17 +12,30 @@ enum AccountType {
   ADMIN
 }
 
-model Users {
-  id            String      @id @default(uuid())
-  name          String
-  email         String
-  password      String
-  avatar_file   String?
-  account_type  AccountType @default(CUSTOMER)
-  created_at    DateTime    @default(now())
-  updated_at    DateTime    @default(now())
+enum ConsumptionCategory {
+  COMMERCIAL_SOCIAL_ASSISTANCE
+  COMMERCIAL_NORMAL
+  INDUSTRIAL_NORMAL
+  PUBLIC_WITH_PROGRAM_AGREEMENT
+  PUBLIC_WITH_CONTRACT_PURE
+  PUBLIC_NORMAL
+  RESIDENTIAL_NORMAL
+  RESIDENTIAL_SOCIAL
+  RESIDENTIAL_VULNERABLE_NORMAL
+}
 
-  forgotPasswordToken  ForgotPasswordTokens?
+model Users {
+  id                  String      @id @default(uuid())
+  name                String
+  email               String
+  password            String
+  avatar_file         String?
+  account_type        AccountType @default(CUSTOMER)
+  created_at          DateTime    @default(now())
+  updated_at          DateTime    @default(now())
+
+  hydrometers         Hydrometers[]
+  forgotPasswordToken ForgotPasswordTokens?
 
   @@map("users")
 }
@@ -40,20 +53,53 @@ model News {
   id          String        @id @default(uuid())
   title       String
   text        String
-  news_images NewsImages[]
-
   created_at  DateTime      @default(now())
   updated_at  DateTime      @default(now())
+
+  news_images NewsImages[]
 
   @@map("news")
 }
 
 model NewsImages {
-  id          String @id @default(uuid())
+  id          String    @id @default(uuid())
   news_id     String
-  news        News @relation(fields: [news_id], references: [id])
   image_file  String
   created_at  DateTime  @default(now())
 
+  news        News @relation(fields: [news_id], references: [id])
+
   @@map("newsImages")
+}
+
+model Hydrometers {
+  id                    String    @id @default(uuid())
+  address_id            String?
+  user_id               String?
+  password              String
+  name                  String
+  consumption_category  ConsumptionCategory
+  created_at            DateTime  @default(now())
+  updated_at            DateTime  @default(now())
+
+  address               Adresses? @relation(fields: [address_id], references: [id])
+  user                  Users?    @relation(fields: [user_id], references: [id])
+
+  @@map("hydrometers")
+}
+
+model Adresses {
+  id            String    @id @default(uuid())
+  postal_code   String
+  street        String
+  number        String?
+  neighborhood  String
+  city          String
+  state         String
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @default(now())
+
+  hydrometers   Hydrometers[]
+
+  @@map("adresses")
 }
