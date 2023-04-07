@@ -5,6 +5,7 @@ import { authenticateRoutes } from '@modules/users/infra/http/routes/authenticat
 import { customerRoutes } from '@modules/users/infra/http/routes/customers.routes'
 import { passwordRoutes } from '@modules/users/infra/http/routes/password.routes'
 import { newsRoutes } from '@modules/news/infra/http/routes/news.routes'
+import { hydrometersRoutes } from '@modules/hydrometers/infra/http/routes/hydrometers.routes'
 
 export const appRoutes = Router()
 
@@ -13,3 +14,4 @@ appRoutes.use('/customers', customerRoutes)
 appRoutes.use('/authenticate', authenticateRoutes)
 appRoutes.use('/password', passwordRoutes)
 appRoutes.use('/news', newsRoutes)
+appRoutes.use('/hydrometers', hydrometersRoutes)
