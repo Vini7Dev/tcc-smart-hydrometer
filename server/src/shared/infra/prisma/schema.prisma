@@ -32,6 +32,8 @@ model ForgotPasswordTokens {
   user_id     String    @unique
   user        Users     @relation(fields: [user_id], references: [id])
   created_at  DateTime  @default(now())
+
+  @@map("forgotPasswordTokens")
 }
 
 model News {
@@ -42,6 +44,8 @@ model News {
 
   created_at  DateTime      @default(now())
   updated_at  DateTime      @default(now())
+
+  @@map("news")
 }
 
 model NewsImages {
@@ -50,4 +54,6 @@ model NewsImages {
   news        News @relation(fields: [news_id], references: [id])
   image_file  String
   created_at  DateTime  @default(now())
+
+  @@map("newsImages")
 }
