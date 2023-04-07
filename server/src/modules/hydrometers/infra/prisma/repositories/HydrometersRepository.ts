@@ -9,6 +9,14 @@ const LIST_FIRST_PAGE = 0
 const LIST_DEFAULT_PER_PAGE = 10
 
 export class HydrometersRepository extends AppRepository implements IHydrometersRepository {
+  public async findById(id: string): Promise<Hydrometer | null> {
+    const findedHydrometer = await this.client.hydrometers.findFirst({
+      where: { id }
+    })
+
+    return findedHydrometer
+  }
+
   public async findByName(name: string): Promise<Hydrometer | null> {
     const findedHydrometer = await this.client.hydrometers.findFirst({
       where: { name }

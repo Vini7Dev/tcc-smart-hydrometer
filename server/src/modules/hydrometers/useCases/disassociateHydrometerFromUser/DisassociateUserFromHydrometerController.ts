@@ -3,25 +3,21 @@ import { container } from 'tsyringe'
 
 import { HTTP_STATUS_CODE } from '@utils/constants'
 import { removeObjectAttributes } from '@utils/removeObjectAttributes'
-import { AssociateHydrometerToUserUseCase } from './AssociateHydrometerToUserUseCase'
+import { DisassociateUserFromHydrometerUseCase } from './DisassociateUserFromHydrometerUseCase'
 
 const PASSWORD_ATTRIBUTE_TO_REMOVE = 'password'
 
-export class AssociateHydrometerToUserController {
+export class DisassociateUserFromHydrometerController {
   public async handle(request: Request, response: Response) {
     const { id: user_id } = request.user
 
-    const {
-      hydrometer_name,
-      hydrometer_password,
-    } = request.body
+    const { id: hydrometer_id } = request.params
 
-    const associateHydrometerToUserUseCase = container.resolve(AssociateHydrometerToUserUseCase)
+    const disassociateHydrometerFromUserUseCase = container.resolve(DisassociateUserFromHydrometerUseCase)
 
-    const updatedHydrometer = await associateHydrometerToUserUseCase.execute({
+    const updatedHydrometer = await disassociateHydrometerFromUserUseCase.execute({
       user_id,
-      hydrometer_name,
-      hydrometer_password,
+      hydrometer_id,
     })
 
     const updatedHydrometerWithoutPassword = removeObjectAttributes({
