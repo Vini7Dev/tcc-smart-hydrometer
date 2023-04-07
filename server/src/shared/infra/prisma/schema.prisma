@@ -13,6 +13,7 @@ enum AccountType {
 }
 
 enum ConsumptionCategory {
+  EMPTY
   COMMERCIAL_SOCIAL_ASSISTANCE
   COMMERCIAL_NORMAL
   INDUSTRIAL_NORMAL
