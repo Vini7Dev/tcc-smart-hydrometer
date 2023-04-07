@@ -12,7 +12,7 @@ interface IUseCaseProps {
 }
 
 const INVALID_TOKEN_ERROR = 'Invalid forgot password token!'
-const USER_NOT_FOUND = 'User not found!'
+const USER_NOT_FOUND_ERROR = 'User not found!'
 
 @injectable()
 export class ResetPasswordUseCase {
@@ -39,7 +39,7 @@ export class ResetPasswordUseCase {
     )
 
     if (!userToResetPassword) {
-      throw new AppError(USER_NOT_FOUND, HTTP_STATUS_CODE.NOT_FOUND)
+      throw new AppError(USER_NOT_FOUND_ERROR, HTTP_STATUS_CODE.NOT_FOUND)
     }
 
     const passwordHash = await this.hashProvider.generateHash(password)
