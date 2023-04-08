@@ -11,9 +11,11 @@ export class AssociateHydrometerToUserController {
   public async handle(request: Request, response: Response) {
     const { id: user_id } = request.user
 
+    const { id: hydrometer_id } = request.params
+
     const {
-      hydrometer_name,
-      hydrometer_password,
+      name,
+      password,
       consumption_category,
       address,
     } = request.body
@@ -21,9 +23,10 @@ export class AssociateHydrometerToUserController {
     const associateHydrometerToUserUseCase = container.resolve(AssociateHydrometerToUserUseCase)
 
     const updatedHydrometer = await associateHydrometerToUserUseCase.execute({
+      id: Number(hydrometer_id),
       user_id,
-      hydrometer_name,
-      hydrometer_password,
+      name,
+      password,
       consumption_category,
       address,
     })

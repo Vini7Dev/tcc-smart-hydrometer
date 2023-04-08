@@ -3,7 +3,7 @@ import { ConsumptionCategory } from '@prisma/client'
 import { Address } from './Address'
 
 export class Hydrometer {
-  public id: string
+  public id: number
 
   public user_id: string | null
 

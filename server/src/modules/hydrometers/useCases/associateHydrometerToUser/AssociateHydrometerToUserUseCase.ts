@@ -18,9 +18,10 @@ type ConsumptionCategory = 'EMPTY'
   | 'RESIDENTIAL_VULNERABLE_NORMAL'
 
 interface IUseCaseProps {
+  id: number
   user_id: string
-  hydrometer_name: string
-  hydrometer_password: string
+  name: string
+  password: string
   consumption_category?: ConsumptionCategory
   address?: {
     postal_code: string
@@ -50,9 +51,10 @@ export class AssociateHydrometerToUserUseCase {
   ) {}
 
   public async execute({
+    id,
     user_id,
-    hydrometer_name,
-    hydrometer_password,
+    name,
+    password,
     consumption_category,
     address,
   }: IUseCaseProps) {
@@ -62,9 +64,7 @@ export class AssociateHydrometerToUserUseCase {
       throw new AppError(USER_NOT_FOUND_ERROR, HTTP_STATUS_CODE.NOT_FOUND)
     }
 
-    const hydrometerToAssociate = await this.hydrometersRepository.findByName(
-      hydrometer_name
-    )
+    const hydrometerToAssociate = await this.hydrometersRepository.findById(id)
 
     if (!hydrometerToAssociate) {
       throw new AppError(INVALID_CREDENTIALS_ERROR, HTTP_STATUS_CODE.UNAUTHORIZED)
@@ -75,7 +75,7 @@ export class AssociateHydrometerToUserUseCase {
     }
 
     const hydrometerPasswordMatch = await this.hashProvider.compareHash(
-      hydrometer_password,
+      password,
       hydrometerToAssociate.password
     )
 
@@ -86,6 +86,7 @@ export class AssociateHydrometerToUserUseCase {
     const updatedHydrometer = await this.hydrometersRepository.update({
       id: hydrometerToAssociate.id,
       user_id,
+      name: name,
       consumption_category,
       address,
     })

@@ -74,7 +74,7 @@ model NewsImages {
 }
 
 model Hydrometers {
-  id                    String    @id @default(uuid())
+  id                    Int       @id @default(autoincrement())
   address_id            String?
   user_id               String?
   password              String

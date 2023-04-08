@@ -14,7 +14,7 @@ export const userHydrometers = Router()
 userHydrometers.get('/', ensureAuthenticated, listUserHydrometersController.handle)
 
 userHydrometers.patch(
-  '/',
+  '/:id',
   ensureAuthenticated,
   associateHydrometerToUserController.handle
 )

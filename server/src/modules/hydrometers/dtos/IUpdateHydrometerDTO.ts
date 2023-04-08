@@ -20,7 +20,7 @@ interface ICreateHydrometerAddressDTO {
 }
 
 export interface IUpdateHydrometerDTO {
-  id: string
+  id: number
   user_id?: string
   name?: string
   password?: string

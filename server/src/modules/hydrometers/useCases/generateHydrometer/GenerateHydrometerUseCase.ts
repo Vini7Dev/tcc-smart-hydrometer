@@ -4,9 +4,8 @@ import { inject, injectable } from 'tsyringe'
 import { IHydrometersRepository } from '@modules/hydrometers/repositories/IHydrometersRepository';
 import { IHashProvider } from '@shared/containers/providers/HashProvider/models/IHashProvider';
 
-const DEFAULT_CONSUMPTION_CATEGORY = 'EMPTY'
 const DEFAULT_PRE_NAME_STRING = 'HIDRÔMETRO'
-const NAME_CRYPTO_RANDOM_LENGTH = 3
+const DEFAULT_CONSUMPTION_CATEGORY = 'EMPTY'
 const PASSWORD_CRYPTO_RANDOM_LENGTH = 5
 const HEX_FORMAT = 'hex'
 
@@ -21,13 +20,6 @@ export class GenerateHydrometerUseCase {
   ) {}
 
   public async execute() {
-    const nameRandom = crypto
-      .randomBytes(NAME_CRYPTO_RANDOM_LENGTH)
-      .toString(HEX_FORMAT)
-      .toUpperCase()
-
-    const nameRandomComplete = `${DEFAULT_PRE_NAME_STRING}-${nameRandom}`
-
     const passwordRandom = crypto
       .randomBytes(PASSWORD_CRYPTO_RANDOM_LENGTH)
       .toString(HEX_FORMAT)
@@ -36,14 +28,13 @@ export class GenerateHydrometerUseCase {
     const passwordRandomHash = await this.hashProvider.generateHash(passwordRandom)
 
     const createdHydrometer = await this.hydrometersRepository.create({
-      name: nameRandomComplete,
+      name: DEFAULT_PRE_NAME_STRING,
       password: passwordRandomHash,
       consumption_category: DEFAULT_CONSUMPTION_CATEGORY,
     })
 
     return {
       id: createdHydrometer.id,
-      name: nameRandomComplete,
       password: passwordRandom,
     }
   }
