@@ -21,7 +21,7 @@ interface ICreateHydrometerAddressDTO {
 
 export interface IUpdateHydrometerDTO {
   id: number
-  user_id?: string
+  user_id: string | null
   name?: string
   password?: string
   consumption_category?: ConsumptionCategory

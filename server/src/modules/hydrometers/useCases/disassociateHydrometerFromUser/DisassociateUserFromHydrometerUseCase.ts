@@ -7,7 +7,7 @@ import { HTTP_STATUS_CODE } from '@utils/constants';
 
 interface IUseCaseProps {
   user_id: string
-  hydrometer_id: string
+  hydrometer_id: number
 }
 
 const USER_NOT_FOUND_ERROR = 'User not found!'

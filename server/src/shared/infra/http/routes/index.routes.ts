@@ -7,6 +7,7 @@ import { passwordRoutes } from '@modules/users/infra/http/routes/password.routes
 import { newsRoutes } from '@modules/news/infra/http/routes/news.routes'
 import { hydrometersRoutes } from '@modules/hydrometers/infra/http/routes/hydrometers.routes'
 import { userHydrometers } from '@modules/hydrometers/infra/http/routes/userHydrometers.routes'
+import { consumptionMarkingsRoutes } from '@modules/consumptionMarkings/infra/http/routes/consumptionMarkings.routes'
 
 export const appRoutes = Router()
 
@@ -17,3 +18,4 @@ appRoutes.use('/password', passwordRoutes)
 appRoutes.use('/news', newsRoutes)
 appRoutes.use('/hydrometers', hydrometersRoutes)
 appRoutes.use('/user-hydrometers', userHydrometers)
+appRoutes.use('/consumption-markings', consumptionMarkingsRoutes)

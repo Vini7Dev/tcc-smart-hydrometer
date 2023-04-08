@@ -63,25 +63,22 @@ export class HydrometersRepository extends AppRepository implements IHydrometers
       name,
       password,
       consumption_category,
-      user: {
-        connect: { id: user_id }
-      },
     }
 
     if (address) {
       if (address.id) {
         Object.assign(payload, {
-          address: {
-            update: { ...address },
-          },
+          user: { connect: { id: user_id } },
+          address: { update: { ...address } },
         })
       } else {
         Object.assign(payload, {
-          address: {
-            create: { ...address },
-          },
+          user: { connect: { id: user_id } },
+          address: { create: { ...address } },
         })
       }
+    } else {
+      Object.assign(payload, { user_id })
     }
 
     const createdHydrometer = await this.client.hydrometers.update({

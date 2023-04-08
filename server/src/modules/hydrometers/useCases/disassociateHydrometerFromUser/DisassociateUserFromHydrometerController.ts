@@ -17,7 +17,7 @@ export class DisassociateUserFromHydrometerController {
 
     const updatedHydrometer = await disassociateHydrometerFromUserUseCase.execute({
       user_id,
-      hydrometer_id,
+      hydrometer_id: Number(hydrometer_id),
     })
 
     const updatedHydrometerWithoutPassword = removeObjectAttributes({

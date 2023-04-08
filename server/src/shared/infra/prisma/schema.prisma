@@ -107,13 +107,13 @@ model Adresses {
 }
 
 model ConsumptionMarkings {
-  id              String    @id @default(uuid())
-  hydrometer_id   Int       @unique
+  id              String      @id @default(uuid())
+  hydrometer_id   Int
   consumption     Int
   monetary_value  Int
-  created_at      DateTime  @default(now())
+  created_at      DateTime    @default(now())
 
-  hydrometer    Hydrometers @relation(fields: [hydrometer_id], references: [id])
+  hydrometer      Hydrometers @relation(fields: [hydrometer_id], references: [id])
 
   @@map("consumptionMarkings")
 }
