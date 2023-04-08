@@ -117,3 +117,41 @@ model ConsumptionMarkings {
 
   @@map("consumptionMarkings")
 }
+
+model CitiesForConversion {
+  id                      String      @id @default(uuid())
+  name                    String
+  last_update             String
+  created_at              DateTime  @default(now())
+  updated_at              DateTime  @default(now())
+
+  categoriesForConversion CategoriesForConversion[]
+
+  @@map("citiesForConversion")
+}
+
+model CategoriesForConversion {
+  id                      String    @id @default(uuid())
+  city_for_conversion_id  String
+  category                String
+  created_at              DateTime  @default(now())
+  updated_at              DateTime  @default(now())
+
+  city_for_conversion     CitiesForConversion @relation(fields: [city_for_conversion_id], references: [id])
+  consumptionConversions  ConsumptionConversions[]
+
+  @@map("categoriesForConversion")
+}
+
+model ConsumptionConversions {
+  id                          String    @id @default(uuid())
+  category_for_conversion_id  String
+  water_rate                  Int
+  sewer_rate                  Int
+  created_at                  DateTime  @default(now())
+  updated_at                  DateTime  @default(now())
+
+  category_for_conversion     CategoriesForConversion @relation(fields: [category_for_conversion_id], references: [id])
+
+  @@map("consumptionConversions")
+}
