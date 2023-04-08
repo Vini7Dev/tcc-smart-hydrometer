@@ -9,6 +9,8 @@ import { appRoutes } from './routes/index.routes'
 import { AppError } from '@shared/errors/AppError'
 import { uploadConfig } from '@configs/upload'
 import { HTTP_STATUS_CODE } from '@utils/constants'
+import { ExpressAdapter, createBullBoard, BullAdapter } from '@bull-board/express'
+import { BullProvider } from '@shared/containers/providers/Queue/implementation/BullProvider'
 
 const SERVER_PORT = process.env.SERVER_PORT ?? 3333
 
@@ -19,6 +21,19 @@ const server = express()
 server.use(express.json())
 
 server.use('/files', express.static(uploadsFolder))
+
+const serverAdapter = new ExpressAdapter()
+
+serverAdapter.setBasePath('/bull-board')
+
+createBullBoard({
+  queues: new BullProvider()
+    .getQueues()
+    .map(queue => new BullAdapter(queue.bull)),
+  serverAdapter
+})
+
+server.use('/bull-board', serverAdapter.getRouter())
 
 server.use(appRoutes)
 
