@@ -85,6 +85,7 @@ model Hydrometers {
 
   address               Adresses? @relation(fields: [address_id], references: [id])
   user                  Users?    @relation(fields: [user_id], references: [id])
+  consumption_marking   ConsumptionMarkings[]
 
   @@map("hydrometers")
 }
@@ -103,4 +104,16 @@ model Adresses {
   hydrometers   Hydrometers[]
 
   @@map("adresses")
+}
+
+model ConsumptionMarkings {
+  id              String    @id @default(uuid())
+  hydrometer_id   Int       @unique
+  consumption     Int
+  monetary_value  Int
+  created_at      DateTime  @default(now())
+
+  hydrometer    Hydrometers @relation(fields: [hydrometer_id], references: [id])
+
+  @@map("consumptionMarkings")
 }
