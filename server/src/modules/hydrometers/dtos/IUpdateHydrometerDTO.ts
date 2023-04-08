@@ -9,11 +9,21 @@ type ConsumptionCategory = 'EMPTY'
   | 'RESIDENTIAL_SOCIAL'
   | 'RESIDENTIAL_VULNERABLE_NORMAL'
 
+interface ICreateHydrometerAddressDTO {
+  id?: string
+  postal_code: string
+  street: string
+  number?: string
+  neighborhood: string
+  city: string
+  state: string
+}
 
 export interface IUpdateHydrometerDTO {
   id: string
-  user_id?: string | null
+  user_id?: string
   name?: string
   password?: string
   consumption_category?: ConsumptionCategory
+  address?: ICreateHydrometerAddressDTO
 }

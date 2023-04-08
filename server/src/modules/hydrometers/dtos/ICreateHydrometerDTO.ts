@@ -9,7 +9,6 @@ type ConsumptionCategory = 'EMPTY'
   | 'RESIDENTIAL_SOCIAL'
   | 'RESIDENTIAL_VULNERABLE_NORMAL'
 
-
 export interface ICreateHydrometerDTO {
   user_id?: string
   name: string

@@ -14,6 +14,8 @@ export class AssociateHydrometerToUserController {
     const {
       hydrometer_name,
       hydrometer_password,
+      consumption_category,
+      address,
     } = request.body
 
     const associateHydrometerToUserUseCase = container.resolve(AssociateHydrometerToUserUseCase)
@@ -22,6 +24,8 @@ export class AssociateHydrometerToUserController {
       user_id,
       hydrometer_name,
       hydrometer_password,
+      consumption_category,
+      address,
     })
 
     const updatedHydrometerWithoutPassword = removeObjectAttributes({
