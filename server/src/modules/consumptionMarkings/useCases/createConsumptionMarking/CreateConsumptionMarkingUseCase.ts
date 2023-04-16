@@ -5,6 +5,8 @@ import { IHashProvider } from '@shared/containers/providers/HashProvider/models/
 import { AppError } from '@shared/errors/AppError'
 import { IConsumptionMarkingsRepository } from '@modules/consumptionMarkings/repositories/IConsumptionMarkingsRepository'
 import { IHydrometersRepository } from '@modules/hydrometers/repositories/IHydrometersRepository'
+import { ICitiesForConversionRepository } from '@modules/citiesForConversion/repositories/ICitiesForConversionRepository'
+import { calculateConsumptionMonetaryByCity } from '@utils/calculateConsumptionMonetaryByCity'
 
 interface IUseCaseProps {
   hydrometer_id: number
@@ -12,6 +14,7 @@ interface IUseCaseProps {
   consumption: number
 }
 
+const EMPTY_MONETARY_CONVERSION = -1
 const INVALID_CREDENTIALS_ERROR = 'Invalid credentials!'
 const THE_HYDROMETER_IS_NOT_ACTIVATED = 'The hydrometer is not activated!'
 
@@ -23,6 +26,9 @@ export class CreateConsumptionMarkingUseCase {
 
     @inject('HydrometersRepository')
     private hydrometersRepository: IHydrometersRepository,
+
+    @inject('CitiesForConversionRepository')
+    private citiesForConversionRepository: ICitiesForConversionRepository,
 
     @inject('HashProvider')
     private hashProvider: IHashProvider,
@@ -52,10 +58,32 @@ export class CreateConsumptionMarkingUseCase {
       throw new AppError(THE_HYDROMETER_IS_NOT_ACTIVATED)
     }
 
+    const { city: hydrometerAddress } = hydrometerToAssociate.address ?? { city: '' }
+
+    const formattedCityName = hydrometerAddress.trim().toUpperCase()
+
+    const hydrometerCity = await this.citiesForConversionRepository.findByName(
+      formattedCityName
+    )
+
+    if (!hydrometerCity) {
+      const createdConsumptionMarking = await this.consumptionMarkingsRepository.create({
+        hydrometer_id: hydrometerToAssociate.id,
+        consumption,
+        monetary_value: EMPTY_MONETARY_CONVERSION,
+      })
+
+      return createdConsumptionMarking
+    }
+
     const createdConsumptionMarking = await this.consumptionMarkingsRepository.create({
       hydrometer_id: hydrometerToAssociate.id,
       consumption,
-      monetary_value: 0
+      monetary_value: calculateConsumptionMonetaryByCity({
+        city: hydrometerCity,
+        consumption_category: hydrometerToAssociate.consumption_category,
+        consumption,
+      })
     })
 
     return createdConsumptionMarking

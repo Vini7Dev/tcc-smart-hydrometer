@@ -4,6 +4,19 @@ import { AppRepository } from '@shared/infra/prisma/repositories/AppRepository'
 import { CityForConversion } from '../entities/CityForConversion'
 
 export class CitiesForConversionRepository extends AppRepository implements ICitiesForConversionRepository {
+  public async findByName(name: string): Promise<CityForConversion | null> {
+    const findedCityForConversion = await this.client.citiesForConversion.findFirst({
+      where: { name },
+      include: {
+        categoriesForConversion: {
+          include: { consumptionConversions: true }
+        }
+      }
+    })
+
+    return findedCityForConversion
+  }
+
   public async findByCode(code: number): Promise<CityForConversion | null> {
     const findedCityForConversion = await this.client.citiesForConversion.findFirst({
       where: { code },

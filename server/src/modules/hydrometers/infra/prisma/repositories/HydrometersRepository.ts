@@ -11,10 +11,11 @@ const LIST_DEFAULT_PER_PAGE = 10
 export class HydrometersRepository extends AppRepository implements IHydrometersRepository {
   public async findById(id: number): Promise<Hydrometer | null> {
     const findedHydrometer = await this.client.hydrometers.findFirst({
-      where: { id }
+      where: { id },
+      include: { address: true }
     })
 
-    return findedHydrometer
+    return findedHydrometer as Hydrometer
   }
 
   public async list({
