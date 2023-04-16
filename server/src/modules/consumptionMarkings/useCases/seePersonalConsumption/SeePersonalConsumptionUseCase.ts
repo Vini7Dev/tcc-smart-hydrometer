@@ -17,6 +17,9 @@ const USER_NOT_FOUND_ERROR = 'User not found!'
 const HYDROMETER_NOT_FOUND_ERROR = 'Hydrometer not found!'
 const WITHOUT_PERMISSION_TO_ACCESS_THIS_HYDROMETER_MARKINGS = 'You have no permission to access this hydrometer markings!'
 
+const ONE_DAY_BEFORE = -1
+const TWO_DAYS_BEFORE = -2
+
 @injectable()
 export class SeePersonalConsumptionUseCase {
   constructor (
@@ -54,8 +57,8 @@ export class SeePersonalConsumptionUseCase {
     }
 
     const nowIntervalDate = new Date()
-    const middleIntervalDate = add(nowIntervalDate, { days: -1 })
-    const pastIntervalDate = add(nowIntervalDate, { days: -2 })
+    const middleIntervalDate = add(nowIntervalDate, { days: ONE_DAY_BEFORE })
+    const pastIntervalDate = add(nowIntervalDate, { days: TWO_DAYS_BEFORE })
 
     const consumptionMarkingList = await this.consumptionMarkingsRepository.list({
       hydrometer_id,

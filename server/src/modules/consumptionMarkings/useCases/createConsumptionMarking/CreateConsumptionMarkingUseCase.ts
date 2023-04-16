@@ -7,6 +7,7 @@ import { IConsumptionMarkingsRepository } from '@modules/consumptionMarkings/rep
 import { IHydrometersRepository } from '@modules/hydrometers/repositories/IHydrometersRepository'
 import { ICitiesForConversionRepository } from '@modules/citiesForConversion/repositories/ICitiesForConversionRepository'
 import { calculateConsumptionMonetaryByCity } from '@utils/calculateConsumptionMonetaryByCity'
+import { format } from 'date-fns'
 
 interface IUseCaseProps {
   hydrometer_id: number
@@ -76,13 +77,23 @@ export class CreateConsumptionMarkingUseCase {
       return createdConsumptionMarking
     }
 
+    const todayConsumptionMarkings = await this.consumptionMarkingsRepository.list({
+      hydrometer_id: hydrometerToAssociate.id,
+      before_date: new Date(format(new Date(), 'yyyy-MM-dd'))
+    })
+
+    const sumOfDayConsumption = todayConsumptionMarkings.reduce(
+      (acc, curr) => acc + curr.consumption,
+      0
+    )
+
     const createdConsumptionMarking = await this.consumptionMarkingsRepository.create({
       hydrometer_id: hydrometerToAssociate.id,
       consumption,
       monetary_value: calculateConsumptionMonetaryByCity({
         city: hydrometerCity,
         consumption_category: hydrometerToAssociate.consumption_category,
-        consumption,
+        consumption: sumOfDayConsumption + consumption,
       })
     })
 
