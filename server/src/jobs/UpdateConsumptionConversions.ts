@@ -29,15 +29,31 @@ export default {
 
       await crawlerProvider.fillCityForm(cityCode)
 
-      const categoryTableDataArray = await crawlerProvider.readTableContent()
+      const tableData = await crawlerProvider.readTableContent()
 
-      console.log('======> categoryTableDataArray', JSON.stringify(categoryTableDataArray, null, 2))
+      const cityAlreadyExists = await citiesForConversionRepository.findByCode(cityCode)
 
-      // TODO: Ver se a cidade está cadastrada: citiesForConversionRepository
+      if (cityAlreadyExists) {
+        if (cityAlreadyExists.last_update === tableData.lastUpdate) {
+          continue
+        }
 
-      // TODO: Verificar se está atualizado, se não, apagar a atual: citiesForConversionRepository
+        await citiesForConversionRepository.delete(cityAlreadyExists.id)
+      }
 
-      // TODO: Cadastrar a cidade: citiesForConversionRepository
+      await citiesForConversionRepository.create({
+        code: cityCode,
+        name: cityKey,
+        last_update: tableData.lastUpdate,
+        categoriesForConversion: tableData.categories.map(({ category, rules }) => ({
+          category,
+          consumptionConversions: rules.map(({ rule, sewage, water }) => ({
+            rule,
+            sewer_rate: Number(sewage.replace(/[R\$|,|.| ]/g, '')),
+            water_rate: Number(water.replace(/[R\$|,|.| ]/g, '')),
+          }))
+        }))
+      })
     }
 
     await crawlerProvider.closeCrawler()

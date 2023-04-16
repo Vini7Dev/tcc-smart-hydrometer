@@ -1,6 +1,8 @@
 import { inject, injectable } from 'tsyringe'
 
 import { IQueueProvider } from '@shared/containers/providers/QueueProvider/models/IQueueProvider'
+import { ICrawlerProvider } from '@shared/containers/providers/CrawlerProvider/models/ICrawlerProvider'
+import { ICitiesForConversionRepository } from '@modules/citiesForConversion/repositories/ICitiesForConversionRepository'
 
 @injectable()
 export class ProcessQueueControl {
@@ -9,8 +11,17 @@ export class ProcessQueueControl {
   constructor (
     @inject('QueueProvider')
     private queueProvider: IQueueProvider,
+
+    @inject('CrawlerProvider')
+    crawlerProvider: ICrawlerProvider,
+
+    @inject('CitiesForConversionRepository')
+    citiesForConversionRepository: ICitiesForConversionRepository,
   ) {
-    this.providers = {}
+    this.providers = {
+      crawlerProvider,
+      citiesForConversionRepository,
+    }
   }
 
   public async execute() {
