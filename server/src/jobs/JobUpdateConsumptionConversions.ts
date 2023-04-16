@@ -3,7 +3,7 @@ import { IHandleProps } from '@shared/containers/providers/QueueProvider/impleme
 import { ICrawlerProvider } from '@shared/containers/providers/CrawlerProvider/models/ICrawlerProvider'
 import { ICitiesForConversionRepository } from '@modules/citiesForConversion/repositories/ICitiesForConversionRepository'
 
-interface IUpdateConsumptionConversionsProps extends IHandleProps {
+interface IJobUpdateConsumptionConversionsProps extends IHandleProps {
   providers: {
     crawlerProvider: ICrawlerProvider
     citiesForConversionRepository: ICitiesForConversionRepository
@@ -19,7 +19,7 @@ export default {
       citiesForConversionRepository,
     },
     data: {},
-  }: IUpdateConsumptionConversionsProps) => {
+  }: IJobUpdateConsumptionConversionsProps) => {
     const citieKeys = Object.keys(WATER_PROVIDER_CITY_CODES)
 
     await crawlerProvider.initCrawler()

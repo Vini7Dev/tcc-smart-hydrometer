@@ -3,6 +3,8 @@ import 'dotenv/config'
 import 'express-async-errors'
 
 import '@shared/containers'
+import '@shared/infra/nodeCron'
+
 import express, { NextFunction, Request, Response } from 'express'
 
 import { appRoutes } from './routes/index.routes'
