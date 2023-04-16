@@ -16,6 +16,10 @@ const start = async () => {
     const cityCode = WATER_PROVIDER_CITY_CODES[cityKey as keyof typeof WATER_PROVIDER_CITY_CODES]
 
     await seleniumProvider.fillCityForm(cityCode)
+
+    const categoryTableDataArray = await seleniumProvider.readTableContent()
+
+    console.log('======> categoryTableDataArray', JSON.stringify(categoryTableDataArray, null, 2))
   }
 
   await seleniumProvider.closeCrawler()

@@ -4,6 +4,8 @@ import chromedriver from 'chromedriver'
 
 import { ICrawlerProvider } from '../models/ICrawlerProvider'
 import { crawlerConfig } from '@configs/crawler'
+import { categoriesForConversionArray } from '@utils/categoriesForConversionArray'
+import { ICategoryConversionRulesDTO, IRule } from '../dtos/ICategoryConversionRulesDTO'
 
 type BySelectors = 'css'
 
@@ -86,5 +88,74 @@ export class SeleniumProvider implements ICrawlerProvider {
 
     await this.waitForElementLoad({ by: 'css', selector: 'form[id="_dxptarifas_WAR_dxptarifas_:tarifasForm"] button[type="submit"]:not([disabled])' })
     await this.driver.findElement(By.css('form[id="_dxptarifas_WAR_dxptarifas_:tarifasForm"] button[type="submit"]')).click()
+  }
+
+  public async readTableContent(): Promise<ICategoryConversionRulesDTO[]> {
+    await this.waitForElementLoad({ by: 'css', selector: 'table[class="table table-responsive table-striped"]' })
+
+    const table = await this.driver.findElement(By.css('[class="table table-responsive table-striped"]'))
+
+    const tableData = await table.findElements(By.css('tbody tr td'))
+
+    const tableDataTextList = await Promise.all(tableData.map(async td => await td.getText()))
+
+    let categoryDivisionIndex = -1
+    const tableDataPerCategory: Array<string[]> = []
+
+    tableDataTextList.forEach(item => {
+      if (categoriesForConversionArray.findIndex(category => category === item) !== -1) {
+        tableDataPerCategory.push([])
+        categoryDivisionIndex += 1
+      }
+
+      tableDataPerCategory[categoryDivisionIndex].push(item)
+    })
+
+    const categoryTableDataArray: Array<{
+      category: string,
+      rules: Array<IRule>
+    }> = []
+
+    for (const categoryTableData of tableDataPerCategory) {
+      const categoryName = categoryTableData.shift() as string
+      const categoryRules = categoryTableData.filter(tableData => tableData !== '')
+
+      const categoryRuleObjects: IRule[] = []
+
+      let newRule: IRule = {} as IRule
+
+      for (const categoryRule of categoryRules) {
+        switch(true) {
+          case categoryRule.indexOf(' a ') !== -1:
+            newRule.rule = categoryRule
+            break
+
+          case categoryRule.indexOf('acima de ') !== -1:
+            newRule.rule = categoryRule
+            break
+
+          case !newRule.water:
+            newRule.water = categoryRule
+            break
+
+          case !newRule.sewage:
+            newRule.sewage = categoryRule
+
+            categoryRuleObjects.push(newRule)
+            newRule = {} as IRule
+            break
+
+          default:
+            continue
+        }
+      }
+
+      categoryTableDataArray.push({
+        category: categoryName,
+        rules: categoryRuleObjects,
+      })
+    }
+
+    return categoryTableDataArray
   }
 }

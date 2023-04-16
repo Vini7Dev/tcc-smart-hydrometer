@@ -21,5 +21,4 @@ export const HTTP_STATUS_CODE = {
 // City codes on the water provider website
 export const WATER_PROVIDER_CITY_CODES = {
   FRANCA: 310,
-  RESTINGA: 575,
 }
