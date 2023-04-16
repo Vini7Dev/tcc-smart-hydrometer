@@ -1,4 +1,6 @@
 import { container } from 'tsyringe'
+import { SeleniumProvider } from './CrawlerProvider/implementations/SeleniumProvider'
+import { ICrawlerProvider } from './CrawlerProvider/models/ICrawlerProvider'
 
 import { BCryptHashProvider } from './HashProvider/implementations/BCryptHashProvider'
 import { IHashProvider } from './HashProvider/models/IHashProvider'
@@ -12,4 +14,5 @@ import { IStorageProvider } from './StorageProvider/models/IStorageProvider'
 container.registerSingleton<IHashProvider>('HashProvider', BCryptHashProvider)
 container.registerSingleton<IStorageProvider>('StorageProvider', DiskStorageProvider)
 container.registerInstance<IMailProvider>('MailProvider', new EtherealMailProvider())
+container.registerInstance<ICrawlerProvider>('CrawlerProvider', new SeleniumProvider())
 container.register<IQueue>('QueueProvider', BullProvider)

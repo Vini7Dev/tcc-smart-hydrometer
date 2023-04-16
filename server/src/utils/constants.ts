@@ -17,3 +17,9 @@ export const HTTP_STATUS_CODE = {
   NOT_FOUND: 404,
   INTERNAL_SERVER_ERROR: 500,
 }
+
+// City codes on the water provider website
+export const WATER_PROVIDER_CITY_CODES = {
+  FRANCA: 310,
+  RESTINGA: 575,
+}
