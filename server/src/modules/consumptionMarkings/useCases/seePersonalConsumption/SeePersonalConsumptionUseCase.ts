@@ -6,6 +6,7 @@ import { IHydrometersRepository } from '@modules/hydrometers/repositories/IHydro
 import { IUsersRepository } from '@modules/users/repositories/IUsersRepository'
 import { AppError } from '@shared/errors/AppError'
 import { HTTP_STATUS_CODE } from '@utils/constants'
+import { groupConsumptionMarkingsByTimeDivision } from '@utils/groupConsumptionMarkingsByIimeDivision'
 
 interface IUseCaseProps {
   hydrometer_id: number
@@ -52,15 +53,21 @@ export class SeePersonalConsumptionUseCase {
       )
     }
 
-    const nowDate = new Date()
-    const twoDaysBefore = add(nowDate, { days: -2 })
+    const nowIntervalDate = new Date()
+    const middleIntervalDate = add(nowIntervalDate, { days: -1 })
+    const pastIntervalDate = add(nowIntervalDate, { days: -2 })
 
     const consumptionMarkingList = await this.consumptionMarkingsRepository.list({
       hydrometer_id,
-      before_date: twoDaysBefore,
-      after_date: nowDate,
+      before_date: pastIntervalDate,
+      after_date: nowIntervalDate,
     })
 
-    return consumptionMarkingList
+    const groupsOfConsumptionMarkings = groupConsumptionMarkingsByTimeDivision({
+      consumptionMarkings: consumptionMarkingList,
+      timeDivision: middleIntervalDate,
+    })
+
+    return groupsOfConsumptionMarkings
   }
 }
