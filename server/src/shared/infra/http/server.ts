@@ -10,7 +10,7 @@ import { AppError } from '@shared/errors/AppError'
 import { uploadConfig } from '@configs/upload'
 import { HTTP_STATUS_CODE } from '@utils/constants'
 import { ExpressAdapter, createBullBoard, BullAdapter } from '@bull-board/express'
-import { BullProvider } from '@shared/containers/providers/Queue/implementation/BullProvider'
+import { BullProvider } from '@shared/containers/providers/QueueProvider/implementation/BullProvider'
 
 const SERVER_PORT = process.env.SERVER_PORT ?? 3333
 

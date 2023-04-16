@@ -7,7 +7,7 @@ export interface IProcessProps {
   providers: object
 }
 
-export interface IQueue {
+export interface IQueueProvider {
   add(data: IAddQueueProps): Promise<void>
   process(props: IProcessProps): void
 }

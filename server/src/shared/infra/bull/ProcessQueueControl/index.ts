@@ -1,6 +1,6 @@
 import { inject, injectable } from 'tsyringe'
 
-import { IQueue } from '@shared/containers/providers/Queue/models/IQueue'
+import { IQueueProvider } from '@shared/containers/providers/QueueProvider/models/IQueueProvider'
 
 @injectable()
 export class ProcessQueueControl {
@@ -8,7 +8,7 @@ export class ProcessQueueControl {
 
   constructor (
     @inject('QueueProvider')
-    private queueProvider: IQueue,
+    private queueProvider: IQueueProvider,
   ) {
     this.providers = {}
   }

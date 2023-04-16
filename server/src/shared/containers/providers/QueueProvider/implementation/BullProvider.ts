@@ -3,7 +3,7 @@ import Bull, { Queue } from 'bull'
 import * as Jobs from '@jobs/index'
 import { redisConfig } from '@configs/redis'
 import { AppError } from '@shared/errors/AppError'
-import { IQueue, IAddQueueProps, IProcessProps } from '../models/IQueue'
+import { IQueueProvider, IAddQueueProps, IProcessProps } from '../models/IQueueProvider'
 
 export interface IHandleProps {
   providers: object
@@ -16,7 +16,7 @@ interface IQueueControlAdd {
   handle: (props: any) => Promise<any>
 }
 
-export class BullProvider implements IQueue {
+export class BullProvider implements IQueueProvider {
   private queues: IQueueControlAdd[]
 
   constructor() {
