@@ -5,7 +5,7 @@ import chromedriver from 'chromedriver'
 import { ICrawlerProvider } from '../models/ICrawlerProvider'
 import { crawlerConfig } from '@configs/crawler'
 import { categoriesForConversionArray } from '@utils/categoriesForConversionArray'
-import { ICategoryConversionRulesDTO, IRule } from '../dtos/ICategoryConversionRulesDTO'
+import { ITableContentDTO, ICategoryConversionRules, IRule } from '../dtos/ITableContentDTO'
 
 type BySelectors = 'css'
 
@@ -90,7 +90,7 @@ export class SeleniumProvider implements ICrawlerProvider {
     await this.driver.findElement(By.css('form[id="_dxptarifas_WAR_dxptarifas_:tarifasForm"] button[type="submit"]')).click()
   }
 
-  public async readTableContent(): Promise<ICategoryConversionRulesDTO[]> {
+  public async readTableContent(): Promise<ITableContentDTO> {
     await this.waitForElementLoad({ by: 'css', selector: 'table[class="table table-responsive table-striped"]' })
 
     const table = await this.driver.findElement(By.css('[class="table table-responsive table-striped"]'))
@@ -111,10 +111,7 @@ export class SeleniumProvider implements ICrawlerProvider {
       tableDataPerCategory[categoryDivisionIndex].push(item)
     })
 
-    const categoryTableDataArray: Array<{
-      category: string,
-      rules: Array<IRule>
-    }> = []
+    const categoryTableDataArray: ICategoryConversionRules[] = []
 
     for (const categoryTableData of tableDataPerCategory) {
       const categoryName = categoryTableData.shift() as string
@@ -156,6 +153,20 @@ export class SeleniumProvider implements ICrawlerProvider {
       })
     }
 
-    return categoryTableDataArray
+    await this.waitForElementLoad({ by: 'css', selector: '#tarifas > div > div:nth-child(2) > p:nth-child(2)' })
+
+    const description = await this.driver.findElement(
+      By.css('#tarifas > div > div:nth-child(2) > p:nth-child(2)')
+    ).getText()
+
+    const lastUpdateDate = description
+      .split('a partir de')[1]
+      .slice(0, -1)
+      .trim()
+
+    return {
+      lastUpdate: lastUpdateDate,
+      categories: categoryTableDataArray,
+    }
   }
 }
