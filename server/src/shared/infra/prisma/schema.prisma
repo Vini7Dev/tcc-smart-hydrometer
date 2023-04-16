@@ -44,7 +44,7 @@ model Users {
 model ForgotPasswordTokens {
   id          String    @id @default(uuid())
   user_id     String    @unique
-  user        Users     @relation(fields: [user_id], references: [id])
+  user        Users     @relation(fields: [user_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
   created_at  DateTime  @default(now())
 
   @@map("forgotPasswordTokens")
@@ -68,7 +68,7 @@ model NewsImages {
   image_file  String
   created_at  DateTime  @default(now())
 
-  news        News @relation(fields: [news_id], references: [id])
+  news        News @relation(fields: [news_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
 
   @@map("newsImages")
 }
@@ -121,6 +121,7 @@ model ConsumptionMarkings {
 model CitiesForConversion {
   id                      String      @id @default(uuid())
   name                    String
+  code                    Int
   last_update             String
   created_at              DateTime  @default(now())
   updated_at              DateTime  @default(now())
@@ -137,7 +138,7 @@ model CategoriesForConversion {
   created_at              DateTime  @default(now())
   updated_at              DateTime  @default(now())
 
-  city_for_conversion     CitiesForConversion @relation(fields: [city_for_conversion_id], references: [id])
+  city_for_conversion     CitiesForConversion @relation(fields: [city_for_conversion_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
   consumptionConversions  ConsumptionConversions[]
 
   @@map("categoriesForConversion")
@@ -146,12 +147,13 @@ model CategoriesForConversion {
 model ConsumptionConversions {
   id                          String    @id @default(uuid())
   category_for_conversion_id  String
+  rule                        String
   water_rate                  Int
   sewer_rate                  Int
   created_at                  DateTime  @default(now())
   updated_at                  DateTime  @default(now())
 
-  category_for_conversion     CategoriesForConversion @relation(fields: [category_for_conversion_id], references: [id])
+  category_for_conversion     CategoriesForConversion @relation(fields: [category_for_conversion_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
 
   @@map("consumptionConversions")
 }
