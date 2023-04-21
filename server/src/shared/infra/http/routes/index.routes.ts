@@ -1,5 +1,7 @@
 import { Router } from 'express'
+import swaggerUi from 'swagger-ui-express'
 
+import swaggerDocs from '@docs/swagger.json'
 import { adminsRoutes } from '@modules/users/infra/http/routes/admins.routes'
 import { authenticateRoutes } from '@modules/users/infra/http/routes/authenticate.routes'
 import { customerRoutes } from '@modules/users/infra/http/routes/customers.routes'
@@ -12,6 +14,8 @@ import { personalConsumptionMarkings } from '@modules/consumptionMarkings/infra/
 import { regionalConsumptionMarkings } from '@modules/consumptionMarkings/infra/http/routes/regionalConsumptionMarkings.routes'
 
 export const appRoutes = Router()
+
+appRoutes.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 
 appRoutes.use('/admins', adminsRoutes)
 appRoutes.use('/customers', customerRoutes)
