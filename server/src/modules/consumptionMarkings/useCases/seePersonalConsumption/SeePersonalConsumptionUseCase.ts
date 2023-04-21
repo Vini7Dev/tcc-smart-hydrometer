@@ -7,18 +7,21 @@ import { IUsersRepository } from '@modules/users/repositories/IUsersRepository'
 import { AppError } from '@shared/errors/AppError'
 import { HTTP_STATUS_CODE } from '@utils/constants'
 import { groupConsumptionMarkingsByTimeDivision } from '@utils/groupConsumptionMarkingsByIimeDivision'
+import { periodFilterBuilder } from '@utils/periodFilterBuilder'
+
+type PeriodType = 'YESTERDAY' | 'PAST_MONTH' | 'PAST_YEAR' | 'CUSTOM'
 
 interface IUseCaseProps {
   hydrometer_id: number
   user_id: string
+  period_type?: PeriodType
+  start_date?: string
+  end_date?: string
 }
 
 const USER_NOT_FOUND_ERROR = 'User not found!'
 const HYDROMETER_NOT_FOUND_ERROR = 'Hydrometer not found!'
 const WITHOUT_PERMISSION_TO_ACCESS_THIS_HYDROMETER_MARKINGS = 'You have no permission to access this hydrometer markings!'
-
-const ONE_DAY_BEFORE = -1
-const TWO_DAYS_BEFORE = -2
 
 @injectable()
 export class SeePersonalConsumptionUseCase {
@@ -36,6 +39,9 @@ export class SeePersonalConsumptionUseCase {
   public async execute({
     hydrometer_id,
     user_id,
+    period_type,
+    start_date,
+    end_date,
   }: IUseCaseProps) {
     const userToAssociate = await this.usersRepository.findById(user_id)
 
@@ -56,14 +62,16 @@ export class SeePersonalConsumptionUseCase {
       )
     }
 
-    const nowIntervalDate = new Date()
-    const middleIntervalDate = add(nowIntervalDate, { days: ONE_DAY_BEFORE })
-    const pastIntervalDate = add(nowIntervalDate, { days: TWO_DAYS_BEFORE })
+    const { afterDate, beforeDate, middleIntervalDate } = periodFilterBuilder({
+      periodType: period_type,
+      startDate: start_date,
+      endDate: end_date,
+    })
 
     const consumptionMarkingList = await this.consumptionMarkingsRepository.list({
       hydrometer_id,
-      before_date: pastIntervalDate,
-      after_date: nowIntervalDate,
+      before_date: beforeDate,
+      after_date: afterDate,
     })
 
     const groupsOfConsumptionMarkings = groupConsumptionMarkingsByTimeDivision({
