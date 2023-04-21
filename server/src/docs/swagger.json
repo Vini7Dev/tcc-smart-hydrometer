@@ -78,7 +78,8 @@
                     "type": "object",
                     "properties": {
                       "id": {
-                        "type": "string"
+                        "type": "string",
+                        "format": "uuid"
                       },
                       "name": {
                         "type": "string"
@@ -110,7 +111,7 @@
             "description": "Unauthorized"
           },
           "403": {
-            "description": "User isn't admin!"
+            "description": "Forbidden"
           }
         }
       },
@@ -137,7 +138,8 @@
                   "type": "object",
                   "properties": {
                     "id": {
-                      "type": "string"
+                      "type": "string",
+                      "format": "uuid"
                     },
                     "name": {
                       "type": "string"
@@ -168,7 +170,7 @@
             "description": "Unauthorized"
           },
           "403": {
-            "description": "User isn't admin!"
+            "description": "Forbidden"
           },
           "400": {
             "description": "Email already exists!"
@@ -202,7 +204,8 @@
                   "type": "object",
                   "properties": {
                     "id": {
-                      "type": "string"
+                      "type": "string",
+                      "format": "uuid"
                     },
                     "name": {
                       "type": "string"
@@ -288,7 +291,8 @@
                   "type": "object",
                   "properties": {
                     "id": {
-                      "type": "string"
+                      "type": "string",
+                      "format": "uuid"
                     },
                     "name": {
                       "type": "string"
@@ -348,7 +352,8 @@
                   "type": "object",
                   "properties": {
                     "id": {
-                      "type": "string"
+                      "type": "string",
+                      "format": "uuid"
                     },
                     "title": {
                       "type": "string"
@@ -362,7 +367,8 @@
                         "type": "object",
                         "properties": {
                           "id": {
-                            "type": "string"
+                            "type": "string",
+                            "format": "uuid"
                           },
                           "news_id": {
                             "type": "string"
@@ -415,7 +421,8 @@
                     "type": "object",
                     "properties": {
                       "id": {
-                        "type": "string"
+                        "type": "string",
+                        "format": "uuid"
                       },
                       "title": {
                         "type": "string"
@@ -429,7 +436,8 @@
                           "type": "object",
                           "properties": {
                             "id": {
-                              "type": "string"
+                              "type": "string",
+                              "format": "uuid"
                             },
                             "news_id": {
                               "type": "string"
@@ -485,7 +493,8 @@
                   "type": "object",
                   "properties": {
                     "id": {
-                      "type": "string"
+                      "type": "string",
+                      "format": "uuid"
                     },
                     "title": {
                       "type": "string"
@@ -510,7 +519,42 @@
             "description": "Unauthorized"
           },
           "403": {
-            "description": "User isn't admin!"
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/hydrometers": {
+      "post": {
+        "summary": "Gerar Hidrômetro",
+        "description": "Essa rota é responsável por gerar um hidrômetro",
+        "tags": ["Hidrômetros"],
+        "security": [{ "adminBearerAuth": [] }],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "password": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
@@ -558,20 +602,6 @@
           }
         }
       },
-      "News": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string"
-          },
-          "text": {
-            "type": "string"
-          },
-          "image_file [multiple images]": {
-            "type": "file"
-          }
-        }
-      },
       "ForgotPassword": {
         "type": "object",
         "properties": {
@@ -588,6 +618,20 @@
           },
           "password": {
             "type": "string"
+          }
+        }
+      },
+      "News": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "image_file [multiple images]": {
+            "type": "file"
           }
         }
       }
