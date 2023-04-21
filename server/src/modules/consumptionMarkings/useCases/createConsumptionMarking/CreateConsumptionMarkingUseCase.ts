@@ -1,4 +1,5 @@
 import { injectable, inject } from 'tsyringe'
+import { addMonths } from 'date-fns'
 
 import { HTTP_STATUS_CODE } from '@utils/constants'
 import { IHashProvider } from '@shared/containers/providers/HashProvider/models/IHashProvider'
@@ -18,6 +19,8 @@ interface IUseCaseProps {
 const EMPTY_MONETARY_CONVERSION = -1
 const INVALID_CREDENTIALS_ERROR = 'Invalid credentials!'
 const THE_HYDROMETER_IS_NOT_ACTIVATED = 'The hydrometer is not activated!'
+const FIRST_DAY_OF_MONTH = 0
+const NEXT_MONTH = 1
 
 @injectable()
 export class CreateConsumptionMarkingUseCase {
@@ -77,12 +80,17 @@ export class CreateConsumptionMarkingUseCase {
       return createdConsumptionMarking
     }
 
-    const todayConsumptionMarkings = await this.consumptionMarkingsRepository.list({
+    const currentDate = new Date(format(new Date(), 'yyyy-MM-dd'))
+    const firstDayOfMonth = new Date(currentDate.setDate(FIRST_DAY_OF_MONTH))
+    const firstDayOfNextMonth = addMonths(firstDayOfMonth, NEXT_MONTH)
+
+    const monthConsumptionMarkings = await this.consumptionMarkingsRepository.list({
       hydrometer_id: hydrometerToAssociate.id,
-      before_date: new Date(format(new Date(), 'yyyy-MM-dd'))
+      before_date: firstDayOfMonth,
+      after_date: firstDayOfNextMonth,
     })
 
-    const sumOfDayConsumption = todayConsumptionMarkings.reduce(
+    const sumOfMonthConsumption = monthConsumptionMarkings.reduce(
       (acc, curr) => acc + curr.consumption,
       0
     )
@@ -93,7 +101,7 @@ export class CreateConsumptionMarkingUseCase {
       monetary_value: calculateConsumptionMonetaryByCity({
         city: hydrometerCity,
         consumption_category: hydrometerToAssociate.consumption_category,
-        consumption: sumOfDayConsumption + consumption,
+        consumption: sumOfMonthConsumption + consumption,
       })
     })
 
