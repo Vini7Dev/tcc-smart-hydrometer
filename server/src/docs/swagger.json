@@ -12,6 +12,58 @@
   ],
   "paths": {
     "/admins": {
+      "get": {
+        "summary": "Listar Administradores",
+        "description": "Essa rota é responsável por listar os administradores",
+        "tags": ["Administradores"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "User isn't admin!"
+          },
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "avatar_file": {
+                        "type": "string"
+                      },
+                      "account_type": {
+                        "type": "string"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "summary": "Cadastrar Administrador",
         "description": "Essa rota é responsável por cadastrar um administrador",
@@ -41,7 +93,32 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/responses/schemas/CreatedUser"
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "avatar_file": {
+                      "type": "string"
+                    },
+                    "account_type": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
                 }
               }
             }
@@ -74,38 +151,6 @@
           "avatar_file": {
             "type": "file",
             "format": "binary"
-          }
-        }
-      }
-    }
-  },
-  "responses": {
-    "schemas": {
-      "CreatedUser": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "avatar_file": {
-            "type": "string"
-          },
-          "account_type": {
-            "type": "string"
-          },
-          "updated_at": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time"
           }
         }
       }
