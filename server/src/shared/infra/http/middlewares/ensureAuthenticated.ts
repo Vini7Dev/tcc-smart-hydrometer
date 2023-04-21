@@ -22,7 +22,7 @@ export const ensureAuthenticated = async (
   const bearerToken = request.headers.authorization
 
   if (!bearerToken) {
-    throw new AppError(TOKEN_NOT_FOUND_ERROR, HTTP_STATUS_CODE.UNAUTHORIZED)
+    throw new AppError(TOKEN_NOT_FOUND_ERROR, HTTP_STATUS_CODE.NOT_FOUND)
   }
 
   try {

@@ -56,7 +56,7 @@
             }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized - Invalid credentials!"
           }
         }
       }
@@ -108,10 +108,13 @@
             }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized - Invalid token!"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden - User isn't admin!"
+          },
+          "404": {
+            "description": "Not Found - Token not found!"
           }
         }
       },
@@ -166,14 +169,17 @@
               }
             }
           },
+          "400": {
+            "description": "Bad Request - Email already exists!"
+          },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized - Invalid token!"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden - User isn't admin!"
           },
-          "400": {
-            "description": "Email already exists!"
+          "404": {
+            "description": "Not Found - Token not found!"
           }
         }
       }
@@ -193,9 +199,6 @@
           }
         },
         "responses": {
-          "400": {
-            "description": "Email already exists!"
-          },
           "201": {
             "description": "Created",
             "content": {
@@ -231,6 +234,9 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad Request - Email already exists!"
           }
         }
       }
@@ -320,7 +326,10 @@
             }
           },
           "401": {
-            "description": "Invalid forgot password token!"
+            "description": "Unauthorized - Invalid forgot password token!"
+          },
+          "404": {
+            "description": "Not Found - User not found!"
           }
         }
       }
@@ -396,10 +405,10 @@
             }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized - Invalid token!"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Not Found - News not found! - Token not found!"
           }
         }
       }
@@ -466,7 +475,10 @@
             }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized - Invalid token!"
+          },
+          "404": {
+            "description": "Not Found - Token not found!"
           }
         }
       },
@@ -516,10 +528,13 @@
             }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized - Invalid token!"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden - User isn't admin!"
+          },
+          "404": {
+            "description": "Not Found - Token not found!"
           }
         }
       }
@@ -551,10 +566,13 @@
             }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized - Invalid token!"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden - User isn't admin!"
+          },
+          "404": {
+            "description": "Not Found - Token not found!"
           }
         }
       }
@@ -611,7 +629,10 @@
             }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized - Invalid token!"
+          },
+          "404": {
+            "description": "Not Found - Token not found! - User not found!"
           }
         }
       }
@@ -686,13 +707,13 @@
             }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized - Invalid token! - Invalid credentials!"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden - The hydrometer is associated with another user!"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Not Found - Token not found! - User not found!"
           }
         }
       },
@@ -756,13 +777,13 @@
             }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized - Invalid token! - Invalid credentials!"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden - The hydrometer is associated with another user!"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Not Found - Token not found! - User not found! - Hydrometer not found!"
           }
         }
       }
@@ -815,10 +836,10 @@
             }
           },
           "400": {
-            "description": "Deactvated Hydrometer"
+            "description": "Bad Request - The hydrometer is not activated!"
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized - Invalid credentials!"
           }
         }
       }
@@ -939,13 +960,13 @@
             }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized - Invalid token!"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden - You have no permission to access this hydrometer markings!"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Not Found - Token not found! - User not found! - Hydrometer not found!"
           }
         }
       }
@@ -1075,7 +1096,10 @@
             }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized - Invalid token!"
+          },
+          "404": {
+            "description": "Not Found - Token not found!"
           }
         }
       }
