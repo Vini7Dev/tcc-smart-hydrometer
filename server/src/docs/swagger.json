@@ -562,7 +562,7 @@
     "/user-hydrometers/{id}": {
       "patch": {
         "summary": "Associar Usuário ao Hidrômetro",
-        "description": "Essa rota é responsável por gerar um hidrômetro",
+        "description": "Essa rota é responsável por associar o usuário à um hidrômetro",
         "tags": ["Hidrômetros do Usuário"],
         "security": [{ "bearerAuth": [] }],
         "parameters": [
@@ -586,6 +586,73 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "address_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "user_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "consumption_category": {
+                      "type": "string"
+                    },
+                    "share_consumption": {
+                      "type": "boolean"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Desassociar Usuário do Hidrômetro",
+        "description": "Essa rota é responsável por desassociar o usuário de um hidrômetro",
+        "tags": ["Hidrômetros do Usuário"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do hidrômetro",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
