@@ -880,30 +880,27 @@
                     "pastGroup": {
                       "type": "array",
                       "items": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "id": {
-                              "type": "string",
-                              "format": "uuid"
-                            },
-                            "hydrometer_id": {
-                              "type": "integer",
-                              "format": "int64"
-                            },
-                            "consumption": {
-                              "type": "integer",
-                              "format": "int64"
-                            },
-                            "monetary_value": {
-                              "type": "integer",
-                              "format": "int64"
-                            },
-                            "created_at": {
-                              "type": "string",
-                              "format": "date-time"
-                            }
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "hydrometer_id": {
+                            "type": "integer",
+                            "format": "int64"
+                          },
+                          "consumption": {
+                            "type": "integer",
+                            "format": "int64"
+                          },
+                          "monetary_value": {
+                            "type": "integer",
+                            "format": "int64"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time"
                           }
                         }
                       }
@@ -911,30 +908,27 @@
                     "presentGroup": {
                       "type": "array",
                       "items": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "id": {
-                              "type": "string",
-                              "format": "uuid"
-                            },
-                            "hydrometer_id": {
-                              "type": "integer",
-                              "format": "int64"
-                            },
-                            "consumption": {
-                              "type": "integer",
-                              "format": "int64"
-                            },
-                            "monetary_value": {
-                              "type": "integer",
-                              "format": "int64"
-                            },
-                            "created_at": {
-                              "type": "string",
-                              "format": "date-time"
-                            }
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "hydrometer_id": {
+                            "type": "integer",
+                            "format": "int64"
+                          },
+                          "consumption": {
+                            "type": "integer",
+                            "format": "int64"
+                          },
+                          "monetary_value": {
+                            "type": "integer",
+                            "format": "int64"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time"
                           }
                         }
                       }
@@ -952,6 +946,136 @@
           },
           "404": {
             "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/regional-consumption-markings": {
+      "get": {
+        "summary": "Listar Marcação de Consumo Regional",
+        "description": "Essa rota é responsável por listar as marcações de consumo de uma região",
+        "tags": ["Marcação de Consumo Regional"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "region",
+            "in": "query",
+            "description": "Região de filtro",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "period_type",
+            "in": "query",
+            "description": "Período de comparação",
+            "schema": {
+              "type": "string",
+              "enum": ["YESTERDAY", "PAST_MONTH", "PAST_YEAR", "CUSTOM"],
+              "default": "YESTERDAY"
+            }
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "Data inicial da comparação (period_type: CUSTOM)",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "Data final da comparação (period_type: CUSTOM)",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "pastGroup": {
+                      "type": "object",
+                      "properties": {
+                        "{hydrometer_id}": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "format": "uuid"
+                              },
+                              "hydrometer_id": {
+                                "type": "integer",
+                                "format": "int64"
+                              },
+                              "consumption": {
+                                "type": "integer",
+                                "format": "int64"
+                              },
+                              "monetary_value": {
+                                "type": "integer",
+                                "format": "int64"
+                              },
+                              "created_at": {
+                                "type": "string",
+                                "format": "date-time"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "presentGroup": {
+                      "type": "object",
+                      "properties": {
+                        "{hydrometer_id}": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "format": "uuid"
+                              },
+                              "hydrometer_id": {
+                                "type": "integer",
+                                "format": "int64"
+                              },
+                              "consumption": {
+                                "type": "integer",
+                                "format": "int64"
+                              },
+                              "monetary_value": {
+                                "type": "integer",
+                                "format": "int64"
+                              },
+                              "created_at": {
+                                "type": "string",
+                                "format": "date-time"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }
