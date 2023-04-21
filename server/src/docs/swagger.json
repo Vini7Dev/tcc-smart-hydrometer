@@ -822,6 +822,139 @@
           }
         }
       }
+    },
+    "/personal-consumption-markings": {
+      "get": {
+        "summary": "Listar Marcação de Consumo Pessoal",
+        "description": "Essa rota é responsável por listar as marcações de consumo pessoal",
+        "tags": ["Marcação de Consumo Pessoal"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "hydrometer_id",
+            "in": "query",
+            "description": "ID do hidrômetro",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "period_type",
+            "in": "query",
+            "description": "Período de comparação",
+            "schema": {
+              "type": "string",
+              "enum": ["YESTERDAY", "PAST_MONTH", "PAST_YEAR", "CUSTOM"],
+              "default": "YESTERDAY"
+            }
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "Data inicial da comparação (period_type: CUSTOM)",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "Data final da comparação (period_type: CUSTOM)",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "pastGroup": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "hydrometer_id": {
+                              "type": "integer",
+                              "format": "int64"
+                            },
+                            "consumption": {
+                              "type": "integer",
+                              "format": "int64"
+                            },
+                            "monetary_value": {
+                              "type": "integer",
+                              "format": "int64"
+                            },
+                            "created_at": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "presentGroup": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "hydrometer_id": {
+                              "type": "integer",
+                              "format": "int64"
+                            },
+                            "consumption": {
+                              "type": "integer",
+                              "format": "int64"
+                            },
+                            "monetary_value": {
+                              "type": "integer",
+                              "format": "int64"
+                            },
+                            "created_at": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
     }
   },
   "components": {
