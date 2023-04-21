@@ -66,7 +66,7 @@
         "summary": "Listar Administradores",
         "description": "Essa rota é responsável por listar os administradores",
         "tags": ["Administradores"],
-        "security": [{ "bearerAuth": [] }],
+        "security": [{ "adminBearerAuth": [] }],
         "responses": {
           "200": {
             "description": "Success",
@@ -118,7 +118,7 @@
         "summary": "Cadastrar Administrador",
         "description": "Essa rota é responsável por cadastrar um administrador",
         "tags": ["Administradores"],
-        "security": [{ "bearerAuth": [] }],
+        "security": [{ "adminBearerAuth": [] }],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -320,10 +320,63 @@
           }
         }
       }
+    },
+    "/news": {
+      "post": {
+        "summary": "Cadastrar Notícia",
+        "description": "Essa rota é responsável por cadastrar uma notícia",
+        "tags": ["Notícias"],
+        "security": [{ "adminBearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/News"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "text": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "securitySchemes": {
+      "adminBearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
       "bearerAuth": {
         "type": "http",
         "scheme": "bearer",
@@ -355,8 +408,21 @@
             "type": "string"
           },
           "avatar_file": {
-            "type": "file",
-            "format": "binary"
+            "type": "file"
+          }
+        }
+      },
+      "News": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "image_file [multiple images]": {
+            "type": "file"
           }
         }
       },
