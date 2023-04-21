@@ -57,12 +57,14 @@ export class HydrometersRepository extends AppRepository implements IHydrometers
     user_id,
     name,
     password,
+    share_consumption,
     consumption_category,
     address,
   }: IUpdateHydrometerDTO): Promise<Hydrometer> {
     const payload = {
       name,
       password,
+      share_consumption,
       consumption_category,
     }
 

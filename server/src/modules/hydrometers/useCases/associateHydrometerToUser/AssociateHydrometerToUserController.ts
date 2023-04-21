@@ -16,6 +16,7 @@ export class AssociateHydrometerToUserController {
     const {
       name,
       password,
+      share_consumption,
       consumption_category,
       address,
     } = request.body
@@ -27,6 +28,7 @@ export class AssociateHydrometerToUserController {
       user_id,
       name,
       password,
+      share_consumption,
       consumption_category,
       address,
     })

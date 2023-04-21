@@ -25,15 +25,16 @@ export class ConsumptionMarkingsRepository extends AppRepository implements ICon
       }
     }
 
-    if (region && share_consumption) {
-      Object.assign(filters, {
-        hydrometer: {
-          AND: {
-            share_consumption,
-            address: {
-              neighborhood: { contains: region, mode: 'insensitive' },
-            },
-          },
+    const hydrometerFilters = {}
+
+    if (share_consumption) {
+      Object.assign(hydrometerFilters, { share_consumption })
+    }
+
+    if (region) {
+      Object.assign(hydrometerFilters, {
+        address: {
+          neighborhood: { contains: region, mode: 'insensitive' },
         },
       })
     }
@@ -41,7 +42,12 @@ export class ConsumptionMarkingsRepository extends AppRepository implements ICon
     const consumptionMarkingList = await this.client.consumptionMarkings.findMany({
       skip: page,
       take: perPage,
-      where: filters,
+      where: {
+        ...filters,
+        hydrometer: {
+          AND: hydrometerFilters,
+        }
+      },
     })
 
     return consumptionMarkingList

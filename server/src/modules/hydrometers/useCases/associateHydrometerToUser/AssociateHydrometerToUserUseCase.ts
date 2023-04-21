@@ -22,6 +22,7 @@ interface IUseCaseProps {
   user_id: string
   name: string
   password: string
+  share_consumption?: boolean
   consumption_category?: ConsumptionCategory
   address?: {
     postal_code: string
@@ -55,6 +56,7 @@ export class AssociateHydrometerToUserUseCase {
     user_id,
     name,
     password,
+    share_consumption,
     consumption_category,
     address,
   }: IUseCaseProps) {
@@ -87,6 +89,7 @@ export class AssociateHydrometerToUserUseCase {
       id: hydrometerToAssociate.id,
       user_id,
       name: name,
+      share_consumption,
       consumption_category,
       address,
     })
