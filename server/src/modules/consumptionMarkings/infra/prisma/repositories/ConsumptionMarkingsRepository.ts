@@ -2,7 +2,7 @@ import { ICreateConsumptionMarkingDTO } from '@modules/consumptionMarkings/dtos/
 import { IListConsumptionMarkingsDTO } from '@modules/consumptionMarkings/dtos/IListConsumptionMarkingsDTO'
 import { IConsumptionMarkingsRepository } from '@modules/consumptionMarkings/repositories/IConsumptionMarkingsRepository'
 import { AppRepository } from '@shared/infra/prisma/repositories/AppRepository'
-import { ConsumptionMarkings } from '../entities/ConsumptionMarkings'
+import { ConsumptionMarking } from '../entities/ConsumptionMarking'
 
 const LIST_FIRST_PAGE = 0
 const LIST_DEFAULT_PER_PAGE = 1000
@@ -16,7 +16,7 @@ export class ConsumptionMarkingsRepository extends AppRepository implements ICon
     after_date,
     page = LIST_FIRST_PAGE,
     perPage = LIST_DEFAULT_PER_PAGE,
-  }: IListConsumptionMarkingsDTO): Promise<ConsumptionMarkings[]> {
+  }: IListConsumptionMarkingsDTO): Promise<ConsumptionMarking[]> {
     const filters = {
       hydrometer_id,
       created_at: {
@@ -48,6 +48,7 @@ export class ConsumptionMarkingsRepository extends AppRepository implements ICon
           AND: hydrometerFilters,
         }
       },
+      orderBy: { created_at: 'desc' },
     })
 
     return consumptionMarkingList
@@ -57,7 +58,7 @@ export class ConsumptionMarkingsRepository extends AppRepository implements ICon
     hydrometer_id,
     consumption,
     monetary_value,
-  }: ICreateConsumptionMarkingDTO): Promise<ConsumptionMarkings> {
+  }: ICreateConsumptionMarkingDTO): Promise<ConsumptionMarking> {
     const createdConsumptionMarking = await this.client.consumptionMarkings.create({
       data: {
         hydrometer_id,

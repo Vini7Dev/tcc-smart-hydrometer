@@ -1,4 +1,4 @@
-export class ConsumptionMarkings {
+export class ConsumptionMarking {
   public id: string
 
   public hydrometer_id: number

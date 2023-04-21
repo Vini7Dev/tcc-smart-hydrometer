@@ -1,8 +1,8 @@
 import { ICreateConsumptionMarkingDTO } from '../dtos/ICreateConsumptionMarkingDTO'
 import { IListConsumptionMarkingsDTO } from '../dtos/IListConsumptionMarkingsDTO'
-import { ConsumptionMarkings } from '../infra/prisma/entities/ConsumptionMarkings'
+import { ConsumptionMarking } from '../infra/prisma/entities/ConsumptionMarking'
 
 export interface IConsumptionMarkingsRepository {
-  list(filters: IListConsumptionMarkingsDTO): Promise<ConsumptionMarkings[]>
-  create(data: ICreateConsumptionMarkingDTO): Promise<ConsumptionMarkings>
+  list(filters: IListConsumptionMarkingsDTO): Promise<ConsumptionMarking[]>
+  create(data: ICreateConsumptionMarkingDTO): Promise<ConsumptionMarking>
 }

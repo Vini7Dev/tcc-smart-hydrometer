@@ -1,9 +1,9 @@
 import { isAfter, isBefore } from 'date-fns'
 
-import { ConsumptionMarkings } from '@modules/consumptionMarkings/infra/prisma/entities/ConsumptionMarkings'
+import { ConsumptionMarking } from '@modules/consumptionMarkings/infra/prisma/entities/ConsumptionMarking'
 
 interface IGroupConsumptionMarkingsByTimeDivisionProps {
-  consumptionMarkings: ConsumptionMarkings[]
+  consumptionMarkings: ConsumptionMarking[]
   timeDivision: Date
 }
 
