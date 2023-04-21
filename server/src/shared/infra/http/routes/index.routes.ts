@@ -8,6 +8,8 @@ import { newsRoutes } from '@modules/news/infra/http/routes/news.routes'
 import { hydrometersRoutes } from '@modules/hydrometers/infra/http/routes/hydrometers.routes'
 import { userHydrometers } from '@modules/hydrometers/infra/http/routes/userHydrometers.routes'
 import { consumptionMarkingsRoutes } from '@modules/consumptionMarkings/infra/http/routes/consumptionMarkings.routes'
+import { personalConsumptionMarkings } from '@modules/consumptionMarkings/infra/http/routes/personalConsumptionMarkings.routes'
+import { regionalConsumptionMarkings } from '@modules/consumptionMarkings/infra/http/routes/regionalConsumptionMarkings.routes'
 
 export const appRoutes = Router()
 
@@ -19,3 +21,5 @@ appRoutes.use('/news', newsRoutes)
 appRoutes.use('/hydrometers', hydrometersRoutes)
 appRoutes.use('/user-hydrometers', userHydrometers)
 appRoutes.use('/consumption-markings', consumptionMarkingsRoutes)
+appRoutes.use('/personal-consumption-markings', personalConsumptionMarkings)
+appRoutes.use('/regional-consumption-markings', regionalConsumptionMarkings)
