@@ -15,6 +15,7 @@ import { ExpressAdapter, createBullBoard, BullAdapter } from '@bull-board/expres
 import { BullProvider } from '@shared/containers/providers/QueueProvider/implementation/BullProvider'
 
 const SERVER_PORT = process.env.SERVER_PORT ?? 3333
+const API_VERSION = process.env.API_VERSION ?? 'v1'
 
 const { uploadsFolder } = uploadConfig
 
@@ -37,7 +38,7 @@ createBullBoard({
 
 server.use('/bull-board', serverAdapter.getRouter())
 
-server.use(appRoutes)
+server.use(`/${API_VERSION}`, appRoutes)
 
 server.use(
   (
