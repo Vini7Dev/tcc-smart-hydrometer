@@ -26,9 +26,6 @@
           }
         },
         "responses": {
-          "401": {
-            "description": "Unauthorized"
-          },
           "201": {
             "description": "Created",
             "content": {
@@ -57,6 +54,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }
@@ -68,12 +68,6 @@
         "tags": ["Administradores"],
         "security": [{ "bearerAuth": [] }],
         "responses": {
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "User isn't admin!"
-          },
           "200": {
             "description": "Success",
             "content": {
@@ -111,6 +105,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "User isn't admin!"
           }
         }
       },
@@ -129,15 +129,6 @@
           }
         },
         "responses": {
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "User isn't admin!"
-          },
-          "400": {
-            "description": "Email already exists!"
-          },
           "201": {
             "description": "Created",
             "content": {
@@ -172,6 +163,15 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "User isn't admin!"
+          },
+          "400": {
+            "description": "Email already exists!"
           }
         }
       }
@@ -231,6 +231,95 @@
           }
         }
       }
+    },
+    "/password/forgot": {
+      "post": {
+        "summary": "Recuperar a Senha",
+        "description": "Essa rota é responsável por enviar um email de recuperação de senha",
+        "tags": ["Recuperação de Senha"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPassword"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/password/reset": {
+      "post": {
+        "summary": "Atualizar a Senha",
+        "description": "Essa rota é responsável por atualizar a senha esquecida",
+        "tags": ["Recuperação de Senha"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPassword"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "avatar_file": {
+                      "type": "string"
+                    },
+                    "account_type": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid forgot password token!"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -268,6 +357,25 @@
           "avatar_file": {
             "type": "file",
             "format": "binary"
+          }
+        }
+      },
+      "ForgotPassword": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "ResetPassword": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
           }
         }
       }
