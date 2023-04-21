@@ -43,19 +43,19 @@ export class SeePersonalConsumptionUseCase {
     start_date,
     end_date,
   }: IUseCaseProps) {
-    const userToAssociate = await this.usersRepository.findById(user_id)
+    const userOwnerOfHydrometer = await this.usersRepository.findById(user_id)
 
-    if (!userToAssociate) {
+    if (!userOwnerOfHydrometer) {
       throw new AppError(USER_NOT_FOUND_ERROR, HTTP_STATUS_CODE.NOT_FOUND)
     }
 
-    const hydrometerToAssociate = await this.hydrometersRepository.findById(hydrometer_id)
+    const hydrometerOfMarkings = await this.hydrometersRepository.findById(hydrometer_id)
 
-    if (!hydrometerToAssociate) {
+    if (!hydrometerOfMarkings) {
       throw new AppError(HYDROMETER_NOT_FOUND_ERROR, HTTP_STATUS_CODE.NOT_FOUND)
     }
 
-    if (hydrometerToAssociate.user_id !== userToAssociate.id) {
+    if (hydrometerOfMarkings.user_id !== userOwnerOfHydrometer.id) {
       throw new AppError(
         WITHOUT_PERMISSION_TO_ACCESS_THIS_HYDROMETER_MARKINGS,
         HTTP_STATUS_CODE.FORBIDDEN
