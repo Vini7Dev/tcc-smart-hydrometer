@@ -16,7 +16,6 @@
         "summary": "Autenticar Usuário",
         "description": "Essa rota é responsável por autenticar o usuário",
         "tags": ["Autenticação"],
-        "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "content": {
             "application/json": {
@@ -136,6 +135,62 @@
           "403": {
             "description": "User isn't admin!"
           },
+          "400": {
+            "description": "Email already exists!"
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "avatar_file": {
+                      "type": "string"
+                    },
+                    "account_type": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customers": {
+      "post": {
+        "summary": "Cadastrar Cliente",
+        "description": "Essa rota é responsável por cadastrar um cliente",
+        "tags": ["Clientes"],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
           "400": {
             "description": "Email already exists!"
           },
