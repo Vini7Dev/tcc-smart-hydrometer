@@ -766,6 +766,62 @@
           }
         }
       }
+    },
+    "/consumption-markings": {
+      "post": {
+        "summary": "Cadastrar Marcação de Consumo",
+        "description": "Essa rota é responsável por cadastrar uma marcação de consumo",
+        "tags": ["Marcação de Consumo"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConsumptionMarking"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "hydrometer_id": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "consumption": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "monetary_value": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Deactvated Hydrometer"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -885,6 +941,22 @@
                 "type": "string"
               }
             }
+          }
+        }
+      },
+      "ConsumptionMarking": {
+        "type": "object",
+        "properties": {
+          "hydrometer_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "hydrometer_password": {
+            "type": "string"
+          },
+          "consumption": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       }
