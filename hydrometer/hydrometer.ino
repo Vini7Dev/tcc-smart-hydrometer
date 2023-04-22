@@ -16,7 +16,7 @@ const char* password = "WIFI_PASSWORD_HERE";
 const char* mqtt_server = "MQTT_SERVER_HERE";
 const char* mqtt_username = "MQTT_USERNAME";
 const char* mqtt_password = "MQTT_PASSWORD";
-const int* mqtt_port = 1883;
+const int mqtt_port = 1883;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
