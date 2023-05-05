@@ -8,4 +8,5 @@ export interface INewsRepository {
   list(filters: IListNewsDTO): Promise<News[]>
   create(data: ICreateNewsDTO): Promise<News>
   update(data: IUpdateNewsDTO): Promise<News>
+  delete(id: string): Promise<void>
 }

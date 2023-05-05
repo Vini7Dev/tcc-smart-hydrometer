@@ -1,5 +1,6 @@
 import { uploadMiddleware } from '@configs/upload'
 import { CreateNewsController } from '@modules/news/useCases/createNews/CreateNewsController'
+import { DeleteNewsController } from '@modules/news/useCases/deleteNews/DeleteNewsController'
 import { ListNewsController } from '@modules/news/useCases/listNews/ListNewsController'
 import { SeeNewsController } from '@modules/news/useCases/seeNews/SeeNewsController'
 import { UpdateNewsController } from '@modules/news/useCases/updateNews/UpdateNewsController'
@@ -12,6 +13,7 @@ const seeNewsController = new SeeNewsController()
 const listNewsController = new ListNewsController()
 const createNewsController = new CreateNewsController()
 const updateNewsController = new UpdateNewsController()
+const deleteNewsController = new DeleteNewsController()
 
 export const newsRoutes = Router()
 
@@ -33,4 +35,11 @@ newsRoutes.patch(
   ensureAdmin,
   uploadMiddleware.array(NEWS_IMAGE_FILE_UPLOAD_FIELD),
   updateNewsController.handle
+)
+
+newsRoutes.delete(
+  '/:id',
+  ensureAuthenticated,
+  ensureAdmin,
+  deleteNewsController.handle
 )

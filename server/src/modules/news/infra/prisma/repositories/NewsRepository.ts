@@ -78,4 +78,10 @@ export class NewsRepository extends AppRepository implements INewsRepository {
 
     return createdNews
   }
+
+  public async delete(id: string): Promise<void> {
+    await this.client.news.delete({
+      where: { id }
+    })
+  }
 }
