@@ -527,6 +527,38 @@
             "description": "Not Found - News not found! - Token not found!"
           }
         }
+      },
+      "delete": {
+        "summary": "Apagar Notícia",
+        "description": "Essa rota é responsável por apagar os dados de uma notícia",
+        "tags": ["Notícias"],
+        "security": [{ "adminBearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da notícia",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Exemplo excluído com sucesso",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid token!"
+          },
+          "404": {
+            "description": "Not Found - News not found! - Token not found!"
+          }
+        }
       }
     },
     "/news": {
@@ -624,6 +656,85 @@
         "description": "Essa rota é responsável por cadastrar uma notícia",
         "tags": ["Notícias"],
         "security": [{ "adminBearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/News"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "text": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                },
+                "examples": {
+                  "news": {
+                    "value": {
+                      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "title": "News title",
+                      "text": "News text...",
+                      "created_at": "2023-01-01T23:59:59.999Z",
+                      "updated_at": "2023-01-01T23:59:59.999Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid token!"
+          },
+          "403": {
+            "description": "Forbidden - User isn't admin!"
+          },
+          "404": {
+            "description": "Not Found - Token not found!"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Atualizar Notícia",
+        "description": "Essa rota é responsável por atualizar uma notícia",
+        "tags": ["Notícias"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da notícia",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
