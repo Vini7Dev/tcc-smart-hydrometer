@@ -158,6 +158,18 @@
         "description": "Essa rota é responsável por cadastrar um administrador",
         "tags": ["Administradores"],
         "security": [{ "adminBearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do administrador",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -225,6 +237,86 @@
           },
           "403": {
             "description": "Forbidden - User isn't admin!"
+          },
+          "404": {
+            "description": "Not Found - Token not found!"
+          }
+        }
+      }
+    },
+    "/admins/{id}": {
+      "patch": {
+        "summary": "Atualizar Administrador",
+        "description": "Essa rota é responsável por atualizar os dados de um administrador",
+        "tags": ["Administradores"],
+        "security": [{ "adminBearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "avatar_file": {
+                      "type": "string"
+                    },
+                    "account_type": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                },
+                "examples": {
+                  "response": {
+                    "value": {
+                      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "name": "Jhon Doe",
+                      "email": "jhondoe@mail.com",
+                      "avatar_file": "file_name.png",
+                      "account_type": "ADMIN",
+                      "created_at": "2023-01-01T23:59:59.999Z",
+                      "updated_at": "2023-01-01T23:59:59.999Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Email already exists!"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid token!"
+          },
+          "403": {
+            "description": "Forbidden - User isn't admin! - You cannot update another user!"
           },
           "404": {
             "description": "Not Found - Token not found!"
@@ -382,11 +474,14 @@
           "400": {
             "description": "Bad Request - Email already exists!"
           },
+          "401": {
+            "description": "Unauthorized - Invalid token!"
+          },
           "403": {
             "description": "Forbidden - You cannot update another user!"
           },
           "404": {
-            "description": "Not Found - User not found"
+            "description": "Not Found - Token not found! - User not found"
           }
         }
       },
