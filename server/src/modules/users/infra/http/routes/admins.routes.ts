@@ -8,10 +8,12 @@ import { ListAdminsController } from '@modules/users/useCases/listAdmins/ListAdm
 import { uploadMiddleware } from '@configs/upload'
 import { AVATAR_FILE_UPLOAD_FIELD } from '@utils/constants'
 import { UpdateAdminController } from '@modules/users/useCases/updateAdminUser/UpdateAdminController'
+import { DeleteAdminController } from '@modules/users/useCases/deleteAdminUser/DeleteAdminController'
 
 const listAdminsController = new ListAdminsController()
 const createAdminController = new CreateAdminController()
 const updateAdminController = new UpdateAdminController()
+const deleteAdminController = new DeleteAdminController()
 
 export const adminsRoutes = Router()
 
@@ -45,4 +47,11 @@ adminsRoutes.patch(
     },
   }),
   updateAdminController.handle
+)
+
+adminsRoutes.delete(
+  '/:id',
+  ensureAuthenticated,
+  ensureAdmin,
+  deleteAdminController.handle
 )

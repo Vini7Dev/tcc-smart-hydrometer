@@ -158,18 +158,6 @@
         "description": "Essa rota é responsável por cadastrar um administrador",
         "tags": ["Administradores"],
         "security": [{ "adminBearerAuth": [] }],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID do administrador",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -250,6 +238,18 @@
         "description": "Essa rota é responsável por atualizar os dados de um administrador",
         "tags": ["Administradores"],
         "security": [{ "adminBearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do administrador",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -308,6 +308,41 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad Request - Email already exists!"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid token!"
+          },
+          "403": {
+            "description": "Forbidden - User isn't admin! - You cannot update another user!"
+          },
+          "404": {
+            "description": "Not Found - Token not found!"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Apagar Administrador",
+        "description": "Essa rota é responsável por apagar os dados de um administrador",
+        "tags": ["Administradores"],
+        "security": [{ "adminBearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do administrador",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
           },
           "400": {
             "description": "Bad Request - Email already exists!"
@@ -506,11 +541,14 @@
           "204": {
             "description": "No Content"
           },
+          "401": {
+            "description": "Unauthorized - Invalid token!"
+          },
           "403": {
             "description": "Forbidden - You cannot delete another user!"
           },
           "404": {
-            "description": "Not Found - User not found"
+            "description": "Not Found - Token not found! - User not found"
           }
         }
       }
