@@ -34,7 +34,7 @@ export class UpdateCustomerController {
     })
 
     return response
-      .status(HTTP_STATUS_CODE.CREATED)
+      .status(HTTP_STATUS_CODE.SUCCESS_DEFAULT)
       .json(createdCustomerWithoutPassword)
   }
 }
