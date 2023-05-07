@@ -381,6 +381,41 @@
           },
           "400": {
             "description": "Bad Request - Email already exists!"
+          },
+          "403": {
+            "description": "Forbidden - You cannot update another user!"
+          },
+          "404": {
+            "description": "Not Found - User not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Apagar Cliente",
+        "description": "Essa rota é responsável por apagar os dados de um cliente",
+        "tags": ["Clientes"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do cliente",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden - You cannot delete another user!"
+          },
+          "404": {
+            "description": "Not Found - User not found"
           }
         }
       }
@@ -629,11 +664,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Exemplo excluído com sucesso",
-            "content": {
-              "application/json": {}
-            }
+          "204": {
+            "description": "No Content"
           },
           "401": {
             "description": "Unauthorized - Invalid token!"

@@ -6,9 +6,11 @@ import { CreateCustomerController } from '@modules/users/useCases/createCustomer
 import { AVATAR_FILE_UPLOAD_FIELD } from '@utils/constants'
 import { UpdateCustomerController } from '@modules/users/useCases/updateCustomerUser/UpdateCustomerController'
 import { ensureAuthenticated } from '@shared/infra/http/middlewares/ensureAuthenticated'
+import { DeleteCustomerController } from '@modules/users/useCases/deleteCustomerUser/DeleteCustomerController'
 
 const createCustomerController = new CreateCustomerController()
 const updateCustomerController = new UpdateCustomerController()
+const deleteCustomerController = new DeleteCustomerController()
 
 export const customerRoutes = Router()
 
@@ -37,4 +39,10 @@ customerRoutes.patch(
   }),
   ensureAuthenticated,
   updateCustomerController.handle
+)
+
+customerRoutes.delete(
+  '/:id',
+  ensureAuthenticated,
+  deleteCustomerController.handle
 )

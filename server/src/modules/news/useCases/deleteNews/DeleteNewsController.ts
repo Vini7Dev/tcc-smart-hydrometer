@@ -10,10 +10,8 @@ export class DeleteNewsController {
 
     const deleteNewsUseCase = container.resolve(DeleteNewsUseCase)
 
-    const newsData = await deleteNewsUseCase.execute({ id })
+    await deleteNewsUseCase.execute({ id })
 
-    return response
-      .status(HTTP_STATUS_CODE.SUCCESS_DEFAULT)
-      .json(newsData)
+    return response.status(HTTP_STATUS_CODE.NO_CONTENT).send()
   }
 }

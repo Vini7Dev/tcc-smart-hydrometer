@@ -35,7 +35,7 @@ export class ForgotPasswordTokensRepository extends AppRepository implements IFo
   }
 
   public async delete(id: string): Promise<void> {
-    const deletedForgotPasswordToken = await this.client.forgotPasswordTokens.delete({
+    await this.client.forgotPasswordTokens.delete({
       where: { id }
     })
   }

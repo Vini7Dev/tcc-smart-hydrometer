@@ -17,7 +17,7 @@ interface IUseCaseProps {
 
 const USER_NOT_FOUND_ERROR = 'User not found!'
 const EMAIL_ALREADY_EXISTS_ERROR = 'Email already exists!'
-const YOU_CANNOT_UPDATE_ANOTHER_USER_ERROR = 'You cannot update another user'
+const YOU_CANNOT_UPDATE_ANOTHER_USER_ERROR = 'You cannot update another user!'
 
 @injectable()
 export class UpdateCustomerUseCase {
