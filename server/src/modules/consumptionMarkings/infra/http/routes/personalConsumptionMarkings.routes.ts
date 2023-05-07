@@ -5,9 +5,9 @@ import { ensureAuthenticated } from '@shared/infra/http/middlewares/ensureAuthen
 
 const seePersonalConsumptionController = new SeePersonalConsumptionController()
 
-export const personalConsumptionMarkings = Router()
+export const personalConsumptionMarkingsRoutes = Router()
 
-personalConsumptionMarkings.get(
+personalConsumptionMarkingsRoutes.get(
   '/',
   ensureAuthenticated,
   seePersonalConsumptionController.handle

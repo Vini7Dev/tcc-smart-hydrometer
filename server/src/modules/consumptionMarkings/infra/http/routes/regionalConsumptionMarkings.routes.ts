@@ -5,9 +5,9 @@ import { SeeRegionalConsumptionController } from '@modules/consumptionMarkings/u
 
 const seeRegionalConsumptionController = new SeeRegionalConsumptionController()
 
-export const regionalConsumptionMarkings = Router()
+export const regionalConsumptionMarkingsRoutes = Router()
 
-regionalConsumptionMarkings.get(
+regionalConsumptionMarkingsRoutes.get(
   '/',
   ensureAuthenticated,
   seeRegionalConsumptionController.handle
