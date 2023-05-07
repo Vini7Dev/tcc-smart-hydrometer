@@ -1,10 +1,10 @@
 import { injectable, inject } from 'tsyringe'
 
-import { HTTP_STATUS_CODE } from '@utils/constants'
 import { IHashProvider } from '@shared/containers/providers/HashProvider/models/IHashProvider'
 import { AppError } from '@shared/errors/AppError'
 import { IUsersRepository } from '@modules/users/repositories/IUsersRepository'
 import { IStorageProvider } from '@shared/containers/providers/StorageProvider/models/IStorageProvider'
+import { HTTP_STATUS_CODE } from '@utils/constants'
 
 interface IUseCaseProps {
   authenticatedUserId: string
@@ -20,7 +20,7 @@ const EMAIL_ALREADY_EXISTS_ERROR = 'Email already exists!'
 const YOU_CANNOT_UPDATE_ANOTHER_USER_ERROR = 'You cannot update another user!'
 
 @injectable()
-export class UpdateCustomerUseCase {
+export class UpdateAdminUseCase {
   constructor (
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,

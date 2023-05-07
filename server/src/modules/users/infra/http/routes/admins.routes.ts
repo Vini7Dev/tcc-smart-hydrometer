@@ -7,9 +7,11 @@ import { ensureAdmin } from '@shared/infra/http/middlewares/ensureAdmin'
 import { ListAdminsController } from '@modules/users/useCases/listAdmins/ListAdminsController'
 import { uploadMiddleware } from '@configs/upload'
 import { AVATAR_FILE_UPLOAD_FIELD } from '@utils/constants'
+import { UpdateAdminController } from '@modules/users/useCases/updateAdminUser/UpdateAdminController'
 
 const listAdminsController = new ListAdminsController()
 const createAdminController = new CreateAdminController()
+const updateAdminController = new UpdateAdminController()
 
 export const adminsRoutes = Router()
 
@@ -28,4 +30,19 @@ adminsRoutes.post(
     },
   }),
   createAdminController.handle
+)
+
+adminsRoutes.patch(
+  '/:id',
+  ensureAuthenticated,
+  ensureAdmin,
+  uploadMiddleware.single(AVATAR_FILE_UPLOAD_FIELD),
+  celebrate({
+    [Segments.BODY]: {
+      name: Joi.string(),
+      email: Joi.string(),
+      password: Joi.string().min(8).alphanum(),
+    },
+  }),
+  updateAdminController.handle
 )

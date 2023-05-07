@@ -29,6 +29,7 @@ customerRoutes.post(
 
 customerRoutes.patch(
   '/:id',
+  ensureAuthenticated,
   uploadMiddleware.single(AVATAR_FILE_UPLOAD_FIELD),
   celebrate({
     [Segments.BODY]: {
@@ -37,7 +38,6 @@ customerRoutes.patch(
       password: Joi.string().min(8).alphanum(),
     }
   }),
-  ensureAuthenticated,
   updateCustomerController.handle
 )
 
