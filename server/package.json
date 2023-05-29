@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@bull-board/express": "^4.9.0",
+    "@faker-js/faker": "^8.0.2",
     "@prisma/client": "^4.11.0",
     "bcrypt": "^5.1.0",
     "bull": "^4.10.4",
@@ -46,6 +47,11 @@
   },
   "scripts": {
     "seed:admin": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/shared/infra/prisma/seeds/createAdmin.ts",
+    "migrate:dev": "prisma migrate dev && prisma generate",
+
+    "mock:faker": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/shared/infra/prisma/mock/fakerDatabase.ts",
+    "mock:reset": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/shared/infra/prisma/mock/clearDatabase.ts && npm-run-all migrate:dev",
+
     "dev": "npm-run-all -p dev:*",
     "dev:server": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/shared/infra/http/server.ts",
     "dev:queue": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/shared/infra/bull/queue.ts",
