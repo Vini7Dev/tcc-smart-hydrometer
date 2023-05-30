@@ -1,10 +1,60 @@
 import { faker } from '@faker-js/faker'
-import { addHours, isLastDayOfMonth } from 'date-fns'
-
-import { CUSTOMER_ACCOUNT_TYPE } from '@utils/constants'
+import { addHours, format, isLastDayOfMonth } from 'date-fns'
 import { AccountType, ConsumptionCategory, PrismaClient } from '@prisma/client'
 
+import { CUSTOMER_ACCOUNT_TYPE } from '@utils/constants'
+
 const prismaClient = new PrismaClient()
+
+const createCitiesAndConsumptionConversions = async () => {
+  const RESIDENTIAL_NORMAL = 'RESIDENTIAL_NORMAL'
+  const A_TRILLION_TO_DECREASE_NUMBER = 100000000000
+  const CONVERSION_RULES = [
+    { rule: '0 a 10', water_rate: 3585, sewer_rate: 2875 },
+    { rule: '11 a 20', water_rate: 500, sewer_rate: 394 },
+    { rule: '21 a 50', water_rate: 768, sewer_rate: 614 },
+    { rule: 'acima de 50', water_rate: 918, sewer_rate: 731 },
+  ]
+
+  const cityForConversionData = {
+    id: faker.string.uuid(),
+    name: faker.location.city(),
+    code: Math.trunc(faker.number.int() / A_TRILLION_TO_DECREASE_NUMBER),
+    last_update: format(faker.date.anytime(), 'dd-MM-yyyy'),
+  }
+
+  const categoryForConversionData = {
+    id: faker.string.uuid(),
+    city_for_conversion_id: cityForConversionData.id,
+    category: RESIDENTIAL_NORMAL,
+  }
+
+  const consumptionConversionList = []
+
+  for (const conversionRule of CONVERSION_RULES) {
+    const consumptionConversionData = {
+      id: faker.string.uuid(),
+      category_for_conversion_id: categoryForConversionData.id,
+      water_rate: conversionRule.water_rate,
+      sewer_rate: conversionRule.sewer_rate,
+      rule: conversionRule.rule,
+    }
+
+    consumptionConversionList.push(consumptionConversionData)
+  }
+
+  await prismaClient.citiesForConversion.create({ data: cityForConversionData })
+
+  await prismaClient.categoriesForConversion.create({ data: categoryForConversionData })
+
+  await prismaClient.consumptionConversions.createMany({ data: consumptionConversionList })
+
+  return {
+    cityForConversionData,
+    categoryForConversionData,
+    consumptionConversionList,
+  }
+}
 
 const createCustomer = async () => {
   const GITHUB_AVATAR_BASE_URL = 'https://avatars.githubusercontent.com/'
@@ -101,6 +151,8 @@ const createConsumptionMarkings = async (hydrometerData: any, count = 1) => {
 
 const sendToDataBase = async () => {
   const TOTAL_OF_CONSUMPTION_MARKINGS = 756
+
+  await createCitiesAndConsumptionConversions()
 
   const { customerData } = await createCustomer()
 
