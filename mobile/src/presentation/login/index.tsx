@@ -6,6 +6,10 @@ function Login() {
     const [user, setUser] = useState("User")
     const [password, setPassword] = useState("Password")
 
+    const login = () => {
+        console.log("1")
+    }
+
     return (
         <SafeAreaView
             style={
@@ -65,9 +69,10 @@ function Login() {
                 </TouchableOpacity>
 
                 <TouchableOpacity 
-                        style={
-                            loginStyles.login
-                        }>
+                    style={
+                        loginStyles.login
+                    }
+                    onPress={login}>
                     <Text>
                         Entrar
                     </Text>

@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 
 import { backgroundColor } from './src/source/commons/styles/style';
-import { NewPassword } from './src/presentation/new_password';
+import { Login } from './src/presentation/login';
 
 function App(): JSX.Element {
   return (
@@ -24,7 +24,7 @@ function App(): JSX.Element {
         borderWidth: 10,
       }}>
       <StatusBar/>
-        <NewPassword />
+        <Login />
     </SafeAreaView>
   );
 }
