@@ -1,9 +1,9 @@
-import { Image, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { useState } from "react";
-import { forgot_password } from "./style";
+import React, { useState } from 'react'
+import { Image, SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { forgot_password } from './styles'
 
-function ForgotPassword() {
-    const [email, setEmail] = useState("User")
+export const ForgotPassword: React.FC = () => {
+    const [email, setEmail] = useState('User')
 
     return (
         <SafeAreaView
@@ -12,18 +12,18 @@ function ForgotPassword() {
             }>
             <Image source={
                 require("../../../assets/logo.png")
-            } 
+            }
             alt={"Logo"}
             />
-            
-            <Text 
+
+            <Text
                 style={
                     forgot_password.program
                 }>
                 NOME DO PROGRAMA
             </Text>
-            
-            <Text 
+
+            <Text
                 style={
                     forgot_password.title
                 }>
@@ -37,18 +37,16 @@ function ForgotPassword() {
                 placeholder="email"
                 onChangeText={email => setEmail(email)}
                 defaultValue="informe o e-mail cadastrado"
-            /> 
+            />
 
-            <TouchableOpacity 
+            <TouchableOpacity
                     style={
                         forgot_password.login
                     }>
                 <Text>
                     Entrar
                 </Text>
-            </TouchableOpacity>           
+            </TouchableOpacity>
         </SafeAreaView>
     )
 }
-
-export { ForgotPassword }

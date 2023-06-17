@@ -1,10 +1,10 @@
-import { Image, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { useState } from "react";
-import { newPassword } from "./style";
+import React, { useState } from 'react'
+import { Image, SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { newPassword } from './styles'
 
-function NewPassword() {
-    const [newPass, setNewPass] = useState("nova senha")
-    const [confirm, setConfirm] = useState("confirme a senha")
+export const NewPassword: React.FC = () => {
+    const [newPass, setNewPass] = useState('nova senha')
+    const [confirm, setConfirm] = useState('confirme a senha')
 
     return (
         <SafeAreaView
@@ -13,18 +13,18 @@ function NewPassword() {
             }>
             <Image source={
                 require("../../../assets/logo.png")
-            } 
+            }
             alt={"Logo"}
             />
-            
-            <Text 
+
+            <Text
                 style={
                     newPassword.program
                 }>
                 NOME DO PROGRAMA
             </Text>
-            
-            <Text 
+
+            <Text
                 style={
                     newPassword.title
                 }>
@@ -32,7 +32,7 @@ function NewPassword() {
             </Text>
 
             <View style={{
-                display: "flex", 
+                display: "flex",
             }}>
                 <TextInput
                     style={
@@ -41,7 +41,7 @@ function NewPassword() {
                     placeholder="nova senha"
                     onChangeText={newPass => setNewPass(newPass)}
                     defaultValue="nova senha"
-                /> 
+                />
 
                 <TextInput
                     style={
@@ -55,7 +55,7 @@ function NewPassword() {
             </View>
 
             <View style={newPassword.containerButton}>
-                <TouchableOpacity 
+                <TouchableOpacity
                         style={
                             newPassword.login
                         }>
@@ -67,5 +67,3 @@ function NewPassword() {
         </SafeAreaView>
     )
 }
-
-export { NewPassword }

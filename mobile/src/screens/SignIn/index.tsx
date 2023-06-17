@@ -1,13 +1,13 @@
-import { Image, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { useState } from "react";
-import { loginStyles } from "./style";
+import React, { useState } from 'react'
+import { Image, SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { loginStyles } from './styles'
 
-function Login() {
-    const [user, setUser] = useState("User")
-    const [password, setPassword] = useState("Password")
+export const SignIn: React.FC = () => {
+    const [user, setUser] = useState('User')
+    const [password, setPassword] = useState('Password')
 
     const login = () => {
-        console.log("1")
+        console.log('1')
     }
 
     return (
@@ -17,18 +17,21 @@ function Login() {
             }>
             <Image source={
                 require("../../../assets/logo.png")
-            } 
+            }
             alt={"Logo"}
+            style={
+                loginStyles.logoImage
+            }
             />
-            
-            <Text 
+
+            <Text
                 style={
                     loginStyles.program
                 }>
-                NOME DO PROGRAMA
+                Inteliágua
             </Text>
-            
-            <Text 
+
+            <Text
                 style={
                     loginStyles.title
                 }>
@@ -36,7 +39,7 @@ function Login() {
             </Text>
 
             <View style={{
-                display: "flex", 
+                display: "flex",
             }}>
                 <TextInput
                     style={
@@ -45,7 +48,7 @@ function Login() {
                     placeholder="user"
                     onChangeText={user => setUser(user)}
                     defaultValue="username"
-                /> 
+                />
 
                 <TextInput
                     style={
@@ -60,7 +63,7 @@ function Login() {
 
             <View style={loginStyles.containerButton}>
                 <TouchableOpacity >
-                    <Text 
+                    <Text
                         style={
                             loginStyles.forgot
                         }>
@@ -68,7 +71,7 @@ function Login() {
                     </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={
                         loginStyles.login
                     }
@@ -78,14 +81,14 @@ function Login() {
                     </Text>
                 </TouchableOpacity>
             </View>
-            
-            <Text 
+
+            <Text
                 style={
                     loginStyles.title
                 }>
                     Não tem conta
             </Text>
-            <Text 
+            <Text
                 style={
                     loginStyles.forgot
                 }>
@@ -94,5 +97,3 @@ function Login() {
         </SafeAreaView>
     )
 }
-
-export { Login }

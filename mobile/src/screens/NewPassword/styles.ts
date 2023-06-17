@@ -1,7 +1,7 @@
-import { StyleSheet } from "react-native"
-import { blackColor, primaryColor, whiteColor, secondaryColor } from "../../source/commons/styles/style";
+import { StyleSheet } from 'react-native'
+import { blackColor, primaryColor, whiteColor, secondaryColor } from '../../styles/variables'
 
-const signin = StyleSheet.create({
+const newPassword = StyleSheet.create({
     container: {
       flex: 1,
       padding: 20,
@@ -24,7 +24,7 @@ const signin = StyleSheet.create({
     },
     forgot: {
       color: secondaryColor,
-      textAlign: "right", 
+      textAlign: "right",
     },
     login: {
       backgroundColor: primaryColor,
@@ -32,8 +32,8 @@ const signin = StyleSheet.create({
       paddingVertical: 10,
     },
     containerButton: {
-      
-    }
-  });
 
-export { signin }
+    }
+  })
+
+export { newPassword }

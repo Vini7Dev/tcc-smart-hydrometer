@@ -1,11 +1,12 @@
-import { Image, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { useState } from "react";
-import { signin } from "./style";
+import React, { useState } from 'react'
+import { Image, SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
-function Signin() {
-    const [name, setName] = useState("Name")
-    const [email, setEmail] = useState("Email")
-    const [password, setPassword] = useState("Password")
+import { signin } from './styles'
+
+export const SignUp: React.FC = () => {
+    const [name, setName] = useState('Name')
+    const [email, setEmail] = useState('Email')
+    const [password, setPassword] = useState('Password')
 
     return (
         <SafeAreaView
@@ -13,14 +14,14 @@ function Signin() {
                 signin.container
             }>
 
-            <Text       
+            <Text
                 style={
                     signin.program
                 }>
                 Bem Vindo (a)
             </Text>
-            
-            <Text       
+
+            <Text
                 style={
                     signin.title
                 }>
@@ -29,12 +30,12 @@ function Signin() {
 
             <Image source={
                 require("../../../assets/avatar-user.png")
-            } 
+            }
             alt={"avatar"}
             />
 
             <View style={{
-                display: "flex", 
+                display: "flex",
             }}>
                 <TextInput
                     style={
@@ -43,8 +44,8 @@ function Signin() {
                     placeholder="user"
                     onChangeText={name => setName(name)}
                     defaultValue="username"
-                /> 
-                
+                />
+
                 <TextInput
                     style={
                         signin.buttons
@@ -52,7 +53,7 @@ function Signin() {
                     placeholder="user"
                     onChangeText={email => setEmail(email)}
                     defaultValue="username"
-                /> 
+                />
 
                 <TextInput
                     style={
@@ -66,7 +67,7 @@ function Signin() {
             </View>
 
             <View style={signin.containerButton}>
-                <TouchableOpacity 
+                <TouchableOpacity
                         style={
                             signin.login
                         }>
@@ -79,5 +80,3 @@ function Signin() {
         </SafeAreaView>
     )
 }
-
-export { Signin }
