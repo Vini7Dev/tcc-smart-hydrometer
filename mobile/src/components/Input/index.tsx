@@ -12,12 +12,17 @@ interface InputProps extends TextInputProps {
 export const Input: React.FC<InputProps> = ({
     iconName,
     backgroundColor = whiteColor,
+    multiline = false,
     style = {} as object,
     ...rest
 }) => {
     return (
-        <Container style={{ backgroundColor }}>
-            <TextInput {...rest} style={{ ...style, backgroundColor }} />
+        <Container isMultiline={multiline} style={{ backgroundColor }}>
+            <TextInput
+                {...rest}
+                multiline={multiline}
+                style={{ ...style, backgroundColor, textAlignVertical: 'top' }}
+            />
 
             {
                 iconName && <Icon name={iconName} size={24} color={blackColor} style={{ backgroundColor }} />

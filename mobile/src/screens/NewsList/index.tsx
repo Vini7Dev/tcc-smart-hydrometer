@@ -24,7 +24,7 @@ interface NewsItemProps {
     title: string
     description: string
     banner: string
-    handleGoToCreateNews: () => void
+    handleGoToViewNews: () => void
 }
 
 const MockBannerImage = require('../../../assets/mockImages/news_banner.png')
@@ -48,10 +48,10 @@ const NewsItem: React.FC<NewsItemProps> = ({
     title,
     description,
     banner,
-    handleGoToCreateNews,
+    handleGoToViewNews,
 }) => {
     return (
-        <NewsItemContainer onPress={handleGoToCreateNews}>
+        <NewsItemContainer onPress={handleGoToViewNews}>
             <>
                 <NewsTitleContainer>
                     <NewsTitle>{title}</NewsTitle>
@@ -71,6 +71,10 @@ export const NewsList: React.FC = () => {
     const navigation = useNavigation()
 
     const handleGoToCreateNews = useCallback(() => {
+        navigation.navigate('CreateNews' as never)
+    }, [navigation])
+
+    const handleGoToViewNews = useCallback(() => {
         navigation.navigate('ViewNews' as never)
     }, [navigation])
 
@@ -97,7 +101,7 @@ export const NewsList: React.FC = () => {
                             title={item.title}
                             description={item.description}
                             banner={item.banner}
-                            handleGoToCreateNews={handleGoToCreateNews}
+                            handleGoToViewNews={handleGoToViewNews}
                         />
                     )}
                     keyExtractor={(item: any) => item.id}

@@ -7,6 +7,7 @@ import { AdminsList } from '../screens/AdminsList'
 import { SignUpAdmin } from '../screens/SignUpAdmin'
 import { NewsList } from '../screens/NewsList'
 import { ViewNews } from '../screens/ViewNews'
+import { CreateNews } from '../screens/CreateNews'
 
 const AdminNav = createStackNavigator()
 
@@ -23,6 +24,7 @@ export const AdminRoutes: React.FC = () => {
             <AdminNav.Screen name="SignUpAdmin" component={SignUpAdmin} />
             <AdminNav.Screen name="NewsList" component={NewsList} />
             <AdminNav.Screen name="ViewNews" component={ViewNews} />
+            <AdminNav.Screen name="CreateNews" component={CreateNews} />
         </AdminNav.Navigator>
     )
 }

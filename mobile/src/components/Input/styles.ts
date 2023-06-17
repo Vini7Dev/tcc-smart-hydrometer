@@ -3,11 +3,15 @@ import Icons from 'react-native-vector-icons/Feather'
 
 import { blackColor, whiteColor } from '../../styles/variables'
 
-export const Container = styled.View`
+interface ContainerProps {
+    isMultiline: boolean
+}
+
+export const Container = styled.View<ContainerProps>`
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    height: 50px;
+    height: ${props => props.isMultiline ? 'auto' : '50px'};
     width: 100%;
     margin: 8px 0;
     padding: 0 16px;
