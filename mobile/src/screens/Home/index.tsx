@@ -41,7 +41,7 @@ export const Home: React.FC = () => {
 
     return (
         <ScreenContainer>
-            <NavigationHeader />
+            <NavigationHeader title="Início" />
 
             <ScreenContent>
                 <UserAvatarContainer>

@@ -86,7 +86,7 @@ export const NewsList: React.FC = () => {
 
     return (
         <ScreenContainer>
-            <NavigationHeader />
+            <NavigationHeader title="Notícias e Dicas" />
 
             <ScreenContent>
                 <SearchInputContainer>

@@ -76,7 +76,7 @@ export const AdminsList: React.FC = () => {
 
     return (
         <ScreenContainer>
-            <NavigationHeader />
+            <NavigationHeader title="Usuários Administradores" />
 
             <ScreenContent>
                 <SearchInputContainer>

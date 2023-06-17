@@ -19,7 +19,7 @@ export const SignUpAdmin: React.FC = () => {
 
     return (
         <ScreenContainer>
-            <NavigationHeader />
+            <NavigationHeader title="Cadastrar Administrador" />
 
             <ScreenContent>
                 <AvatarUpload />

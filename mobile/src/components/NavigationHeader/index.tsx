@@ -20,6 +20,10 @@ import { primaryColor, whiteColor } from '../../styles/variables'
 import { Button } from '../Button'
 import { useAuth } from '../../hooks/Auth'
 
+interface NavigationHeaderProps {
+    title: string
+}
+
 interface NavigationContainerProps {
     closeNavigation: () => void
 }
@@ -104,7 +108,9 @@ const NavigationContainer: React.FC<NavigationContainerProps> = ({
     )
 }
 
-export const NavigationHeader: React.FC = () => {
+export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
+    title,
+}) => {
     const navigation = useNavigation()
 
     const [isShowNavigation, setIsShowNavigation] = useState(false)
@@ -126,7 +132,7 @@ export const NavigationHeader: React.FC = () => {
                 color={whiteColor}
             />
 
-            <ScreenTitle>Início</ScreenTitle>
+            <ScreenTitle>{title}</ScreenTitle>
 
             <NavigationIcon
                 name="menu"

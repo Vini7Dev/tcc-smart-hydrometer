@@ -20,7 +20,7 @@ export const GenerateHydrometer: React.FC = () => {
 
     return (
         <ScreenContainer>
-            <NavigationHeader />
+            <NavigationHeader title="Gerar Hidrômetro" />
 
             <ScreenContent>
                 <ButtonLabel>Gostaria de gerar um novo hydrômetro?</ButtonLabel>

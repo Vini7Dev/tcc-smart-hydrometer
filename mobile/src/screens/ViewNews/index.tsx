@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
 import { Dimensions } from 'react-native'
 import { format } from 'date-fns'
 
@@ -41,8 +40,6 @@ const mockNewsData = {
 const { width } = Dimensions.get('window')
 
 export const ViewNews: React.FC = () => {
-    const navigation = useNavigation()
-
     const [currentBannerIndex, setCurrentBannerIndex] = useState(0)
 
     const handleNextBanner = useCallback(() => {
@@ -63,7 +60,7 @@ export const ViewNews: React.FC = () => {
 
     return (
         <ScreenContainer>
-            <NavigationHeader />
+            <NavigationHeader title={mockNewsData.title} />
 
             <BannersContainer>
                 <BannersList

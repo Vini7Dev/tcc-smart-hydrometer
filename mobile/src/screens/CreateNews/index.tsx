@@ -24,7 +24,7 @@ export const CreateNews: React.FC = () => {
 
     return (
         <ScreenContainer>
-            <NavigationHeader />
+            <NavigationHeader title="Cadastrar Notícia" />
 
             <ScreenContent>
                 <Input
