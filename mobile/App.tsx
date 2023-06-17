@@ -5,19 +5,17 @@ import {
 } from 'react-native'
 
 import { backgroundColor } from './src/styles/variables'
-import { SignIn } from './src/screens/SignIn'
+import { SignUp } from './src/screens/SignUp'
 
 const App: React.FC = () => {
   return (
     <SafeAreaView
       style={{
-        backgroundColor: backgroundColor,
         flex: 1,
-        borderColor: "#000000",
-        borderWidth: 10,
+        backgroundColor: backgroundColor,
       }}>
       <StatusBar/>
-        <SignIn />
+        <SignUp />
     </SafeAreaView>
   )
 }

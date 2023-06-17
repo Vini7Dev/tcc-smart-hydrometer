@@ -40,7 +40,7 @@ export const SignIn: React.FC = () => {
                 <ForgotPasswordText>Esqueci a senha</ForgotPasswordText>
             </ForgotPasswordButton>
 
-            <Button text="Entrar" />
+            <Button text="ENTRAR" />
 
             <CreateAccountContainer>
                 <CreateAccountLink>Não tem conta?{' '}</CreateAccountLink>

@@ -1,7 +1,14 @@
 import React, { useState } from 'react'
-import { Image, SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
-import { signin } from './styles'
+import {
+    ScreenContainer,
+    Title,
+    Subtitle,
+    ButtonMargin,
+} from './styles'
+import { Input } from '../../components/Input'
+import { Button } from '../../components/Button'
+import { AvatarUpload } from '../../components/AvatarUpload'
 
 export const SignUp: React.FC = () => {
     const [name, setName] = useState('Name')
@@ -9,74 +16,37 @@ export const SignUp: React.FC = () => {
     const [password, setPassword] = useState('Password')
 
     return (
-        <SafeAreaView
-            style={
-                signin.container
-            }>
+        <ScreenContainer>
+            <Title>Bem Vindo (a)</Title>
 
-            <Text
-                style={
-                    signin.program
-                }>
-                Bem Vindo (a)
-            </Text>
+            <Subtitle>Cadastre-se</Subtitle>
 
-            <Text
-                style={
-                    signin.title
-                }>
-                Cadastre-se
-            </Text>
+            <AvatarUpload />
 
-            <Image source={
-                require("../../../assets/avatar-user.png")
-            }
-            alt={"avatar"}
+            <Input
+                iconName="user"
+                placeholder="Nome"
+                onChangeText={name => setName(name)}
             />
 
-            <View style={{
-                display: "flex",
-            }}>
-                <TextInput
-                    style={
-                        signin.buttons
-                    }
-                    placeholder="user"
-                    onChangeText={name => setName(name)}
-                    defaultValue="username"
+            <Input
+                iconName="mail"
+                placeholder="Email"
+                onChangeText={email => setEmail(email)}
+            />
+
+            <Input
+                iconName="lock"
+                placeholder="Senha"
+                keyboardType="visible-password"
+                onChangeText={password => setPassword(password)}
+            />
+
+            <ButtonMargin>
+                <Button
+                    text="CADASTRAR"
                 />
-
-                <TextInput
-                    style={
-                        signin.buttons
-                    }
-                    placeholder="user"
-                    onChangeText={email => setEmail(email)}
-                    defaultValue="username"
-                />
-
-                <TextInput
-                    style={
-                        signin.buttons
-                    }
-                    keyboardType="visible-password"
-                    placeholder="password"
-                    onChangeText={password => setPassword(password)}
-                    defaultValue="password"
-                />
-            </View>
-
-            <View style={signin.containerButton}>
-                <TouchableOpacity
-                        style={
-                            signin.login
-                        }>
-                    <Text>
-                        CADASTRAR
-                    </Text>
-                </TouchableOpacity>
-            </View>
-
-        </SafeAreaView>
+            </ButtonMargin>
+        </ScreenContainer>
     )
 }
