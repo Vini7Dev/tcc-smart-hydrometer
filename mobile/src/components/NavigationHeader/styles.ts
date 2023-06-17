@@ -96,3 +96,9 @@ export const NavItemText = styled.Text`
     color: ${primaryColor};
     background: ${whiteColor};
 `
+
+export const DisconnectButtonMargin = styled.View`
+    margin-top: 20px;
+    width: 100%;
+    background-color: ${primaryColor};
+`

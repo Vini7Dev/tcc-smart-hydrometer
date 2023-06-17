@@ -14,8 +14,11 @@ import {
     NavItem,
     NavItemText,
     NavItemIcon,
+    DisconnectButtonMargin,
 } from './styles'
 import { primaryColor, whiteColor } from '../../styles/variables'
+import { Button } from '../Button'
+import { useAuth } from '../../hooks/Auth'
 
 interface NavigationContainerProps {
     closeNavigation: () => void
@@ -25,11 +28,16 @@ const NavigationContainer: React.FC<NavigationContainerProps> = ({
     closeNavigation,
 }) => {
     const navigation = useNavigation()
+    const { logout } = useAuth()
 
     const navItems = [
         { name: 'Home', placehoder: 'Início', icon: 'home' },
-        { name: 'GenerateHydrometer', placehoder: 'Gerar Hydrômetro', icon: 'engine' },
+        { name: 'GenerateHydrometer', placehoder: 'Gerar Hydrômetro', icon: 'settings' },
     ]
+
+    const handleLogoutUser = useCallback(() => {
+        logout()
+    }, [logout])
 
     const handleNavigateToSelectedItem = useCallback((pageName: string) => {
         closeNavigation()
@@ -78,6 +86,15 @@ const NavigationContainer: React.FC<NavigationContainerProps> = ({
                             </NavItem>
                         ))
                     }
+
+                    <DisconnectButtonMargin>
+                        <Button
+                            text="DESCONECTAR"
+                            iconName="power"
+                            style={{ width: '100%' }}
+                            onPress={handleLogoutUser}
+                        />
+                    </DisconnectButtonMargin>
                 </NavListArea>
             </NavWrapper>
         </NavContainer>
