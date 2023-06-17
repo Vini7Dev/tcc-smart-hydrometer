@@ -9,10 +9,10 @@ interface ButtonProps extends TouchableHighlightProps {
 
 export const Button: React.FC<ButtonProps> = ({
     text,
-    onPress,
+    ...rest
 }) => {
     return (
-        <Container onPress={onPress}>
+        <Container {...rest}>
             <ButtonText>{text}</ButtonText>
         </Container>
     )

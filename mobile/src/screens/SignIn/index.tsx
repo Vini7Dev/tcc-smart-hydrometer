@@ -14,8 +14,8 @@ import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
 
 export const SignIn: React.FC = () => {
-    const [user, setUser] = useState('User')
-    const [password, setPassword] = useState('Password')
+    const [email, setEmail] = useState('Email')
+    const [password, setPassword] = useState('Senha')
 
     return (
         <ScreenContainer>
@@ -24,9 +24,10 @@ export const SignIn: React.FC = () => {
             <Title>ENTRAR</Title>
 
             <Input
-                iconName="user"
-                placeholder="Usuário"
-                onChangeText={user => setUser(user)}
+                iconName="mail"
+                placeholder="Email"
+                onChangeText={email => setEmail(email)}
+                defaultValue={email}
             />
 
             <Input
@@ -34,6 +35,7 @@ export const SignIn: React.FC = () => {
                 placeholder="Senha"
                 keyboardType="visible-password"
                 onChangeText={password => setPassword(password)}
+                defaultValue={password}
             />
 
             <ForgotPasswordButton>

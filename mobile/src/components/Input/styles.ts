@@ -1,7 +1,7 @@
 import styled from 'styled-components/native'
 import Icons from 'react-native-vector-icons/Feather'
 
-import { whiteColor } from '../../styles/variables'
+import { blackColor, whiteColor } from '../../styles/variables'
 
 export const Container = styled.View`
     flex-direction: row;
@@ -16,6 +16,7 @@ export const Container = styled.View`
 
 export const TextInput = styled.TextInput`
     width: 250px;
+    color: ${blackColor};
 `
 
 export const Icon = styled(Icons)``

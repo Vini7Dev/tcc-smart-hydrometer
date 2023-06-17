@@ -6,6 +6,7 @@ import {
 
 import { backgroundColor } from './src/styles/variables'
 import { SignUp } from './src/screens/SignUp'
+import { SignIn } from './src/screens/SignIn'
 
 const App: React.FC = () => {
   return (
@@ -15,7 +16,7 @@ const App: React.FC = () => {
         backgroundColor: backgroundColor,
       }}>
       <StatusBar/>
-        <SignUp />
+        <SignIn />
     </SafeAreaView>
   )
 }
