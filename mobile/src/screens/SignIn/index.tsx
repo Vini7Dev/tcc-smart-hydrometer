@@ -1,99 +1,52 @@
 import React, { useState } from 'react'
-import { Image, SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { loginStyles } from './styles'
+
+import {
+    ScreenContainer,
+    Title,
+    ForgotPasswordButton,
+    ForgotPasswordText,
+    CreateAccountContainer,
+    CreateAccountLink,
+    CreateAccountLinkHighlight,
+} from './styles'
+import { AppLogo } from '../../components/AppLogo'
+import { Input } from '../../components/Input'
+import { Button } from '../../components/Button'
 
 export const SignIn: React.FC = () => {
     const [user, setUser] = useState('User')
     const [password, setPassword] = useState('Password')
 
-    const login = () => {
-        console.log('1')
-    }
-
     return (
-        <SafeAreaView
-            style={
-                loginStyles.container
-            }>
-            <Image source={
-                require("../../../assets/logo.png")
-            }
-            alt={"Logo"}
-            style={
-                loginStyles.logoImage
-            }
+        <ScreenContainer>
+            <AppLogo />
+
+            <Title>ENTRAR</Title>
+
+            <Input
+                iconName="user"
+                placeholder="Usuário"
+                onChangeText={user => setUser(user)}
             />
 
-            <Text
-                style={
-                    loginStyles.program
-                }>
-                Inteliágua
-            </Text>
+            <Input
+                iconName="lock"
+                placeholder="Senha"
+                keyboardType="visible-password"
+                onChangeText={password => setPassword(password)}
+            />
 
-            <Text
-                style={
-                    loginStyles.title
-                }>
-                ENTRAR
-            </Text>
+            <ForgotPasswordButton>
+                <ForgotPasswordText>Esqueci a senha</ForgotPasswordText>
+            </ForgotPasswordButton>
 
-            <View style={{
-                display: "flex",
-            }}>
-                <TextInput
-                    style={
-                        loginStyles.buttons
-                    }
-                    placeholder="user"
-                    onChangeText={user => setUser(user)}
-                    defaultValue="username"
-                />
+            <Button text="Entrar" />
 
-                <TextInput
-                    style={
-                        loginStyles.buttons
-                    }
-                    keyboardType="visible-password"
-                    placeholder="password"
-                    onChangeText={password => setPassword(password)}
-                    defaultValue="password"
-                />
-            </View>
+            <CreateAccountContainer>
+                <CreateAccountLink>Não tem conta?{' '}</CreateAccountLink>
 
-            <View style={loginStyles.containerButton}>
-                <TouchableOpacity >
-                    <Text
-                        style={
-                            loginStyles.forgot
-                        }>
-                        Esqueci a senha
-                    </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={
-                        loginStyles.login
-                    }
-                    onPress={login}>
-                    <Text>
-                        Entrar
-                    </Text>
-                </TouchableOpacity>
-            </View>
-
-            <Text
-                style={
-                    loginStyles.title
-                }>
-                    Não tem conta
-            </Text>
-            <Text
-                style={
-                    loginStyles.forgot
-                }>
-                Criar agora
-            </Text>
-        </SafeAreaView>
+                <CreateAccountLinkHighlight>Criar agora</CreateAccountLinkHighlight>
+            </CreateAccountContainer>
+        </ScreenContainer>
     )
 }

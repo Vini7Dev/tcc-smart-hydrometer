@@ -1,47 +1,58 @@
-import { StyleSheet } from 'react-native'
-import { blackColor, primaryColor, whiteColor, secondaryColor } from '../../styles/variables'
+import styled from 'styled-components/native'
 
-const loginStyles = StyleSheet.create({
-    container: {
-      flex: 1,
-      paddingVertical: 100,
-      alignItems: "center",
-    },
-    logoImage: {
-      marginBottom: 10,
-    },
-    program: {
-      marginBottom: 62,
-      fontFamily: 'Nunito',
-      fontWeight: '700',
-      fontSize: 24,
-      lineHeight: 33,
-      color: blackColor,
-    },
-    title: {
-      marginBottom: 32,
-      color: primaryColor,
-      fontFamily: 'Nunito',
-      fontWeight: '700',
-      fontSize: 24,
-      lineHeight: 33,
-    },
-    buttons: {
-      backgroundColor: whiteColor,
-      color: blackColor,
-    },
-    forgot: {
-      color: secondaryColor,
-      textAlign: "right",
-    },
-    login: {
-      backgroundColor: primaryColor,
-      paddingHorizontal: 50,
-      paddingVertical: 10,
-    },
-    containerButton: {
+import {
+    blackColor,
+    primaryColor,
+    secondaryColor
+} from '../../styles/variables'
 
-    }
-  })
+export const ScreenContainer = styled.SafeAreaView`
+    flex: 1;
+    padding: 75px 16px;
+    align-items: center;
+`
 
-export { loginStyles }
+export const Title = styled.Text`
+    margin-bottom: 32px;
+    color: ${primaryColor};
+    font-family: 'Nunito';
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 33px;
+`
+
+export const ForgotPasswordButton = styled.TouchableOpacity`
+    margin-left: auto;
+    margin-bottom: 60px;
+`
+
+export const ForgotPasswordText = styled.Text`
+    width: 100%;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 16px;
+    color: ${secondaryColor};
+`
+
+export const CreateAccountContainer = styled.TouchableOpacity`
+    flex-direction: row;
+    margin-top: 70px;
+`
+
+export const CreateAccountLink = styled.Text`
+    font-family: 'Roboto';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: ${blackColor};
+`
+
+export const CreateAccountLinkHighlight = styled.Text`
+    font-family: 'Roboto';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: ${secondaryColor};
+`
