@@ -13,9 +13,11 @@ import {
 import { AppLogo } from '../../components/AppLogo'
 import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
+import { useAuth } from '../../hooks/Auth'
 
 export const SignIn: React.FC = () => {
     const navigation = useNavigation()
+    const { login } = useAuth()
 
     const [email, setEmail] = useState('Email')
     const [password, setPassword] = useState('Senha')
@@ -27,6 +29,13 @@ export const SignIn: React.FC = () => {
     const handleGoToForgotPassword = useCallback(() => {
         navigation.navigate('ForgotPassword' as never)
     }, [navigation.navigate])
+
+    const handleLogin = useCallback(async () => {
+        await login({
+            email,
+            password,
+        })
+    }, [email, password, login])
 
     return (
         <ScreenContainer>
@@ -53,7 +62,7 @@ export const SignIn: React.FC = () => {
                 <ForgotPasswordText>Esqueci a senha</ForgotPasswordText>
             </ForgotPasswordButton>
 
-            <Button text="ENTRAR" />
+            <Button text="ENTRAR" onPress={handleLogin} />
 
             <CreateAccountContainer onPress={handleGoToSignUp}>
                 <CreateAccountLink>Não tem conta?{' '}</CreateAccountLink>

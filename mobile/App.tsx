@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler'
 import React from 'react'
 import {
   SafeAreaView,
@@ -8,18 +9,22 @@ import { NavigationContainer } from '@react-navigation/native'
 import { backgroundColor } from './src/styles/variables'
 
 import { Routes } from './src/routes'
+import { AppProvider } from './src/hooks'
 
 const App: React.FC = () => {
   return (
     <SafeAreaView
-    style={{
-        flex: 1,
-        backgroundColor: backgroundColor,
-    }}>
+        style={{
+            flex: 1,
+            backgroundColor: backgroundColor,
+        }}
+    >
         <NavigationContainer>
             <StatusBar/>
 
-            <Routes />
+            <AppProvider>
+                <Routes />
+            </AppProvider>
         </NavigationContainer>
     </SafeAreaView>
   )

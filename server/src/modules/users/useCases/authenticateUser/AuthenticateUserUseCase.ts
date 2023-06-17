@@ -49,6 +49,7 @@ export class AuthenticateUserUseCase {
 
     return {
       user: {
+        id: findedUser.id,
         name: findedUser.name,
         email: findedUser.email,
         account_type: findedUser.account_type
