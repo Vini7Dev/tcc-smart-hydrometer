@@ -7,16 +7,18 @@ import { Container, ButtonText, ButtonIcon, ContainerWrapper } from './styles'
 interface ButtonProps extends TouchableHighlightProps {
     text: string
     iconName?: string
+    align?: 'center' | 'flex-start' | 'flex-end'
 }
 
 export const Button: React.FC<ButtonProps> = ({
     text,
     iconName,
+    align = 'center',
     ...rest
 }) => {
     return (
         <Container {...rest}>
-            <ContainerWrapper haveIcon={!!iconName}>
+            <ContainerWrapper align={align}>
                 {
                     iconName && <ButtonIcon name={iconName} size={24} color={whiteColor} />
                 }

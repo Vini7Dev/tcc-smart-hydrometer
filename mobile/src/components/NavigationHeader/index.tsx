@@ -33,6 +33,7 @@ const NavigationContainer: React.FC<NavigationContainerProps> = ({
     const navItems = [
         { name: 'Home', placehoder: 'Início', icon: 'home' },
         { name: 'GenerateHydrometer', placehoder: 'Gerar Hydrômetro', icon: 'settings' },
+        { name: 'AdminsList', placehoder: 'Gerenciar Administradores', icon: 'user' },
     ]
 
     const handleLogoutUser = useCallback(() => {
@@ -75,13 +76,13 @@ const NavigationContainer: React.FC<NavigationContainerProps> = ({
                                 onPress={() => handleNavigateToSelectedItem(navItem.name)}
                             >
                                 <>
-                                <NavItemIcon
-                                    name={navItem.icon}
-                                    size={24}
-                                    color={primaryColor}
-                                />
+                                    <NavItemIcon
+                                        name={navItem.icon}
+                                        size={24}
+                                        color={primaryColor}
+                                    />
 
-                                <NavItemText>{navItem.placehoder}</NavItemText>
+                                    <NavItemText>{navItem.placehoder}</NavItemText>
                                 </>
                             </NavItem>
                         ))

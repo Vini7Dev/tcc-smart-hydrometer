@@ -22,7 +22,7 @@ const navigationOptions = [
     },
     {
         screenLabel: 'GERENCIAR ADMINSTRADORES',
-        screenName: '???',
+        screenName: 'AdminsList',
         screenIcon: 'user',
     },
     {
@@ -56,6 +56,7 @@ export const Home: React.FC = () => {
                             <Button
                                 text={navigateOption.screenLabel}
                                 iconName={navigateOption.screenIcon}
+                                align="flex-start"
                                 style={{width: '100%'}}
                                 onPress={() => handleGoToSelectedOption(
                                     navigateOption.screenName

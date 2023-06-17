@@ -29,6 +29,7 @@ export const GenerateHydrometer: React.FC = () => {
                     <Button
                         text="GERAR HIDRÔMETRO"
                         iconName="plus"
+                        align="flex-start"
                         style={{ width: '100%' }}
                         onPress={() => setIsHydrometerGenerated(true)}
                     />

@@ -1,10 +1,10 @@
 import styled from 'styled-components/native'
 import Icons from 'react-native-vector-icons/Feather'
 
-import { lightGray, primaryColor, whiteColor } from '../../styles/variables'
+import { lightGray, primaryColor } from '../../styles/variables'
 
 interface ContainerWrapperProps {
-    haveIcon: boolean
+    align: 'center' | 'flex-start' | 'flex-end'
 }
 
 export const Container = styled.TouchableHighlight`
@@ -18,7 +18,7 @@ export const Container = styled.TouchableHighlight`
 
 export const ContainerWrapper = styled.View<ContainerWrapperProps>`
     flex-direction: row;
-    justify-content: ${(props) => props.haveIcon ? 'flex-start' : 'center'};
+    justify-content: ${(props) => props.align};
     align-items: center;
     width: 100%;
     padding: 0 20px;
