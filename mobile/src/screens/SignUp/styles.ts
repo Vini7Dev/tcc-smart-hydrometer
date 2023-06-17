@@ -1,6 +1,6 @@
 import { styled } from 'styled-components/native'
 
-import { grayColor } from '../../styles/variables'
+import { blackColor, grayColor, secondaryColor } from '../../styles/variables'
 
 export const ScreenContainer = styled.View`
     flex: 1;
@@ -31,5 +31,26 @@ export const Subtitle = styled.Text`
 `
 
 export const ButtonMargin = styled.View`
-    margin-top: 80px;
+    margin-top: 40px;
+`
+
+export const SignInContainer = styled.TouchableOpacity`
+    flex-direction: row;
+    margin-top: 40px;
+`
+
+export const SignInLink = styled.Text`
+    font-family: 'Roboto';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: ${blackColor};
+`
+
+export const SignInLinkHighlight = styled.Text`
+    font-family: 'Roboto';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: ${secondaryColor};
 `

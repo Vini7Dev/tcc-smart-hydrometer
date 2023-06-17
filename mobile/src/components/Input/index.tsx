@@ -21,7 +21,7 @@ export const Input: React.FC<InputProps> = ({
             <TextInput
                 {...rest}
                 multiline={multiline}
-                style={{ ...style, backgroundColor, textAlignVertical: 'top' }}
+                style={{ ...style, backgroundColor, textAlignVertical: multiline ? 'top' : 'center' }}
             />
 
             {
