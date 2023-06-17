@@ -6,7 +6,7 @@ import {
     secondaryColor
 } from '../../styles/variables'
 
-export const ScreenContainer = styled.SafeAreaView`
+export const ScreenContainer = styled.View`
     flex: 1;
     padding: 75px 16px;
     align-items: center;
