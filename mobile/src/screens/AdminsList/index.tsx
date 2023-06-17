@@ -27,20 +27,20 @@ interface AdminItemProps {
     handleGoToCreateAdmin: () => void
 }
 
-const EmptyAvatarImage = require("../../../assets/avatar-user.png")
+const MockAvatarImage = require('../../../assets/mockImages/avatar.png')
 
 const mockUsers = [
     {
         id: '1',
         name: 'Example 1',
         email: 'example2@mail.com',
-        avatar: EmptyAvatarImage as string,
+        avatar: MockAvatarImage as string,
     },
     {
         id: '2',
         name: 'Example 2',
         email: 'example1@mail.com',
-        avatar: EmptyAvatarImage as string,
+        avatar: MockAvatarImage as string,
     },
 ]
 

@@ -12,7 +12,7 @@ import {
     UserAvatarContainer
 } from './styles'
 
-const EmptyAvatarImage = require("../../../assets/avatar-user.png")
+const EmptyAvatarImage = require('../../../assets/avatar-user.png')
 
 const navigationOptions = [
     {

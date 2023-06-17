@@ -4,7 +4,7 @@ import Icons from 'react-native-vector-icons/Feather'
 import { Container, AvatarImage, UpdateAvatarButton } from './styles'
 import { whiteColor } from '../../styles/variables'
 
-const EmptyAvatarImage = require("../../../assets/avatar-user.png")
+const EmptyAvatarImage = require('../../../assets/avatar-user.png')
 
 export const AvatarUpload: React.FC = () => {
     return (
