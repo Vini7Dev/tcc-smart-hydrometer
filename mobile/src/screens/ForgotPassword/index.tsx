@@ -1,52 +1,33 @@
 import React, { useState } from 'react'
-import { Image, SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { forgot_password } from './styles'
+
+import {
+    ScreenContainer,
+    Title,
+    ButtonMargin,
+} from './styles'
+import { AppLogo } from '../../components/AppLogo'
+import { Input } from '../../components/Input'
+import { Button } from '../../components/Button'
 
 export const ForgotPassword: React.FC = () => {
-    const [email, setEmail] = useState('User')
+    const [email, setEmail] = useState('')
 
     return (
-        <SafeAreaView
-            style={
-                forgot_password.container
-            }>
-            <Image source={
-                require("../../../assets/logo.png")
-            }
-            alt={"Logo"}
-            />
+        <ScreenContainer>
+            <AppLogo />
 
-            <Text
-                style={
-                    forgot_password.program
-                }>
-                NOME DO PROGRAMA
-            </Text>
+            <Title>Recuperar senha</Title>
 
-            <Text
-                style={
-                    forgot_password.title
-                }>
-                RECUPERAR SENHA
-            </Text>
-
-            <TextInput
-                style={
-                    forgot_password.buttons
-                }
-                placeholder="email"
+            <Input
+                iconName="mail"
+                placeholder="Informe o email cadastrado"
                 onChangeText={email => setEmail(email)}
-                defaultValue="informe o e-mail cadastrado"
+                defaultValue="Informe o email cadastrado"
             />
 
-            <TouchableOpacity
-                    style={
-                        forgot_password.login
-                    }>
-                <Text>
-                    Entrar
-                </Text>
-            </TouchableOpacity>
-        </SafeAreaView>
+            <ButtonMargin>
+                <Button text="ENVIAR" />
+            </ButtonMargin>
+        </ScreenContainer>
     )
 }

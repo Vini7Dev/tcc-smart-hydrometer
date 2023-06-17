@@ -1,69 +1,41 @@
 import React, { useState } from 'react'
-import { Image, SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { newPassword } from './styles'
+
+import {
+    ScreenContainer,
+    Title,
+    ButtonMargin,
+} from './styles'
+import { AppLogo } from '../../components/AppLogo'
+import { Input } from '../../components/Input'
+import { Button } from '../../components/Button'
 
 export const NewPassword: React.FC = () => {
-    const [newPass, setNewPass] = useState('nova senha')
-    const [confirm, setConfirm] = useState('confirme a senha')
+    const [code, setCode] = useState('')
+    const [password, setPassword] = useState('')
 
     return (
-        <SafeAreaView
-            style={
-                newPassword.container
-            }>
-            <Image source={
-                require("../../../assets/logo.png")
-            }
-            alt={"Logo"}
+        <ScreenContainer>
+            <AppLogo />
+
+            <Title>Alterar Senha</Title>
+
+            <Input
+                iconName="mail"
+                placeholder="Informe o código de verificação"
+                onChangeText={code => setCode(code)}
+                defaultValue="Informe o código de verificação"
             />
 
-            <Text
-                style={
-                    newPassword.program
-                }>
-                NOME DO PROGRAMA
-            </Text>
+            <Input
+                iconName="lock"
+                placeholder="Informe a nova senha"
+                onChangeText={password => setPassword(password)}
+                defaultValue="Informe a nova senha"
+            />
 
-            <Text
-                style={
-                    newPassword.title
-                }>
-                Alterar A Senha
-            </Text>
-
-            <View style={{
-                display: "flex",
-            }}>
-                <TextInput
-                    style={
-                        newPassword.buttons
-                    }
-                    placeholder="nova senha"
-                    onChangeText={newPass => setNewPass(newPass)}
-                    defaultValue="nova senha"
-                />
-
-                <TextInput
-                    style={
-                        newPassword.buttons
-                    }
-                    keyboardType="visible-password"
-                    placeholder="confirme a senha"
-                    onChangeText={confirm => setConfirm(confirm)}
-                    defaultValue="confirme a senha"
-                />
-            </View>
-
-            <View style={newPassword.containerButton}>
-                <TouchableOpacity
-                        style={
-                            newPassword.login
-                        }>
-                    <Text>
-                        Entrar
-                    </Text>
-                </TouchableOpacity>
-            </View>
-        </SafeAreaView>
+            <ButtonMargin>
+                <Button text="SALVAR" />
+            </ButtonMargin>
+        </ScreenContainer>
     )
 }
