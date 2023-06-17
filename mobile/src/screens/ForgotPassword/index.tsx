@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
+import { useNavigation } from '@react-navigation/native'
 
 import {
     ScreenContainer,
@@ -10,7 +11,13 @@ import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
 
 export const ForgotPassword: React.FC = () => {
+    const navigation = useNavigation()
+
     const [email, setEmail] = useState('')
+
+    const handleGoToNewPassword = useCallback(() => {
+        navigation.navigate('NewPassword' as never)
+    }, [navigation.navigate])
 
     return (
         <ScreenContainer>
@@ -26,7 +33,7 @@ export const ForgotPassword: React.FC = () => {
             />
 
             <ButtonMargin>
-                <Button text="ENVIAR" />
+                <Button text="ENVIAR" onPress={handleGoToNewPassword} />
             </ButtonMargin>
         </ScreenContainer>
     )

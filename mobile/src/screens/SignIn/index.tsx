@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
+import { useNavigation } from '@react-navigation/native'
 
 import {
     ScreenContainer,
@@ -14,8 +15,18 @@ import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
 
 export const SignIn: React.FC = () => {
+    const navigation = useNavigation()
+
     const [email, setEmail] = useState('Email')
     const [password, setPassword] = useState('Senha')
+
+    const handleGoToSignUp = useCallback(() => {
+        navigation.navigate('SignUp' as never)
+    }, [navigation.navigate])
+
+    const handleGoToForgotPassword = useCallback(() => {
+        navigation.navigate('ForgotPassword' as never)
+    }, [navigation.navigate])
 
     return (
         <ScreenContainer>
@@ -38,13 +49,13 @@ export const SignIn: React.FC = () => {
                 defaultValue={password}
             />
 
-            <ForgotPasswordButton>
+            <ForgotPasswordButton onPress={handleGoToForgotPassword}>
                 <ForgotPasswordText>Esqueci a senha</ForgotPasswordText>
             </ForgotPasswordButton>
 
             <Button text="ENTRAR" />
 
-            <CreateAccountContainer>
+            <CreateAccountContainer onPress={handleGoToSignUp}>
                 <CreateAccountLink>Não tem conta?{' '}</CreateAccountLink>
 
                 <CreateAccountLinkHighlight>Criar agora</CreateAccountLinkHighlight>

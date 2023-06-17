@@ -3,22 +3,24 @@ import {
   SafeAreaView,
   StatusBar,
 } from 'react-native'
+import { NavigationContainer } from '@react-navigation/native'
 
 import { backgroundColor } from './src/styles/variables'
-import { SignUp } from './src/screens/SignUp'
-import { SignIn } from './src/screens/SignIn'
-import { ForgotPassword } from './src/screens/ForgotPassword'
-import { NewPassword } from './src/screens/NewPassword'
+
+import { Routes } from './src/routes'
 
 const App: React.FC = () => {
   return (
     <SafeAreaView
-      style={{
+    style={{
         flex: 1,
         backgroundColor: backgroundColor,
-      }}>
-      <StatusBar/>
-        <NewPassword />
+    }}>
+        <NavigationContainer>
+            <StatusBar/>
+
+            <Routes />
+        </NavigationContainer>
     </SafeAreaView>
   )
 }
