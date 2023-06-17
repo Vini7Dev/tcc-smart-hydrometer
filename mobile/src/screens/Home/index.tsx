@@ -27,7 +27,7 @@ const navigationOptions = [
     },
     {
         screenLabel: 'GERENCIAR NOTÍCIAS E DICAS',
-        screenName: '???',
+        screenName: 'NewsList',
         screenIcon: 'file-text',
     },
 ]

@@ -34,6 +34,7 @@ const NavigationContainer: React.FC<NavigationContainerProps> = ({
         { name: 'Home', placehoder: 'Início', icon: 'home' },
         { name: 'GenerateHydrometer', placehoder: 'Gerar Hydrômetro', icon: 'settings' },
         { name: 'AdminsList', placehoder: 'Gerenciar Administradores', icon: 'user' },
+        { name: 'NewsList', placehoder: 'Gerenciar Notícias e Dicas', icon: 'file-text' },
     ]
 
     const handleLogoutUser = useCallback(() => {
@@ -92,6 +93,7 @@ const NavigationContainer: React.FC<NavigationContainerProps> = ({
                         <Button
                             text="DESCONECTAR"
                             iconName="power"
+                            align="flex-start"
                             style={{ width: '100%' }}
                             onPress={handleLogoutUser}
                         />

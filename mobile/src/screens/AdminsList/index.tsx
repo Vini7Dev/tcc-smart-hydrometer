@@ -86,7 +86,7 @@ export const AdminsList: React.FC = () => {
                         backgroundColor={backgroundColor}
                     />
 
-                    <ResultCountText>5 resultados encontrados</ResultCountText>
+                    <ResultCountText>{mockUsers.length} resultados encontrados</ResultCountText>
                 </SearchInputContainer>
 
                 <SearchResultContainer

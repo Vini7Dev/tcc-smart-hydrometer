@@ -5,6 +5,7 @@ import { Home } from '../screens/Home'
 import { GenerateHydrometer } from '../screens/GenerateHydrometer'
 import { AdminsList } from '../screens/AdminsList'
 import { SignUpAdmin } from '../screens/SignUpAdmin'
+import { NewsList } from '../screens/NewsList'
 
 const AdminNav = createStackNavigator()
 
@@ -19,6 +20,7 @@ export const AdminRoutes: React.FC = () => {
             <AdminNav.Screen name="GenerateHydrometer" component={GenerateHydrometer} />
             <AdminNav.Screen name="AdminsList" component={AdminsList} />
             <AdminNav.Screen name="SignUpAdmin" component={SignUpAdmin} />
+            <AdminNav.Screen name="NewsList" component={NewsList} />
         </AdminNav.Navigator>
     )
 }
