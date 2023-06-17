@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useCallback } from 'react'
+import { useNavigation } from '@react-navigation/native'
 
 import { NavigationHeader } from '../../components/NavigationHeader'
 import { Button } from '../../components/Button'
@@ -13,7 +14,31 @@ import {
 
 const EmptyAvatarImage = require("../../../assets/avatar-user.png")
 
+const navigationOptions = [
+    {
+        screenLabel: 'GERAR HIDRÔMETRO',
+        screenName: 'GenerateHydrometer',
+        screenIcon: 'plus',
+    },
+    {
+        screenLabel: 'GERENCIAR ADMINSTRADORES',
+        screenName: '???',
+        screenIcon: 'user',
+    },
+    {
+        screenLabel: 'GERENCIAR NOTÍCIAS E DICAS',
+        screenName: '???',
+        screenIcon: 'paper',
+    },
+]
+
 export const Home: React.FC = () => {
+    const navigation = useNavigation()
+
+    const handleGoToSelectedOption = useCallback((screenName: string) => {
+        navigation.navigate(screenName as never)
+    }, [navigation])
+
     return (
         <ScreenContainer>
             <NavigationHeader />
@@ -25,29 +50,20 @@ export const Home: React.FC = () => {
 
                 <Title>Bem Vindo(a)</Title>
 
-                <ButtonMargin>
-                    <Button
-                        text="GERAR HIDRÔMETRO"
-                        iconName="plus"
-                        style={{width: '100%'}}
-                    />
-                </ButtonMargin>
-
-                <ButtonMargin>
-                    <Button
-                        text="GERENCIAR ADMINSTRADORES"
-                        iconName="user"
-                        style={{width: '100%'}}
-                    />
-                </ButtonMargin>
-
-                <ButtonMargin>
-                    <Button
-                        text="GERENCIAR NOTÍCIAS E DICAS"
-                        iconName="note"
-                        style={{width: '100%'}}
-                    />
-                </ButtonMargin>
+                {
+                    navigationOptions.map((navigateOption, idx) => (
+                        <ButtonMargin key={idx}>
+                            <Button
+                                text={navigateOption.screenLabel}
+                                iconName={navigateOption.screenIcon}
+                                style={{width: '100%'}}
+                                onPress={() => handleGoToSelectedOption(
+                                    navigateOption.screenName
+                                )}
+                            />
+                        </ButtonMargin>
+                    ))
+                }
             </ScreenContent>
         </ScreenContainer>
     )

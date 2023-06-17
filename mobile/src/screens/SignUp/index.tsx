@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 
 import {
     ScreenContainer,
@@ -14,6 +14,10 @@ export const SignUp: React.FC = () => {
     const [name, setName] = useState('Nome')
     const [email, setEmail] = useState('Email')
     const [password, setPassword] = useState('Senha')
+
+    const handleSignUp = useCallback(async () => {
+        //
+    }, [name, email, password])
 
     return (
         <ScreenContainer>
