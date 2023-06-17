@@ -30,7 +30,7 @@ export const SearchResultContainer = styled.FlatList`
     width: 100%;
 `
 
-export const AdminItemContainer = styled.View`
+export const AdminItemContainer = styled.TouchableHighlight`
     flex-direction: row;
     justify-content: space-between;
     align-items: center;

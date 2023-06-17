@@ -24,6 +24,7 @@ interface AdminItemProps {
     name: string
     email: string
     avatar: string
+    handleGoToCreateAdmin: () => void
 }
 
 const EmptyAvatarImage = require("../../../assets/avatar-user.png")
@@ -47,18 +48,21 @@ const AdminItem: React.FC<AdminItemProps> = ({
     name,
     email,
     avatar,
+    handleGoToCreateAdmin,
 }) => {
     return (
-        <AdminItemContainer>
-            <AdminAvatar source={avatar as any} />
+        <AdminItemContainer onPress={handleGoToCreateAdmin}>
+            <>
+                <AdminAvatar source={avatar as any} />
 
-            <AdminNameContainer>
-                <AdminName>{name}</AdminName>
+                <AdminNameContainer>
+                    <AdminName>{name}</AdminName>
 
-                <AdminEmail>{email}</AdminEmail>
-            </AdminNameContainer>
+                    <AdminEmail>{email}</AdminEmail>
+                </AdminNameContainer>
 
-            <DeleteAdminIcon name="trash-2" size={16} color={errorColor} />
+                <DeleteAdminIcon name="trash-2" size={16} color={errorColor} />
+            </>
         </AdminItemContainer>
     )
 }
@@ -67,7 +71,7 @@ export const AdminsList: React.FC = () => {
     const navigation = useNavigation()
 
     const handleGoToCreateAdmin = useCallback(() => {
-        navigation.navigate('CreateAdmin' as never)
+        navigation.navigate('SignUpAdmin' as never)
     }, [navigation])
 
     return (
@@ -93,6 +97,7 @@ export const AdminsList: React.FC = () => {
                             name={item.name}
                             email={item.email}
                             avatar={item.avatar}
+                            handleGoToCreateAdmin={handleGoToCreateAdmin}
                         />
                     )}
                 />
@@ -102,6 +107,7 @@ export const AdminsList: React.FC = () => {
                         text="CADASTRAR ADM"
                         iconName="user-plus"
                         style={{ width: '100%' }}
+                        onPress={handleGoToCreateAdmin}
                     />
                 </CreateAdminButtonMargin>
             </ScreenContent>
