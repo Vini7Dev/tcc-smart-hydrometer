@@ -100,6 +100,7 @@ export const AdminsList: React.FC = () => {
                             handleGoToCreateAdmin={handleGoToCreateAdmin}
                         />
                     )}
+                    keyExtractor={(item: any) => item.id}
                 />
 
                 <CreateAdminButtonMargin>

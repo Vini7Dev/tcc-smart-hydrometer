@@ -29,7 +29,7 @@ interface NewsItemProps {
 
 const MockBannerImage = require('../../../assets/mockImages/news_banner.png')
 
-const mockUsers = [
+const mockNews = [
     {
         id: '1',
         title: 'Título 1',
@@ -71,7 +71,7 @@ export const NewsList: React.FC = () => {
     const navigation = useNavigation()
 
     const handleGoToCreateNews = useCallback(() => {
-        navigation.navigate('SignUpNews' as never)
+        navigation.navigate('ViewNews' as never)
     }, [navigation])
 
     return (
@@ -86,11 +86,11 @@ export const NewsList: React.FC = () => {
                         backgroundColor={backgroundColor}
                     />
 
-                    <ResultCountText>{mockUsers.length} resultados encontrados</ResultCountText>
+                    <ResultCountText>{mockNews.length} resultados encontrados</ResultCountText>
                 </SearchInputContainer>
 
                 <SearchResultContainer
-                    data={mockUsers}
+                    data={mockNews}
                     renderItem={({ item }: any) => (
                         <NewsItem
                             key={item.email}
@@ -100,6 +100,7 @@ export const NewsList: React.FC = () => {
                             handleGoToCreateNews={handleGoToCreateNews}
                         />
                     )}
+                    keyExtractor={(item: any) => item.id}
                 />
 
                 <CreateNewsButtonMargin>
