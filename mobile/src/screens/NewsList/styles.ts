@@ -71,12 +71,24 @@ export const NewsBanner = styled.Image`
     object-fit: cover;
 `
 
-export const DeleteNewsIcon = styled(Icons)`
+export const NewsActionButtonsContainer = styled.View`
     position: absolute;
     right: 3px;
     top: 3px;
+    flex-direction: row;
+`
+
+export const DeleteNewsIcon = styled(Icons)`
     margin-bottom: auto;
-    padding: 3px;
+    margin-right: 10px;
+    padding: 6px;
+    border-radius: 50px;
+    background-color: ${whiteColor};
+`
+
+export const EditNewsIcon = styled(Icons)`
+    margin-bottom: auto;
+    padding: 6px;
     border-radius: 50px;
     background-color: ${whiteColor};
 `

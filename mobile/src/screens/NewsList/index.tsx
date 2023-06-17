@@ -15,9 +15,11 @@ import {
     NewsDescription,
     DeleteNewsIcon,
     CreateNewsButtonMargin,
+    NewsActionButtonsContainer,
+    EditNewsIcon,
 } from './styles'
 import { Input } from '../../components/Input'
-import { backgroundColor, errorColor } from '../../styles/variables'
+import { backgroundColor, errorColor, secondaryColor } from '../../styles/variables'
 import { Button } from '../../components/Button'
 
 interface NewsItemProps {
@@ -61,7 +63,11 @@ const NewsItem: React.FC<NewsItemProps> = ({
 
                 <NewsBanner source={banner as any} />
 
-                <DeleteNewsIcon name="trash-2" size={16} color={errorColor} />
+                <NewsActionButtonsContainer>
+                    <DeleteNewsIcon name="trash-2" size={16} color={errorColor} />
+
+                    <EditNewsIcon name="edit-3" size={16} color={secondaryColor} />
+                </NewsActionButtonsContainer>
             </>
         </NewsItemContainer>
     )

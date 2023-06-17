@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { Dimensions } from 'react-native'
+import { format } from 'date-fns'
 
 import { NavigationHeader } from '../../components/NavigationHeader'
 import {
@@ -44,10 +45,6 @@ export const ViewNews: React.FC = () => {
 
     const [currentBannerIndex, setCurrentBannerIndex] = useState(0)
 
-    const handleGoToCreateNews = useCallback(() => {
-        navigation.navigate('SignUpNews' as never)
-    }, [navigation])
-
     const handleNextBanner = useCallback(() => {
         if (currentBannerIndex < mockNewsData.banners.length - 1) {
             setCurrentBannerIndex(currentBannerIndex + 1)
@@ -59,6 +56,10 @@ export const ViewNews: React.FC = () => {
             setCurrentBannerIndex(currentBannerIndex - 1)
         }
     }, [currentBannerIndex])
+
+    const handleFormatPublishDate = useCallback((date: Date) => {
+        return format(date, 'dd/MM/yyyy HH:mm')
+    }, [])
 
     return (
         <ScreenContainer>
@@ -101,7 +102,7 @@ export const ViewNews: React.FC = () => {
                         <AuthorName>{mockNewsData.author.name}</AuthorName>
 
                         <PublishedDate>
-                            {mockNewsData.publishedDate.toISOString()}
+                            {handleFormatPublishDate(mockNewsData.publishedDate)}
                         </PublishedDate>
                     </AuthorNameContainer>
 
