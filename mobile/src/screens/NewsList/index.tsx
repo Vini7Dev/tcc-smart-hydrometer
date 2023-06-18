@@ -21,6 +21,8 @@ import {
 import { Input } from '../../components/Input'
 import { backgroundColor, errorColor, secondaryColor } from '../../styles/variables'
 import { Button } from '../../components/Button'
+import { useAuth } from '../../hooks/Auth'
+import { ADMIN_ACCOUNT_TYPE } from '../../utils/constants'
 
 interface NewsItemProps {
     title: string
@@ -52,6 +54,8 @@ const NewsItem: React.FC<NewsItemProps> = ({
     banner,
     handleGoToViewNews,
 }) => {
+    const { user } = useAuth()
+
     return (
         <NewsItemContainer onPress={handleGoToViewNews}>
             <>
@@ -63,11 +67,15 @@ const NewsItem: React.FC<NewsItemProps> = ({
 
                 <NewsBanner source={banner as any} />
 
-                <NewsActionButtonsContainer>
-                    <DeleteNewsIcon name="trash-2" size={16} color={errorColor} />
+                {
+                    user.account_type === ADMIN_ACCOUNT_TYPE && (
+                        <NewsActionButtonsContainer>
+                            <DeleteNewsIcon name="trash-2" size={16} color={errorColor} />
 
-                    <EditNewsIcon name="edit-3" size={16} color={secondaryColor} />
-                </NewsActionButtonsContainer>
+                            <EditNewsIcon name="edit-3" size={16} color={secondaryColor} />
+                        </NewsActionButtonsContainer>
+                    )
+                }
             </>
         </NewsItemContainer>
     )
@@ -75,6 +83,7 @@ const NewsItem: React.FC<NewsItemProps> = ({
 
 export const NewsList: React.FC = () => {
     const navigation = useNavigation()
+    const { user } = useAuth()
 
     const handleGoToCreateNews = useCallback(() => {
         navigation.navigate('CreateNews' as never)
@@ -113,14 +122,18 @@ export const NewsList: React.FC = () => {
                     keyExtractor={(item: any) => item.id}
                 />
 
-                <CreateNewsButtonMargin>
-                    <Button
-                        text="CADASTRAR NOTÍCIA"
-                        iconName="file-text"
-                        style={{ width: '100%' }}
-                        onPress={handleGoToCreateNews}
-                    />
-                </CreateNewsButtonMargin>
+                {
+                    user.account_type === ADMIN_ACCOUNT_TYPE && (
+                        <CreateNewsButtonMargin>
+                            <Button
+                                text="CADASTRAR NOTÍCIA"
+                                iconName="file-text"
+                                style={{ width: '100%' }}
+                                onPress={handleGoToCreateNews}
+                            />
+                        </CreateNewsButtonMargin>
+                    )
+                }
             </ScreenContent>
         </ScreenContainer>
     )
