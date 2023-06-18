@@ -3,6 +3,8 @@ import { addHours, format, isLastDayOfMonth } from 'date-fns'
 import { AccountType, ConsumptionCategory, PrismaClient } from '@prisma/client'
 
 import { CUSTOMER_ACCOUNT_TYPE } from '@utils/constants'
+import { BCryptHashProvider } from '@shared/containers/providers/HashProvider/implementations/BCryptHashProvider'
+import { calculateConsumptionMonetaryByCity } from '@utils/calculateConsumptionMonetaryByCity'
 
 const prismaClient = new PrismaClient()
 
@@ -60,15 +62,20 @@ const createCustomer = async () => {
   const GITHUB_AVATAR_BASE_URL = 'https://avatars.githubusercontent.com/'
   const EMPTY_STRING = ''
 
+  const CUSTOMER_MOCK_EMAIL = 'test@mail.com'
+  const CUSTOMER_MOCK_PASSWORD = 'test1234'
+
   const avatarFileFormat = faker.image
     .avatarGitHub()
     .replace(GITHUB_AVATAR_BASE_URL, EMPTY_STRING)
 
+  const bCryptHashProvider = new BCryptHashProvider()
+
   const customerData = {
     id: faker.string.uuid(),
     name: faker.person.fullName(),
-    email: faker.internet.email(),
-    password: faker.internet.password(),
+    email: CUSTOMER_MOCK_EMAIL,
+    password: await bCryptHashProvider.generateHash(CUSTOMER_MOCK_PASSWORD),
     account_type: CUSTOMER_ACCOUNT_TYPE as AccountType,
     avatar_file: avatarFileFormat,
   }
@@ -107,10 +114,26 @@ const createHydrometer = async (customerData: any) => {
 
   await prismaClient.hydrometers.create({ data: hydrometerData })
 
+  Object.assign(addressData, {
+    categoriesForConversion: [{
+      category: 'RESIDENCIAL / NORMAL',
+      consumptionConversions: [
+        { rule: '0 a 10', water_rate: 3585, sewer_rate: 2875 },
+        { rule: '11 a 20', water_rate: 500, sewer_rate: 394 },
+        { rule: '21 a 50', water_rate: 768, sewer_rate: 614 },
+        { rule: 'acima de 50', water_rate: 918, sewer_rate: 731 },
+      ]
+    }]
+  })
+
   return { addressData, hydrometerData }
 }
 
-const createConsumptionMarkings = async (hydrometerData: any, count = 1) => {
+const createConsumptionMarkings = async (
+  hydrometerData: any,
+  count = 1,
+  addressData: any
+) => {
   const FIRST_DAY_OF_THE_YEAR = new Date(2023, 0, 1, 0)
   const LAST_HOUR_OF_THE_DAY_TO_COMPARE = 21
 
@@ -129,13 +152,19 @@ const createConsumptionMarkings = async (hydrometerData: any, count = 1) => {
       consumptionSum = 0
     }
 
-    consumptionSum += Number(Math.random().toFixed(1)) * 10 * 2
+    const newConsumptionValue = Number(Math.random().toFixed(1)) * 10 * 2
+
+    consumptionSum += newConsumptionValue
 
     const consumptionMarkingData = {
       id: faker.string.uuid(),
       hydrometer_id: hydrometerData.id,
-      consumption: consumptionSum,
-      monetary_value: 0,
+      consumption: newConsumptionValue,
+      monetary_value: calculateConsumptionMonetaryByCity({
+        city: addressData,
+        consumption_category: hydrometerData.consumption_category,
+        consumption: consumptionSum,
+      }),
       created_at: markingDate
     }
 
@@ -156,9 +185,13 @@ const sendToDataBase = async () => {
 
   const { customerData } = await createCustomer()
 
-  const { hydrometerData } = await createHydrometer(customerData)
+  const { hydrometerData, addressData } = await createHydrometer(customerData)
 
-  await createConsumptionMarkings(hydrometerData, TOTAL_OF_CONSUMPTION_MARKINGS)
+  await createConsumptionMarkings(
+    hydrometerData,
+    TOTAL_OF_CONSUMPTION_MARKINGS,
+    addressData
+  )
 }
 
 sendToDataBase()
