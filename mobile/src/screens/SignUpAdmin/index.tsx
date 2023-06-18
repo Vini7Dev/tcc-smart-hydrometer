@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 
 import {
     ScreenContainer,
-    Title,
-    Subtitle,
     ButtonMargin,
     ScreenContent,
 } from './styles'

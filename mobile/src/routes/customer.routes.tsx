@@ -5,6 +5,7 @@ import { Home } from '../screens/Home'
 import { NewsList } from '../screens/NewsList'
 import { ViewNews } from '../screens/ViewNews'
 import { PersonalHydrometersList } from '../screens/PersonalHydrometersList'
+import { AssociateHydrometer } from '../screens/AssociateHydrometer'
 
 const CustomerNav = createStackNavigator()
 
@@ -19,6 +20,7 @@ export const CustomerRoutes: React.FC = () => {
             <CustomerNav.Screen name="NewsList" component={NewsList} />
             <CustomerNav.Screen name="ViewNews" component={ViewNews} />
             <CustomerNav.Screen name="PersonalHydrometersList" component={PersonalHydrometersList} />
+            <CustomerNav.Screen name="AssociateHydrometer" component={AssociateHydrometer} />
         </CustomerNav.Navigator>
     )
 }

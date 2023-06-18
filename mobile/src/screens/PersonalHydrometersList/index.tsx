@@ -68,7 +68,7 @@ export const PersonalHydrometersList: React.FC = () => {
     const navigation = useNavigation()
 
     const handleGoToCreateHydrometer = useCallback(() => {
-        navigation.navigate('SignUpHydrometer' as never)
+        navigation.navigate('AssociateHydrometer' as never)
     }, [navigation])
 
     return (
