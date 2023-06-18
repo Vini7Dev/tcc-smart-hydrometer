@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
-import { adminNavigationOptions, customerNavigationOptions } from './navigationOptions'
+import { adminNavigationOptions, customerNavigationOptions } from '../../utils/navigationOptions'
 import { NavigationHeader } from '../../components/NavigationHeader'
 import { Button } from '../../components/Button'
 import {
@@ -25,7 +25,6 @@ export const Home: React.FC = () => {
         ? adminNavigationOptions
         : customerNavigationOptions
 
-
     const handleGoToSelectedOption = useCallback((screenName: string) => {
         navigation.navigate(screenName as never)
     }, [navigation])
@@ -42,19 +41,25 @@ export const Home: React.FC = () => {
                 <Title>Bem Vindo(a)</Title>
 
                 {
-                    navigationOptions.map((navigateOption, idx) => (
-                        <ButtonMargin key={idx}>
-                            <Button
-                                text={navigateOption.screenLabel}
-                                iconName={navigateOption.screenIcon}
-                                align="flex-start"
-                                style={{width: '100%'}}
-                                onPress={() => handleGoToSelectedOption(
-                                    navigateOption.screenName
-                                )}
-                            />
-                        </ButtonMargin>
-                    ))
+                    navigationOptions.map((navigateOption, idx) => {
+                        if (navigateOption.screenName === 'Home') {
+                            return null
+                        }
+
+                        return (
+                            <ButtonMargin key={idx}>
+                                <Button
+                                    text={navigateOption.screenLabel}
+                                    iconName={navigateOption.screenIcon}
+                                    align="flex-start"
+                                    style={{width: '100%' }}
+                                    onPress={() => handleGoToSelectedOption(
+                                        navigateOption.screenName
+                                    )}
+                                />
+                            </ButtonMargin>
+                        )
+                    })
                 }
             </ScreenContent>
         </ScreenContainer>

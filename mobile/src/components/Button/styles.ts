@@ -44,5 +44,6 @@ export const ButtonText = styled.Text<ButtonTextProps>`
     font-weight: 500;
     font-size: 18px;
     line-height: 25px;
+    text-transform: uppercase;
     color: ${props => props.buttonStyle === 'primary' ? lightGray : secondaryColor};
 `

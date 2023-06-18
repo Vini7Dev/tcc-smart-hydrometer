@@ -16,9 +16,11 @@ import {
     NavItemIcon,
     DisconnectButtonMargin,
 } from './styles'
+import { ADMIN_ACCOUNT_TYPE } from '../../utils/constants'
 import { primaryColor, whiteColor } from '../../styles/variables'
 import { Button } from '../Button'
 import { useAuth } from '../../hooks/Auth'
+import { adminNavigationOptions, customerNavigationOptions } from '../../utils/navigationOptions'
 
 interface NavigationHeaderProps {
     title: string
@@ -32,14 +34,11 @@ const NavigationContainer: React.FC<NavigationContainerProps> = ({
     closeNavigation,
 }) => {
     const navigation = useNavigation()
-    const { logout } = useAuth()
+    const { user, logout } = useAuth()
 
-    const navItems = [
-        { name: 'Home', placehoder: 'Início', icon: 'home' },
-        { name: 'GenerateHydrometer', placehoder: 'Gerar Hydrômetro', icon: 'settings' },
-        { name: 'AdminsList', placehoder: 'Gerenciar Administradores', icon: 'user' },
-        { name: 'NewsList', placehoder: 'Gerenciar Notícias e Dicas', icon: 'file-text' },
-    ]
+    const navigationOptions = user.account_type === ADMIN_ACCOUNT_TYPE
+        ? adminNavigationOptions
+        : customerNavigationOptions
 
     const handleLogoutUser = useCallback(() => {
         logout()
@@ -76,18 +75,18 @@ const NavigationContainer: React.FC<NavigationContainerProps> = ({
 
                 <NavListArea>
                     {
-                        navItems.map(navItem => (
+                        navigationOptions.map(navItem => (
                             <NavItem
-                                onPress={() => handleNavigateToSelectedItem(navItem.name)}
+                                onPress={() => handleNavigateToSelectedItem(navItem.screenName)}
                             >
                                 <>
                                     <NavItemIcon
-                                        name={navItem.icon}
+                                        name={navItem.screenIcon}
                                         size={24}
                                         color={primaryColor}
                                     />
 
-                                    <NavItemText>{navItem.placehoder}</NavItemText>
+                                    <NavItemText>{navItem.screenLabel}</NavItemText>
                                 </>
                             </NavItem>
                         ))

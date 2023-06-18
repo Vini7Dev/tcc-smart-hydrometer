@@ -1,16 +1,21 @@
 export const adminNavigationOptions = [
     {
-        screenLabel: 'GERAR HIDRÔMETRO',
+        screenLabel: 'Início',
+        screenName: 'Home',
+        screenIcon: 'home',
+    },
+    {
+        screenLabel: 'Gerar Hydrômetro',
         screenName: 'GenerateHydrometer',
         screenIcon: 'plus',
     },
     {
-        screenLabel: 'GERENCIAR ADMINSTRADORES',
+        screenLabel: 'Gerenciar Administradores',
         screenName: 'AdminsList',
         screenIcon: 'user',
     },
     {
-        screenLabel: 'GERENCIAR NOTÍCIAS E DICAS',
+        screenLabel: 'Gerenciar Notícias e Dicas',
         screenName: 'NewsList',
         screenIcon: 'file-text',
     },
@@ -18,22 +23,27 @@ export const adminNavigationOptions = [
 
 export const customerNavigationOptions = [
     {
-        screenLabel: 'VER MEU CONSUMO',
+        screenLabel: 'Início',
+        screenName: 'Home',
+        screenIcon: 'home',
+    },
+    {
+        screenLabel: 'Ver o Meu Consumo',
         screenName: 'PersonalConsumption',
         screenIcon: 'eye',
     },
     {
-        screenLabel: 'VER CONSUMO DA CIDADE',
+        screenLabel: 'Ver o Consumo da Cidade',
         screenName: 'CityConsumption',
         screenIcon: 'map',
     },
     {
-        screenLabel: 'MEUS HIDRÔMETROS',
+        screenLabel: 'Meus Hidrômetros',
         screenName: 'PersonalHydrometersList',
         screenIcon: 'thermometer',
     },
     {
-        screenLabel: 'NOTÍCIAS E DICAS',
+        screenLabel: 'Ver Notícias e Dicas',
         screenName: 'NewsList',
         screenIcon: 'file-text',
     },
