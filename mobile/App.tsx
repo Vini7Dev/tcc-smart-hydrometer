@@ -8,7 +8,7 @@ import { NavigationContainer } from '@react-navigation/native'
 
 import { backgroundColor } from './src/styles/variables'
 
-import { Routes } from './src/routes'
+import { Routes } from './src/routes/index.routes'
 import { AppProvider } from './src/hooks'
 
 const App: React.FC = () => {

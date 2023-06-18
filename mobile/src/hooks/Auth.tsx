@@ -7,7 +7,7 @@ interface User {
     id: string
     name: string
     email: string
-    account_type: string
+    account_type: 'ADMIN' | 'CUSTOMER'
 }
 
 interface AuthData {

@@ -5,6 +5,8 @@ import { primaryColor } from '../styles/variables'
 import { useAuth } from '../hooks/Auth'
 import { AppRoutes } from './app.routes'
 import { AdminRoutes } from './admin.routes'
+import { CustomerRoutes } from './customer.routes'
+import { ADMIN_ACCOUNT_TYPE } from '../utils/constants'
 
 export const Routes: React.FC = () => {
     const { user, loading } = useAuth()
@@ -17,5 +19,13 @@ export const Routes: React.FC = () => {
         )
     }
 
-    return (user ? <AdminRoutes /> : <AppRoutes />);
+    if (user) {
+        if (user.account_type === ADMIN_ACCOUNT_TYPE) {
+            return <AdminRoutes />
+        }
+
+        return <CustomerRoutes />
+    }
+
+    return <AppRoutes />
 }

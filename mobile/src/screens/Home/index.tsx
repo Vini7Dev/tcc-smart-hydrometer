@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
+import { adminNavigationOptions, customerNavigationOptions } from './navigationOptions'
 import { NavigationHeader } from '../../components/NavigationHeader'
 import { Button } from '../../components/Button'
 import {
@@ -11,29 +12,19 @@ import {
     UserAvatar,
     UserAvatarContainer
 } from './styles'
+import { useAuth } from '../../hooks/Auth'
+import { ADMIN_ACCOUNT_TYPE } from '../../utils/constants'
 
 const EmptyAvatarImage = require('../../../assets/avatar-user.png')
 
-const navigationOptions = [
-    {
-        screenLabel: 'GERAR HIDRÔMETRO',
-        screenName: 'GenerateHydrometer',
-        screenIcon: 'plus',
-    },
-    {
-        screenLabel: 'GERENCIAR ADMINSTRADORES',
-        screenName: 'AdminsList',
-        screenIcon: 'user',
-    },
-    {
-        screenLabel: 'GERENCIAR NOTÍCIAS E DICAS',
-        screenName: 'NewsList',
-        screenIcon: 'file-text',
-    },
-]
-
 export const Home: React.FC = () => {
     const navigation = useNavigation()
+    const { user } = useAuth()
+
+    const navigationOptions = user.account_type === ADMIN_ACCOUNT_TYPE
+        ? adminNavigationOptions
+        : customerNavigationOptions
+
 
     const handleGoToSelectedOption = useCallback((screenName: string) => {
         navigation.navigate(screenName as never)
