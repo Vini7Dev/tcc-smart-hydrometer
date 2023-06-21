@@ -11,7 +11,6 @@ interface CompareOptionTextProps {
 
 export const Container = styled.View`
     width: 100%;
-    height: 200px;
 `
 
 export const CompareOptionsLabel = styled.Text`
