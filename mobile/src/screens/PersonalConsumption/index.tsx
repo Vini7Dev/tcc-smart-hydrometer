@@ -11,11 +11,13 @@ import {
     ChartLabelItem,
     ChartLabelSquareColor,
     ChartLabelSquareText,
+    ChrtTitle,
 } from './styles'
 import { blackColor, errorColor, grayColor, infoColor, successColor } from '../../styles/variables'
 import { NavigationHeader } from '../../components/NavigationHeader'
 import { CompareByOptions } from '../../components/CompareByOptions'
 import { MOCK_CONSUMPTIONS } from './MOCK_CONSUMPTIONS'
+import { Select } from '../../components/Select'
 
 interface ConsumptionProps {
     id: string
@@ -65,6 +67,8 @@ const ChartComponent: React.FC = () => {
 
     return (
         <ChartContainer>
+            <ChrtTitle>Consumo X Tempo</ChrtTitle>
+
             <LineChart
                 areaChart
                 showVerticalLines
@@ -117,15 +121,36 @@ const ChartComponent: React.FC = () => {
 };
 
 export const PersonalConsumption: React.FC = () => {
+    const [selectedHydrometerId, setSelectedHydrometerId] = useState<string>()
+
+    const handleSelectHydrometer = useCallback((value?: string) => {
+        setSelectedHydrometerId(value)
+    }, [])
+
     return (
         <ScreenContainer>
             <NavigationHeader title="Consumo Pessoal" />
 
             <ScreenScrollView>
                 <ScreenContent>
-                    <CompareByOptions />
+                    <Select
+                        placeholder="Selecione um hidrômetro"
+                        options={[
+                            { label: 'Casa 1', value: '1' },
+                            { label: 'Casa 2', value: '2' },
+                        ]}
+                        onSelect={handleSelectHydrometer}
+                    />
 
-                    <ChartComponent />
+                    {
+                        selectedHydrometerId && (
+                            <>
+                                <CompareByOptions />
+
+                                <ChartComponent />
+                            </>
+                        )
+                    }
                 </ScreenContent>
             </ScreenScrollView>
         </ScreenContainer>

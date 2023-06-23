@@ -13,7 +13,8 @@ export const ScreenScrollView = styled.ScrollView``
 export const ScreenContent = styled.View`
     flex: 1;
     width: 100%;
-    padding: 40px 16px;
+    height: 100%;
+    padding: 40px 16px 100px;
     align-items: center;
 `
 
@@ -22,6 +23,15 @@ export const ChartContainer = styled.View`
     margin: 32px 16px 0;
     padding: 16px 8px;
     background-color: ${whiteColor};
+`
+
+export const ChrtTitle = styled.Text`
+    margin-bottom: 16px;
+    font-family: 'Roboto';
+    font-weight: 500;
+    font-size: 22px;
+    color: ${blackColor};
+    text-align: center;
 `
 
 export const ChartLabelContainer = styled.View`
