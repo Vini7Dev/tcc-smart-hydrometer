@@ -34,7 +34,7 @@ export const customerNavigationOptions = [
     },
     {
         screenLabel: 'Ver o Consumo da Cidade',
-        screenName: 'CityConsumption',
+        screenName: 'RegionalConsumption',
         screenIcon: 'map',
     },
     {
