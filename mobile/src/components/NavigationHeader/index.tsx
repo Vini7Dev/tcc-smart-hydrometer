@@ -17,7 +17,7 @@ import {
     DisconnectButtonMargin,
 } from './styles'
 import { ADMIN_ACCOUNT_TYPE } from '../../utils/constants'
-import { primaryColor, whiteColor } from '../../styles/variables'
+import { primaryColor, transparent, whiteColor } from '../../styles/variables'
 import { Button } from '../Button'
 import { useAuth } from '../../hooks/Auth'
 import { adminNavigationOptions, customerNavigationOptions } from '../../utils/navigationOptions'
@@ -29,6 +29,8 @@ interface NavigationHeaderProps {
 interface NavigationContainerProps {
     closeNavigation: () => void
 }
+
+const HOME_STATE_INDEX = 1
 
 const NavigationContainer: React.FC<NavigationContainerProps> = ({
     closeNavigation,
@@ -115,6 +117,12 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
     const [isShowNavigation, setIsShowNavigation] = useState(false)
 
     const handleGoBackScreen = useCallback(() => {
+        const navigationState = navigation.getState()
+
+        if (navigationState.routes.length <= HOME_STATE_INDEX) {
+            return
+        }
+
         navigation.goBack()
     }, [navigation])
 
@@ -128,7 +136,11 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
                 onPress={handleGoBackScreen}
                 name="chevron-left"
                 size={24}
-                color={whiteColor}
+                color={
+                    navigation.getState().routes.length <= HOME_STATE_INDEX
+                        ? transparent
+                        : whiteColor
+                }
             />
 
             <ScreenTitle>{title}</ScreenTitle>
