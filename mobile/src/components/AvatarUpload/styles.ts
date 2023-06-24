@@ -13,7 +13,11 @@ export const Container = styled.View`
     background-color: ${whiteColor};
 `
 
-export const AvatarImage = styled.Image``
+export const AvatarImage = styled.Image`
+    width: 120px;
+    height: 120px;
+    border-radius: 120px;
+`
 
 export const UpdateAvatarButton = styled.TouchableHighlight`
     position: absolute;

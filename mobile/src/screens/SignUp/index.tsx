@@ -13,6 +13,13 @@ import {
 import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
 import { AvatarUpload } from '../../components/AvatarUpload'
+import { api } from '../../services/api'
+
+interface AvatarProps {
+    type: string
+    name: string
+    uri?: string
+}
 
 export const SignUp: React.FC = () => {
     const navigation = useNavigation()
@@ -20,14 +27,36 @@ export const SignUp: React.FC = () => {
     const [name, setName] = useState('Nome')
     const [email, setEmail] = useState('Email')
     const [password, setPassword] = useState('Senha')
+    const [avatar, setAvatar] = useState<AvatarProps>()
+
+    const handleReceiveSelectedAvatar = useCallback((avatarProps: AvatarProps) => {
+        setAvatar(avatarProps)
+    }, [])
 
     const handleGoBackToSignIn = useCallback(() => {
         navigation.goBack()
     }, [navigation])
 
     const handleSignUp = useCallback(async () => {
-        //
-    }, [name, email, password])
+        try {
+            const formData = new FormData()
+
+            formData.append('name', name)
+            formData.append('email', email)
+            formData.append('password', password)
+            formData.append('avatar_file', avatar)
+
+            await api.post('/customers', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+
+            handleGoBackToSignIn()
+        } catch (err: any) {
+            console.error(err)
+        }
+    }, [avatar, name, email, password, handleGoBackToSignIn])
 
     return (
         <ScreenContainer>
@@ -35,7 +64,7 @@ export const SignUp: React.FC = () => {
 
             <Subtitle>Cadastre-se</Subtitle>
 
-            <AvatarUpload />
+            <AvatarUpload onSelectAvatar={handleReceiveSelectedAvatar} />
 
             <Input
                 iconName="user"
@@ -62,6 +91,7 @@ export const SignUp: React.FC = () => {
             <ButtonMargin>
                 <Button
                     text="CADASTRAR"
+                    onPress={handleSignUp}
                 />
             </ButtonMargin>
 

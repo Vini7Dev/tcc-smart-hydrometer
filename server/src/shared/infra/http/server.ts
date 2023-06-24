@@ -47,11 +47,11 @@ server.use(
     response: Response,
     _next: NextFunction,
   ): Response => {
+    console.error(error)
+
     if (error instanceof AppError) {
       return response.status(error.code).json({ error: error.message })
     }
-
-    console.error(error)
 
     return response
       .status(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR)
