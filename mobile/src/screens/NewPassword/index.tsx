@@ -9,19 +9,26 @@ import {
 import { AppLogo } from '../../components/AppLogo'
 import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
+import { api } from '../../services/api'
 
 export const NewPassword: React.FC = () => {
     const navigation = useNavigation()
 
-    const [code, setCode] = useState('')
+    const [token, setToken] = useState('')
     const [password, setPassword] = useState('')
 
-    const handleGoBackToSignIn = useCallback(() => {
-        navigation.reset({
-            index: 0,
-            routes: [{ name: 'SignIn' as never }]
-        })
-    }, [navigation.navigate])
+    const handleSendForgotPasswordCode = useCallback(async () => {
+        try {
+            await api.post('/password/reset', { token, password })
+
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'SignIn' as never }]
+            })
+        } catch(err) {
+            console.error(err)
+        }
+    }, [token, password, navigation])
 
     return (
         <ScreenContainer>
@@ -32,7 +39,7 @@ export const NewPassword: React.FC = () => {
             <Input
                 iconName="mail"
                 placeholder="Informe o código de verificação"
-                onChangeText={code => setCode(code)}
+                onChangeText={token => setToken(token)}
                 defaultValue="Informe o código de verificação"
             />
 
@@ -44,7 +51,7 @@ export const NewPassword: React.FC = () => {
             />
 
             <ButtonMargin>
-                <Button text="SALVAR" onPress={handleGoBackToSignIn} />
+                <Button text="SALVAR" onPress={handleSendForgotPasswordCode} />
             </ButtonMargin>
         </ScreenContainer>
     )

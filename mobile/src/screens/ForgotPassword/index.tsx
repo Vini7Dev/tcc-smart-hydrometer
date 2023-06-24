@@ -9,15 +9,22 @@ import {
 import { AppLogo } from '../../components/AppLogo'
 import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
+import { api } from '../../services/api'
 
 export const ForgotPassword: React.FC = () => {
     const navigation = useNavigation()
 
     const [email, setEmail] = useState('')
 
-    const handleGoToNewPassword = useCallback(() => {
-        navigation.navigate('NewPassword' as never)
-    }, [navigation.navigate])
+    const handleSendForgotPasswordCode = useCallback(async () => {
+        try {
+            await api.post('/password/forgot', { email })
+
+            navigation.navigate('NewPassword' as never)
+        } catch(err) {
+            console.error(err)
+        }
+    }, [email, navigation])
 
     return (
         <ScreenContainer>
@@ -33,7 +40,7 @@ export const ForgotPassword: React.FC = () => {
             />
 
             <ButtonMargin>
-                <Button text="ENVIAR" onPress={handleGoToNewPassword} />
+                <Button text="ENVIAR" onPress={handleSendForgotPasswordCode} />
             </ButtonMargin>
         </ScreenContainer>
     )
