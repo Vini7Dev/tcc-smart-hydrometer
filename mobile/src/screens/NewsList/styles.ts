@@ -30,7 +30,7 @@ export const SearchResultContainer = styled.FlatList`
     width: 100%;
 `
 
-export const NewsItemContainer = styled.TouchableHighlight`
+export const NewsItemContainer = styled.View`
     position: relative;
     flex-direction: row;
     justify-content: space-between;
@@ -40,7 +40,7 @@ export const NewsItemContainer = styled.TouchableHighlight`
     margin-bottom: 32px;
 `
 
-export const NewsTitleContainer = styled.View`
+export const NewsTitleContainer = styled.TouchableHighlight`
     flex: 1;
     align-items: flex-start;
     justify-content: flex-start;

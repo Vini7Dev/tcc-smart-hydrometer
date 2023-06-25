@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
+import { Alert } from 'react-native'
 
 import { NavigationHeader } from '../../components/NavigationHeader'
 import {
@@ -45,54 +46,48 @@ interface NewsProps {
 }
 
 interface NewsItemProps {
-    id: string
     title: string
     text: string
     news_images: Array<{ image_file: string }>
-    author: AuthorProps
-    updated_at: string
-    handleGoToViewNews: (newsData: NewsProps) => void
+    handleDeleteAdmin: () => void
+    handleGoToViewNews: () => void
 }
 
 const NewsItem: React.FC<NewsItemProps> = ({
-    id,
     title,
     text,
     news_images,
-    author,
-    updated_at,
+    handleDeleteAdmin,
     handleGoToViewNews,
 }) => {
     const { user } = useAuth()
 
     return (
-        <NewsItemContainer onPress={() => handleGoToViewNews({
-            id,
-            title,
-            text,
-            news_images,
-            author,
-            updated_at,
-        })}>
-            <>
-                <NewsTitleContainer>
+        <NewsItemContainer>
+            <NewsTitleContainer onPress={handleGoToViewNews}>
+                <>
                     <NewsTitle>{title}</NewsTitle>
 
                     <NewsDescription>{text}</NewsDescription>
-                </NewsTitleContainer>
+                </>
+            </NewsTitleContainer>
 
-                <NewsBanner source={{ uri: API_FILES_URL(news_images[0].image_file) }} />
+            <NewsBanner source={{ uri: API_FILES_URL(news_images[0].image_file) }} />
 
-                {
-                    user.account_type === ADMIN_ACCOUNT_TYPE && (
-                        <NewsActionButtonsContainer>
-                            <DeleteNewsIcon name="trash-2" size={16} color={errorColor} />
+            {
+                user.account_type === ADMIN_ACCOUNT_TYPE && (
+                    <NewsActionButtonsContainer>
+                        <EditNewsIcon name="edit-3" size={16} color={secondaryColor} />
 
-                            <EditNewsIcon name="edit-3" size={16} color={secondaryColor} />
-                        </NewsActionButtonsContainer>
-                    )
-                }
-            </>
+                        <DeleteNewsIcon
+                            name="trash-2"
+                            size={16}
+                            color={errorColor}
+                            onPress={handleDeleteAdmin}
+                        />
+                    </NewsActionButtonsContainer>
+                )
+            }
         </NewsItemContainer>
     )
 }
@@ -105,6 +100,18 @@ export const NewsList: React.FC = () => {
 
     const [newsList, setNewsList] = useState<NewsProps[]>([])
 
+    const handleGetNewsList = async () => {
+        const {
+            data: newsListResponse
+        } = await api.get<NewsProps[]>('/news')
+
+        setNewsList(newsListResponse)
+    }
+
+    useEffect(() => {
+        handleGetNewsList()
+    }, [routeParams?.reloadList])
+
     const handleGoToCreateNews = useCallback((newsData?: NewsProps) => {
         navigation.navigate('CreateNews' as never, { ...newsData } as never)
     }, [navigation])
@@ -113,17 +120,29 @@ export const NewsList: React.FC = () => {
         navigation.navigate('ViewNews' as never, { ...newsData } as never)
     }, [navigation])
 
-    useEffect(() => {
-        const handleGetNewsList = async () => {
-            const {
-                data: newsListResponse
-            } = await api.get<NewsProps[]>('/news')
+    const handleDeleteAdmin = useCallback((newsId: string) => {
+        const deleteNewsCallback = async (id: string) => {
+            try {
+                await api.delete(`/news/${id}`)
 
-            setNewsList(newsListResponse)
+                await handleGetNewsList()
+            } catch(err) {
+                console.error(err)
+            }
         }
 
-        handleGetNewsList()
-    }, [routeParams?.reloadList])
+        Alert.alert(
+            'Deseja apagar a notícia?',
+            'Esta ação não pode ser desfeita!',
+            [
+                {
+                    text: 'Sim',
+                    onPress: () => deleteNewsCallback(newsId),
+                },
+                { text: 'Não' },
+            ],
+        )
+    }, [handleGetNewsList])
 
     return (
         <ScreenContainer>
@@ -145,12 +164,10 @@ export const NewsList: React.FC = () => {
                     renderItem={({ item }: any) => (
                         <NewsItem
                             key={item.id}
-                            id={item.id}
                             title={item.title}
                             text={item.text}
                             news_images={item.news_images}
-                            author={item.author}
-                            updated_at={item.updated_at}
+                            handleDeleteAdmin={() => handleDeleteAdmin(item.id)}
                             handleGoToViewNews={() => {
                                 handleGoToViewNews({
                                     id: item.id,

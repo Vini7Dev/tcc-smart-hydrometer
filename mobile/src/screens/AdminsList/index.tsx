@@ -82,6 +82,18 @@ export const AdminsList: React.FC = () => {
 
     const [adminList, setAdminList] = useState<AdminProps[]>([])
 
+    const handleGetAdminsList = async () => {
+        const {
+            data: adminListResponse
+        } = await api.get<AdminProps[]>('/admins')
+
+        setAdminList(adminListResponse)
+    }
+
+    useEffect(() => {
+        handleGetAdminsList()
+    }, [routeParams?.reloadList])
+
     const handleGoToCreateAdmin = useCallback((adminData?: AdminProps) => {
         navigation.navigate('SignUpAdmin' as never, { ...adminData } as never)
     }, [navigation])
@@ -90,13 +102,15 @@ export const AdminsList: React.FC = () => {
         const deleteAdminCallback = async (id: string) => {
             try {
                 await api.delete(`/admins/${id}`)
+
+                await handleGetAdminsList()
             } catch(err) {
                 console.error(err)
             }
         }
 
         Alert.alert(
-            'Deseja apagar a imagem?',
+            'Deseja apagar o usuário?',
             'Esta ação não pode ser desfeita!',
             [
                 {
@@ -106,19 +120,7 @@ export const AdminsList: React.FC = () => {
                 { text: 'Não' },
             ],
         )
-    }, [])
-
-    useEffect(() => {
-        const handleGetAdminsList = async () => {
-            const {
-                data: adminListResponse
-            } = await api.get<AdminProps[]>('/admins')
-
-            setAdminList(adminListResponse)
-        }
-
-        handleGetAdminsList()
-    }, [routeParams?.reloadList])
+    }, [handleGetAdminsList])
 
     return (
         <ScreenContainer>
