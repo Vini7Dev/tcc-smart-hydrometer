@@ -37,7 +37,7 @@ export const Home: React.FC = () => {
 
     useEffect(() => {
         reloadProfile()
-    }, [routeParams?.reloadAvatar, reloadProfile])
+    }, [routeParams?.reloadAvatar])
 
     return (
         <ScreenContainer>

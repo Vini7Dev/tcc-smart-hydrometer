@@ -99,6 +99,10 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
     }, [])
 
     const reloadProfile = useCallback(async () => {
+        if (!data.user) {
+            return
+        }
+
         const { data: updatedProfileData } = await api.get('/profile')
 
         setData({
