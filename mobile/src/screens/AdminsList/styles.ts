@@ -44,7 +44,7 @@ export const AdminItemContainer = styled.TouchableHighlight`
 export const AdminAvatar = styled.Image`
     width: 50px;
     height: 50px;
-    border-radius: 25px;
+    border-radius: 50px;
 `
 
 export const AdminNameContainer = styled.View`

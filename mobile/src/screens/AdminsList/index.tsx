@@ -20,6 +20,7 @@ import { Input } from '../../components/Input'
 import { backgroundColor, errorColor } from '../../styles/variables'
 import { Button } from '../../components/Button'
 import { api } from '../../services/api'
+import { API_FILES_URL } from '../../utils/constants'
 
 interface AdminItemProps {
     name: string
@@ -32,7 +33,7 @@ interface AdminProps {
     id: string
     name: string
     email: string
-    avatar: string
+    avatar_file: string
 }
 
 const EmptyAvatarImage = require('../../../assets/avatar-user.png')
@@ -65,8 +66,8 @@ export const AdminsList: React.FC = () => {
 
     const [adminList, setAdminList] = useState<AdminProps[]>([])
 
-    const handleGoToCreateAdmin = useCallback(() => {
-        navigation.navigate('SignUpAdmin' as never)
+    const handleGoToCreateAdmin = useCallback((adminData?: AdminProps) => {
+        navigation.navigate('SignUpAdmin' as never, { ...adminData } as never)
     }, [navigation])
 
     useEffect(() => {
@@ -103,8 +104,13 @@ export const AdminsList: React.FC = () => {
                             key={item.email}
                             name={item.name}
                             email={item.email}
-                            avatar={item.avatar}
-                            handleGoToCreateAdmin={handleGoToCreateAdmin}
+                            avatar={API_FILES_URL(item.avatar_file ?? '')}
+                            handleGoToCreateAdmin={() => handleGoToCreateAdmin({
+                                id: item.id,
+                                name: item.name,
+                                email: item.email,
+                                avatar_file: item.avatar_file,
+                            })}
                         />
                     )}
                     keyExtractor={(item: any) => item.id}
@@ -115,7 +121,7 @@ export const AdminsList: React.FC = () => {
                         text="CADASTRAR ADM"
                         iconName="user-plus"
                         style={{ width: '100%' }}
-                        onPress={handleGoToCreateAdmin}
+                        onPress={() => handleGoToCreateAdmin()}
                     />
                 </CreateAdminButtonMargin>
             </ScreenContent>

@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useNavigation, useRoute } from '@react-navigation/native'
 
 import {
     ScreenContainer,
@@ -11,6 +11,14 @@ import { Button } from '../../components/Button'
 import { AvatarUpload } from '../../components/AvatarUpload'
 import { NavigationHeader } from '../../components/NavigationHeader'
 import { api } from '../../services/api'
+import { API_FILES_URL } from '../../utils/constants'
+
+interface RouteParams {
+    id?: string
+    name?: string
+    email?: string
+    avatar_file?: string
+}
 
 interface AvatarProps {
     type: string
@@ -20,10 +28,12 @@ interface AvatarProps {
 
 export const SignUpAdmin: React.FC = () => {
     const navigation = useNavigation()
+    const route = useRoute()
+    const routeParams = route.params as RouteParams
 
-    const [name, setName] = useState('Nome')
-    const [email, setEmail] = useState('Email')
-    const [password, setPassword] = useState('Senha')
+    const [name, setName] = useState(routeParams.name ?? 'Nome')
+    const [email, setEmail] = useState(routeParams.email ?? 'Email')
+    const [password, setPassword] = useState(routeParams.id ? undefined : 'Senha')
     const [avatar, setAvatar] = useState<AvatarProps>()
 
     const handleReceiveSelectedAvatar = useCallback((avatarProps: AvatarProps) => {
@@ -40,14 +50,28 @@ export const SignUpAdmin: React.FC = () => {
 
             formData.append('name', name)
             formData.append('email', email)
-            formData.append('password', password)
-            formData.append('avatar_file', avatar)
 
-            await api.post('/admins', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            })
+            if (password) {
+                formData.append('password', password)
+            }
+
+            if (avatar) {
+                formData.append('avatar_file', avatar)
+            }
+
+            if (routeParams.id) {
+                await api.patch(`/admins/${routeParams.id}`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
+            } else {
+                await api.post('/admins', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
+            }
 
             handleGoBackToAdminsList()
         } catch (err: any) {
@@ -60,7 +84,10 @@ export const SignUpAdmin: React.FC = () => {
             <NavigationHeader title="Cadastrar Administrador" />
 
             <ScreenContent>
-                <AvatarUpload onSelectAvatar={handleReceiveSelectedAvatar} />
+                <AvatarUpload
+                    defaultAvatar={routeParams.avatar_file ? API_FILES_URL(routeParams.avatar_file) : undefined}
+                    onSelectAvatar={handleReceiveSelectedAvatar}
+                />
 
                 <Input
                     iconName="user"

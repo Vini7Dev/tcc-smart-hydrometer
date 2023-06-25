@@ -44,7 +44,10 @@ export const SignUp: React.FC = () => {
             formData.append('name', name)
             formData.append('email', email)
             formData.append('password', password)
-            formData.append('avatar_file', avatar)
+
+            if (avatar) {
+                formData.append('avatar_file', avatar)
+            }
 
             await api.post('/customers', formData, {
                 headers: {
