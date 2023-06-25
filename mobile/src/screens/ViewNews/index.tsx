@@ -19,31 +19,33 @@ import {
     PublishedDate,
     AuthorAvatar,
 } from './styles'
-import { whiteColor } from '../../styles/variables'
+import { transparent, whiteColor } from '../../styles/variables'
+import { useRoute } from '@react-navigation/native'
+import { API_FILES_URL } from '../../utils/constants'
 
-const MockAvatarImage = require('../../../assets/mockImages/avatar.png')
-const MockBannerImage = require('../../../assets/mockImages/news_banner.png')
-const MockBanner2Image = require('../../../assets/mockImages/news_banner2.png')
-
-const mockNewsData = {
-    id: '1',
-    title: 'Título da notícia',
-    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam porttitor at augue nec semper. Cras non volutpat metus. Duis elit tortor, pulvinar ut purus ac, lacinia dapibus orci. Nunc in sagittis nibh. Phasellus iaculis nibh nec porta faucibus. Donec vel velit et massa blandit pellentesque. In sit amet lectus pretium, pharetra lectus eu, luctus lacus. Fusce lacinia accumsan nibh, at viverra risus suscipit et. Maecenas vitae libero ac purus congue elementum eget eget est.',
-    banners: [MockBanner2Image, MockBannerImage] as string[],
-    publishedDate: new Date(),
+interface RouteParams {
+    id: string
+    title: string
+    text: string
+    news_images: Array<{ image_file: string }>
     author: {
-        name: 'Jhon Doe',
-        avatar: MockAvatarImage as string,
-    },
+        id: string
+        name: string
+        avatar_file: string
+    }
+    updated_at: string
 }
 
 const { width } = Dimensions.get('window')
 
 export const ViewNews: React.FC = () => {
+    const route = useRoute()
+    const routeParams = route.params as RouteParams
+
     const [currentBannerIndex, setCurrentBannerIndex] = useState(0)
 
     const handleNextBanner = useCallback(() => {
-        if (currentBannerIndex < mockNewsData.banners.length - 1) {
+        if (currentBannerIndex < routeParams.news_images.length - 1) {
             setCurrentBannerIndex(currentBannerIndex + 1)
         }
     }, [currentBannerIndex])
@@ -60,14 +62,17 @@ export const ViewNews: React.FC = () => {
 
     return (
         <ScreenContainer>
-            <NavigationHeader title={mockNewsData.title} />
+            <NavigationHeader title={routeParams.title} />
 
             <BannersContainer>
                 <BannersList
                     horizontal
-                    data={[mockNewsData.banners[currentBannerIndex]]}
-                    renderItem={({ item }) => (
-                        <BannerItem source={item as any} style={{ width }} />
+                    data={[routeParams.news_images[currentBannerIndex]]}
+                    renderItem={({ item }: any) => (
+                        <BannerItem
+                            source={{ uri: API_FILES_URL(item.image_file) }}
+                            style={{ width }}
+                        />
                     )}
                     keyExtractor={(_, idx) => idx.toString()}
                 />
@@ -75,35 +80,41 @@ export const ViewNews: React.FC = () => {
                 <BannerPrevArrow
                     name="chevron-left"
                     size={24}
-                    color={whiteColor}
+                    color={currentBannerIndex === 0 ? transparent : whiteColor}
                     onPress={handlePreviousBanner}
                 />
 
                 <BannerNextArrow
                     name="chevron-right"
                     size={24}
-                    color={whiteColor}
+                    color={
+                        currentBannerIndex >= routeParams.news_images.length - 1
+                            ? transparent
+                            : whiteColor
+                    }
                     onPress={handleNextBanner}
                 />
 
-                <NewsTitle>{mockNewsData.title}</NewsTitle>
+                <NewsTitle>{routeParams.title}</NewsTitle>
             </BannersContainer>
 
             <ScreenContent>
                 <NewsBody>
-                    {mockNewsData.body}
+                    {routeParams.text}
                 </NewsBody>
 
                 <AuthorContainer>
                     <AuthorNameContainer>
-                        <AuthorName>{mockNewsData.author.name}</AuthorName>
+                        <AuthorName>{routeParams.author.name}</AuthorName>
 
                         <PublishedDate>
-                            {handleFormatPublishDate(mockNewsData.publishedDate)}
+                            {handleFormatPublishDate(new Date(routeParams.updated_at))}
                         </PublishedDate>
                     </AuthorNameContainer>
 
-                    <AuthorAvatar source={mockNewsData.author.avatar as any} />
+                    <AuthorAvatar
+                        source={{ uri: API_FILES_URL(routeParams.author.avatar_file) }}
+                    />
                 </AuthorContainer>
             </ScreenContent>
         </ScreenContainer>

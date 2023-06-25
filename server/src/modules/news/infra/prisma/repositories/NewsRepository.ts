@@ -13,7 +13,8 @@ export class NewsRepository extends AppRepository implements INewsRepository {
     const findedNews = await this.client.news.findFirst({
       where: { id },
       include: {
-        news_images: true
+        news_images: true,
+        author: true,
       }
     })
 
@@ -28,7 +29,8 @@ export class NewsRepository extends AppRepository implements INewsRepository {
       skip: page,
       take: perPage,
       include: {
-        news_images: true
+        news_images: true,
+        author: true,
       }
     })
 
@@ -36,12 +38,14 @@ export class NewsRepository extends AppRepository implements INewsRepository {
   }
 
   public async create({
+    user_id,
     title,
     text,
     image_files
   }: ICreateNewsDTO): Promise<News> {
     const createdNews = await this.client.news.create({
       data: {
+        user_id,
         title,
         text,
         news_images: {

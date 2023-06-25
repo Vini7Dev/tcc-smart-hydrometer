@@ -46,6 +46,7 @@ export const NewsTitle = styled.Text`
 `
 
 export const NewsBody = styled.Text`
+    width: 100%;
     margin-bottom: 40px;
     font-family: 'Roboto';
     font-weight: 400;

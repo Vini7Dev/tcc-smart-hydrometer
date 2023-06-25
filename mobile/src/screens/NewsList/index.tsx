@@ -25,11 +25,10 @@ import { useAuth } from '../../hooks/Auth'
 import { ADMIN_ACCOUNT_TYPE, API_FILES_URL } from '../../utils/constants'
 import { api } from '../../services/api'
 
-interface NewsItemProps {
-    title: string
-    description: string
-    banner: string
-    handleGoToViewNews: () => void
+interface AuthorProps {
+    id: string
+    name: string
+    avatar_file: string
 }
 
 interface NewsProps {
@@ -37,28 +36,48 @@ interface NewsProps {
     title: string
     text: string
     news_images: Array<{ image_file: string }>
-    created_at: Date
-    updated_at: Date
+    author: AuthorProps
+    updated_at: string
+}
+
+interface NewsItemProps {
+    id: string
+    title: string
+    text: string
+    news_images: Array<{ image_file: string }>
+    author: AuthorProps
+    updated_at: string
+    handleGoToViewNews: (newsData: NewsProps) => void
 }
 
 const NewsItem: React.FC<NewsItemProps> = ({
+    id,
     title,
-    description,
-    banner,
+    text,
+    news_images,
+    author,
+    updated_at,
     handleGoToViewNews,
 }) => {
     const { user } = useAuth()
 
     return (
-        <NewsItemContainer onPress={handleGoToViewNews}>
+        <NewsItemContainer onPress={() => handleGoToViewNews({
+            id,
+            title,
+            text,
+            news_images,
+            author,
+            updated_at,
+        })}>
             <>
                 <NewsTitleContainer>
                     <NewsTitle>{title}</NewsTitle>
 
-                    <NewsDescription>{description}</NewsDescription>
+                    <NewsDescription>{text}</NewsDescription>
                 </NewsTitleContainer>
 
-                <NewsBanner source={{ uri: banner }} />
+                <NewsBanner source={{ uri: API_FILES_URL(news_images[0].image_file) }} />
 
                 {
                     user.account_type === ADMIN_ACCOUNT_TYPE && (
@@ -80,12 +99,12 @@ export const NewsList: React.FC = () => {
 
     const [newsList, setNewsList] = useState<NewsProps[]>([])
 
-    const handleGoToCreateNews = useCallback(() => {
-        navigation.navigate('CreateNews' as never)
+    const handleGoToCreateNews = useCallback((newsData?: NewsProps) => {
+        navigation.navigate('CreateNews' as never, { ...newsData } as never)
     }, [navigation])
 
-    const handleGoToViewNews = useCallback(() => {
-        navigation.navigate('ViewNews' as never)
+    const handleGoToViewNews = useCallback((newsData: NewsProps) => {
+        navigation.navigate('ViewNews' as never, { ...newsData } as never)
     }, [navigation])
 
     useEffect(() => {
@@ -120,10 +139,22 @@ export const NewsList: React.FC = () => {
                     renderItem={({ item }: any) => (
                         <NewsItem
                             key={item.id}
+                            id={item.id}
                             title={item.title}
-                            description={item.text}
-                            banner={API_FILES_URL(item.news_images[0].image_file)}
-                            handleGoToViewNews={handleGoToViewNews}
+                            text={item.text}
+                            news_images={item.news_images}
+                            author={item.author}
+                            updated_at={item.updated_at}
+                            handleGoToViewNews={() => {
+                                handleGoToViewNews({
+                                    id: item.id,
+                                    title: item.title,
+                                    text: item.text,
+                                    news_images: item.news_images,
+                                    author: item.author,
+                                    updated_at: item.updated_at
+                                })
+                            }}
                         />
                     )}
                     keyExtractor={(item: any) => item.id}
@@ -136,7 +167,7 @@ export const NewsList: React.FC = () => {
                                 text="CADASTRAR NOTÍCIA"
                                 iconName="file-text"
                                 style={{ width: '100%' }}
-                                onPress={handleGoToCreateNews}
+                                onPress={() => handleGoToCreateNews()}
                             />
                         </CreateNewsButtonMargin>
                     )

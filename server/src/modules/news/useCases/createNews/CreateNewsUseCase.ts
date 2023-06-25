@@ -4,6 +4,7 @@ import { INewsRepository } from '@modules/news/repositories/INewsRepository'
 import { IStorageProvider } from '@shared/containers/providers/StorageProvider/models/IStorageProvider'
 
 interface IUseCaseProps {
+  authenticatedUserId: string
   title: string
   text: string
   image_files: string[]
@@ -20,6 +21,7 @@ export class CreateNewsUseCase {
   ) {}
 
   public async execute({
+    authenticatedUserId,
     title,
     text,
     image_files
@@ -29,9 +31,10 @@ export class CreateNewsUseCase {
     }
 
     const createdNews = await this.newsRepository.create({
+      user_id: authenticatedUserId,
       title,
       text,
-      image_files
+      image_files,
     })
 
     return createdNews

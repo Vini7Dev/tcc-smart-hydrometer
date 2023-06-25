@@ -14,9 +14,17 @@ import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
 import { NavigationHeader } from '../../components/NavigationHeader'
 import { whiteColor } from '../../styles/variables'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { launchImageLibrary } from 'react-native-image-picker'
 import { api } from '../../services/api'
+import { MULTPART_FORM_DATA_HEADERS } from '../../utils/constants'
+
+interface RouteParams {
+    id: string
+    title: string
+    text: string
+    news_images: Array<{ image_file: string }>
+}
 
 interface FormDataPayloadProps {
     type: string
@@ -24,15 +32,14 @@ interface FormDataPayloadProps {
     uri?: string
 }
 
-const MockBannerImage = require('../../../assets/mockImages/news_banner.png')
-const MockBanner2Image = require('../../../assets/mockImages/news_banner2.png')
-
 export const CreateNews: React.FC = () => {
     const navigation = useNavigation()
+    const route = useRoute()
+    const routeParams = route.params as RouteParams
 
     const [isLoadingCreateNews, setIsLoadingCreateNews] = useState(false)
-    const [title, setTitle] = useState('Título da notícia')
-    const [body, setBody] = useState('Corpo da notícia')
+    const [title, setTitle] = useState(routeParams.title ?? 'Título da notícia')
+    const [body, setBody] = useState(routeParams.text ?? 'Corpo da notícia')
     const [newsImages, setNewsImages] = useState<FormDataPayloadProps[]>([])
 
     const handleSelectNewsImages = useCallback(() => {
@@ -84,11 +91,19 @@ export const CreateNews: React.FC = () => {
                 formData.append('image_file', newsImage)
             }
 
-            await api.post('/news', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            })
+            if (routeParams.id) {
+                await api.patch(
+                    `/news/${routeParams.id}`,
+                    formData,
+                    MULTPART_FORM_DATA_HEADERS,
+                )
+            } else {
+                await api.post(
+                    '/news',
+                    formData,
+                    MULTPART_FORM_DATA_HEADERS,
+                )
+            }
 
             setIsLoadingCreateNews(false)
 

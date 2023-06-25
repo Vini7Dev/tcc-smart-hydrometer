@@ -37,6 +37,7 @@ model Users {
 
   hydrometers         Hydrometers[]
   forgotPasswordToken ForgotPasswordTokens?
+  news                News[]
 
   @@map("users")
 }
@@ -52,11 +53,13 @@ model ForgotPasswordTokens {
 
 model News {
   id          String        @id @default(uuid())
+  user_id     String?
   title       String
   text        String
   created_at  DateTime      @default(now())
   updated_at  DateTime      @default(now())
 
+  author      Users?         @relation(fields: [user_id], references: [id])
   news_images NewsImages[]
 
   @@map("news")

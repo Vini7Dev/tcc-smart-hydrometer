@@ -11,7 +11,7 @@ import { Button } from '../../components/Button'
 import { AvatarUpload } from '../../components/AvatarUpload'
 import { NavigationHeader } from '../../components/NavigationHeader'
 import { api } from '../../services/api'
-import { API_FILES_URL } from '../../utils/constants'
+import { API_FILES_URL, MULTPART_FORM_DATA_HEADERS } from '../../utils/constants'
 
 interface RouteParams {
     id?: string
@@ -60,17 +60,17 @@ export const SignUpAdmin: React.FC = () => {
             }
 
             if (routeParams.id) {
-                await api.patch(`/admins/${routeParams.id}`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                })
+                await api.patch(
+                    `/admins/${routeParams.id}`,
+                    formData,
+                    MULTPART_FORM_DATA_HEADERS,
+                )
             } else {
-                await api.post('/admins', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                })
+                await api.post(
+                    '/admins',
+                    formData,
+                    MULTPART_FORM_DATA_HEADERS,
+                )
             }
 
             handleGoBackToAdminList()

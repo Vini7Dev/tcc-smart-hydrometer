@@ -14,6 +14,7 @@ import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
 import { AvatarUpload } from '../../components/AvatarUpload'
 import { api } from '../../services/api'
+import { MULTPART_FORM_DATA_HEADERS } from '../../utils/constants'
 
 interface AvatarProps {
     type: string
@@ -49,11 +50,7 @@ export const SignUp: React.FC = () => {
                 formData.append('avatar_file', avatar)
             }
 
-            await api.post('/customers', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            })
+            await api.post('/customers', formData, MULTPART_FORM_DATA_HEADERS)
 
             handleGoBackToSignIn()
         } catch (err: any) {

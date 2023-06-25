@@ -6,6 +6,8 @@ import { CreateNewsUseCase } from './CreateNewsUseCase'
 
 export class CreateNewsController {
   public async handle(request: Request, response: Response) {
+    const { id: authenticatedUserId } = request.user
+
     const { title, text } = request.body
     const newsImageFiles = request.files as any[]
 
@@ -16,6 +18,7 @@ export class CreateNewsController {
     const createNewsUseCase = container.resolve(CreateNewsUseCase)
 
     const createdNews = await createNewsUseCase.execute({
+      authenticatedUserId,
       title,
       text,
       image_files: newsImageFileNames,
