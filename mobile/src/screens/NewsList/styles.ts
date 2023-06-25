@@ -58,6 +58,7 @@ export const NewsTitle = styled.Text`
 `
 
 export const NewsDescription = styled.Text`
+    max-height: 50px;
     font-family: 'Roboto';
     font-weight: 400;
     font-size: 16px;

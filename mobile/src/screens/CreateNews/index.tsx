@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 
 import {
     ScreenContainer,
@@ -14,13 +14,89 @@ import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
 import { NavigationHeader } from '../../components/NavigationHeader'
 import { whiteColor } from '../../styles/variables'
+import { useNavigation } from '@react-navigation/native'
+import { launchImageLibrary } from 'react-native-image-picker'
+import { api } from '../../services/api'
+
+interface FormDataPayloadProps {
+    type: string
+    name: string
+    uri?: string
+}
 
 const MockBannerImage = require('../../../assets/mockImages/news_banner.png')
 const MockBanner2Image = require('../../../assets/mockImages/news_banner2.png')
 
 export const CreateNews: React.FC = () => {
+    const navigation = useNavigation()
+
+    const [isLoadingCreateNews, setIsLoadingCreateNews] = useState(false)
     const [title, setTitle] = useState('Título da notícia')
     const [body, setBody] = useState('Corpo da notícia')
+    const [newsImages, setNewsImages] = useState<FormDataPayloadProps[]>([])
+
+    const handleSelectNewsImages = useCallback(() => {
+        launchImageLibrary({ mediaType: 'photo' }, response => {
+            if(response.didCancel || !response.assets || !response.assets[0]) {
+                return
+            }
+
+            if(response.errorCode) {
+                console.error(`${response.errorCode}: ${response.errorMessage}`)
+            }
+
+            const filesPayload = response.assets.map(asset => ({
+                type: 'image/jpeg',
+                name: `${asset.id}.jpg`,
+                uri: asset.uri
+            }))
+
+            setNewsImages([...newsImages, ...filesPayload])
+        })
+    }, [newsImages])
+
+    const handleRemoveNewsImage = useCallback((imageIndex: number) => {
+        const updatedNewsImagesArray = newsImages
+
+        updatedNewsImagesArray.splice(imageIndex, 1)
+
+        setNewsImages([...updatedNewsImagesArray])
+    }, [newsImages])
+
+    const handleGoBackToNewsList = useCallback(() => {
+        navigation.goBack()
+    }, [navigation])
+
+    const handleCreateNews = useCallback(async () => {
+        try {
+            if (isLoadingCreateNews || newsImages.length < 1) {
+                return
+            }
+
+            setIsLoadingCreateNews(true)
+
+            const formData = new FormData()
+
+            formData.append('title', title)
+            formData.append('text', body)
+
+            for (const newsImage of newsImages) {
+                formData.append('image_file', newsImage)
+            }
+
+            await api.post('/news', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+
+            setIsLoadingCreateNews(false)
+
+            handleGoBackToNewsList()
+        } catch(err) {
+            console.error(err)
+        }
+    }, [isLoadingCreateNews, title, body, newsImages, handleGoBackToNewsList])
 
     return (
         <ScreenContainer>
@@ -47,25 +123,32 @@ export const CreateNews: React.FC = () => {
                         iconName="plus"
                         buttonStyle="secondary"
                         style={{ width: '100%' }}
+                        onPress={handleSelectNewsImages}
                     />
                 </AddImageButtonMargin>
 
                 <ImagesPreviewContainer>
-                    <ImagePreviewItem>
-                        <ImagePreview source={MockBanner2Image} />
+                    {
+                        newsImages.map((newsImage, idx) => (
+                            <ImagePreviewItem>
+                                <ImagePreview source={{ uri: newsImage.uri }} />
 
-                        <ImagePreviewRemoveButton name="trash-2" size={16} color={whiteColor} />
-                    </ImagePreviewItem>
-
-                    <ImagePreviewItem>
-                        <ImagePreview source={MockBannerImage} />
-
-                        <ImagePreviewRemoveButton name="trash-2" size={16} color={whiteColor} />
-                    </ImagePreviewItem>
+                                <ImagePreviewRemoveButton
+                                    name="trash-2"
+                                    size={16}
+                                    color={whiteColor}
+                                    onPress={() => handleRemoveNewsImage(idx)}
+                                />
+                            </ImagePreviewItem>
+                        ))
+                    }
                 </ImagesPreviewContainer>
 
                 <ButtonMargin>
-                    <Button text="PUBLICAR" />
+                    <Button
+                        text={isLoadingCreateNews ? 'PUBLICANDO' : 'PUBLICAR' }
+                        onPress={handleCreateNews}
+                    />
                 </ButtonMargin>
             </ScreenContent>
         </ScreenContainer>

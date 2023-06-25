@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
 import { NavigationHeader } from '../../components/NavigationHeader'
@@ -22,7 +22,8 @@ import { Input } from '../../components/Input'
 import { backgroundColor, errorColor, secondaryColor } from '../../styles/variables'
 import { Button } from '../../components/Button'
 import { useAuth } from '../../hooks/Auth'
-import { ADMIN_ACCOUNT_TYPE } from '../../utils/constants'
+import { ADMIN_ACCOUNT_TYPE, API_FILES_URL } from '../../utils/constants'
+import { api } from '../../services/api'
 
 interface NewsItemProps {
     title: string
@@ -31,22 +32,14 @@ interface NewsItemProps {
     handleGoToViewNews: () => void
 }
 
-const MockBannerImage = require('../../../assets/mockImages/news_banner.png')
-
-const mockNews = [
-    {
-        id: '1',
-        title: 'Título 1',
-        description: 'Breve descrição Breve descrição Breve descrição',
-        banner: MockBannerImage as string,
-    },
-    {
-        id: '2',
-        title: 'Título 2',
-        description: 'Breve descrição Breve descrição Breve descrição',
-        banner: MockBannerImage as string,
-    },
-]
+interface NewsProps {
+    id: string
+    title: string
+    text: string
+    news_images: Array<{ image_file: string }>
+    created_at: Date
+    updated_at: Date
+}
 
 const NewsItem: React.FC<NewsItemProps> = ({
     title,
@@ -65,7 +58,7 @@ const NewsItem: React.FC<NewsItemProps> = ({
                     <NewsDescription>{description}</NewsDescription>
                 </NewsTitleContainer>
 
-                <NewsBanner source={banner as any} />
+                <NewsBanner source={{ uri: banner }} />
 
                 {
                     user.account_type === ADMIN_ACCOUNT_TYPE && (
@@ -85,6 +78,8 @@ export const NewsList: React.FC = () => {
     const navigation = useNavigation()
     const { user } = useAuth()
 
+    const [newsList, setNewsList] = useState<NewsProps[]>([])
+
     const handleGoToCreateNews = useCallback(() => {
         navigation.navigate('CreateNews' as never)
     }, [navigation])
@@ -92,6 +87,18 @@ export const NewsList: React.FC = () => {
     const handleGoToViewNews = useCallback(() => {
         navigation.navigate('ViewNews' as never)
     }, [navigation])
+
+    useEffect(() => {
+        const handleGetNewsList = async () => {
+            const {
+                data: newsListResponse
+            } = await api.get<NewsProps[]>('/news')
+
+            setNewsList(newsListResponse)
+        }
+
+        handleGetNewsList()
+    }, [])
 
     return (
         <ScreenContainer>
@@ -105,17 +112,17 @@ export const NewsList: React.FC = () => {
                         backgroundColor={backgroundColor}
                     />
 
-                    <ResultCountText>{mockNews.length} resultados encontrados</ResultCountText>
+                    <ResultCountText>{newsList.length} resultados encontrados</ResultCountText>
                 </SearchInputContainer>
 
                 <SearchResultContainer
-                    data={mockNews}
+                    data={newsList}
                     renderItem={({ item }: any) => (
                         <NewsItem
-                            key={item.email}
+                            key={item.id}
                             title={item.title}
-                            description={item.description}
-                            banner={item.banner}
+                            description={item.text}
+                            banner={API_FILES_URL(item.news_images[0].image_file)}
                             handleGoToViewNews={handleGoToViewNews}
                         />
                     )}

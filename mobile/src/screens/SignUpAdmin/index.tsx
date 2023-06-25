@@ -40,7 +40,7 @@ export const SignUpAdmin: React.FC = () => {
         setAvatar(avatarProps)
     }, [])
 
-    const handleGoBackToAdminsList = useCallback(() => {
+    const handleGoBackToAdminList = useCallback(() => {
         navigation.goBack()
     }, [navigation])
 
@@ -73,11 +73,11 @@ export const SignUpAdmin: React.FC = () => {
                 })
             }
 
-            handleGoBackToAdminsList()
+            handleGoBackToAdminList()
         } catch (err: any) {
             console.error(err)
         }
-    }, [avatar, name, email, password, handleGoBackToAdminsList])
+    }, [avatar, name, email, password, handleGoBackToAdminList])
 
     return (
         <ScreenContainer>
