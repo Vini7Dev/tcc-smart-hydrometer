@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
 import { NavigationHeader } from '../../components/NavigationHeader'
@@ -19,6 +19,7 @@ import {
 import { Input } from '../../components/Input'
 import { backgroundColor, errorColor } from '../../styles/variables'
 import { Button } from '../../components/Button'
+import { api } from '../../services/api'
 
 interface AdminItemProps {
     name: string
@@ -27,22 +28,14 @@ interface AdminItemProps {
     handleGoToCreateAdmin: () => void
 }
 
-const MockAvatarImage = require('../../../assets/mockImages/avatar.png')
+interface AdminProps {
+    id: string
+    name: string
+    email: string
+    avatar: string
+}
 
-const mockUsers = [
-    {
-        id: '1',
-        name: 'Example 1',
-        email: 'example2@mail.com',
-        avatar: MockAvatarImage as string,
-    },
-    {
-        id: '2',
-        name: 'Example 2',
-        email: 'example1@mail.com',
-        avatar: MockAvatarImage as string,
-    },
-]
+const EmptyAvatarImage = require('../../../assets/avatar-user.png')
 
 const AdminItem: React.FC<AdminItemProps> = ({
     name,
@@ -53,7 +46,7 @@ const AdminItem: React.FC<AdminItemProps> = ({
     return (
         <AdminItemContainer onPress={handleGoToCreateAdmin}>
             <>
-                <AdminAvatar source={avatar as any} />
+                <AdminAvatar source={avatar ? { uri: avatar } : EmptyAvatarImage} />
 
                 <AdminNameContainer>
                     <AdminName>{name}</AdminName>
@@ -70,9 +63,23 @@ const AdminItem: React.FC<AdminItemProps> = ({
 export const AdminsList: React.FC = () => {
     const navigation = useNavigation()
 
+    const [adminList, setAdminList] = useState<AdminProps[]>([])
+
     const handleGoToCreateAdmin = useCallback(() => {
         navigation.navigate('SignUpAdmin' as never)
     }, [navigation])
+
+    useEffect(() => {
+        const handleGetAdminsList = async () => {
+            const {
+                data: adminListResponse
+            } = await api.get<AdminProps[]>('/admins')
+
+            setAdminList(adminListResponse)
+        }
+
+        handleGetAdminsList()
+    }, [])
 
     return (
         <ScreenContainer>
@@ -86,11 +93,11 @@ export const AdminsList: React.FC = () => {
                         backgroundColor={backgroundColor}
                     />
 
-                    <ResultCountText>{mockUsers.length} resultados encontrados</ResultCountText>
+                    <ResultCountText>{adminList.length} resultados encontrados</ResultCountText>
                 </SearchInputContainer>
 
                 <SearchResultContainer
-                    data={mockUsers}
+                    data={adminList}
                     renderItem={({ item }: any) => (
                         <AdminItem
                             key={item.email}

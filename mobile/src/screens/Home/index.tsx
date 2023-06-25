@@ -36,7 +36,7 @@ export const Home: React.FC = () => {
             <ScreenContent>
                 <UserAvatarContainer>
                     <UserAvatar source={profile?.avatar_file
-                        ? { uri: `${API_FILES_URL}/${profile.avatar_file}` }
+                        ? { uri: API_FILES_URL(profile.avatar_file) }
                         : EmptyAvatarImage
                     }/>
                 </UserAvatarContainer>
