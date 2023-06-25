@@ -805,6 +805,32 @@
                         }
                       }
                     },
+                    "author": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "tiype": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email":{
+                          "type": "string"
+                        },
+                        "avatar_file":  {
+                          "type": "string"
+                        },
+                        "account_type": {
+                          "type": "string"
+                        },
+                        "created_at": {
+                          "type": "string"
+                        },
+                        "updated_at": {
+                          "type": "string"
+                        }
+                      }
+                    },
                     "created_at": {
                       "type": "string",
                       "format": "date-time"
