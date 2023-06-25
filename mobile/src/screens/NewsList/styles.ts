@@ -76,6 +76,7 @@ export const NewsActionButtonsContainer = styled.View`
     position: absolute;
     right: 3px;
     top: 3px;
+    gap: 8px;
     flex-direction: row;
 `
 
