@@ -51,6 +51,7 @@ interface NewsItemProps {
     news_images: Array<{ image_file: string }>
     handleDeleteAdmin: () => void
     handleGoToViewNews: () => void
+    handleGoToCreateNews: () => void
 }
 
 const NewsItem: React.FC<NewsItemProps> = ({
@@ -59,6 +60,7 @@ const NewsItem: React.FC<NewsItemProps> = ({
     news_images,
     handleDeleteAdmin,
     handleGoToViewNews,
+    handleGoToCreateNews,
 }) => {
     const { user } = useAuth()
 
@@ -77,7 +79,12 @@ const NewsItem: React.FC<NewsItemProps> = ({
             {
                 user.account_type === ADMIN_ACCOUNT_TYPE && (
                     <NewsActionButtonsContainer>
-                        <EditNewsIcon name="edit-3" size={16} color={secondaryColor} />
+                        <EditNewsIcon
+                            name="edit-3"
+                            size={16}
+                            color={secondaryColor}
+                            onPress={handleGoToCreateNews}
+                        />
 
                         <DeleteNewsIcon
                             name="trash-2"
@@ -178,6 +185,14 @@ export const NewsList: React.FC = () => {
                                     updated_at: item.updated_at
                                 })
                             }}
+                            handleGoToCreateNews={() => handleGoToCreateNews({
+                                id: item.id,
+                                title: item.title,
+                                text: item.text,
+                                news_images: item.news_images,
+                                author: item.author,
+                                updated_at: item.updated_at
+                            })}
                         />
                     )}
                     keyExtractor={(item: any) => item.id}
