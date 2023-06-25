@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { format } from 'date-fns'
 import { LineChart } from 'react-native-gifted-charts'
 
@@ -18,12 +18,18 @@ import { NavigationHeader } from '../../components/NavigationHeader'
 import { CompareByOptions } from '../../components/CompareByOptions'
 import { MOCK_CONSUMPTIONS } from './MOCK_CONSUMPTIONS'
 import { Select } from '../../components/Select'
+import { api } from '../../services/api'
 
 interface ConsumptionProps {
     id: string
     consumption: number
     monetary_value: number
     created_at: string
+}
+
+interface HydrometerProps {
+    id: string
+    name: string
 }
 
 const ChartComponent: React.FC = () => {
@@ -123,6 +129,20 @@ const ChartComponent: React.FC = () => {
 export const PersonalConsumption: React.FC = () => {
     const [selectedHydrometerId, setSelectedHydrometerId] = useState<string>()
 
+    const [userHydrometerList, setUserHydrometerList] = useState<HydrometerProps[]>([])
+
+    const handleGetUserHydrometerList = async () => {
+        const {
+            data: userHydrometerListResponse
+        } = await api.get<HydrometerProps[]>('/user-hydrometers')
+
+        setUserHydrometerList(userHydrometerListResponse)
+    }
+
+    useEffect(() => {
+        handleGetUserHydrometerList()
+    }, [])
+
     const handleSelectHydrometer = useCallback((value?: string) => {
         setSelectedHydrometerId(value)
     }, [])
@@ -135,10 +155,10 @@ export const PersonalConsumption: React.FC = () => {
                 <ScreenContent>
                     <Select
                         placeholder="Selecione um hidrômetro"
-                        options={[
-                            { label: 'Casa 1', value: '1' },
-                            { label: 'Casa 2', value: '2' },
-                        ]}
+                        options={userHydrometerList.map(hydrometer => ({
+                            value: hydrometer.id,
+                            label: hydrometer.name,
+                        }))}
                         onSelect={handleSelectHydrometer}
                     />
 

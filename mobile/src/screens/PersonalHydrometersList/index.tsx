@@ -69,7 +69,7 @@ const HydrometerItem: React.FC<HydrometerItemProps> = ({
                         </HydrometerName>
 
                         <HydrometerAddress>
-                            {address.street} - {address.number ?? 'S/N'}
+                            {address?.street ?? 'Sem endereço'} - {address?.number ?? 'S/N'}
                         </HydrometerAddress>
                     </>
                 </HydrometerNameContainer>
