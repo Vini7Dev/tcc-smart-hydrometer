@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 
 import { NavigationHeader } from '../../components/NavigationHeader'
 import {
@@ -24,6 +24,10 @@ import { Button } from '../../components/Button'
 import { useAuth } from '../../hooks/Auth'
 import { ADMIN_ACCOUNT_TYPE, API_FILES_URL } from '../../utils/constants'
 import { api } from '../../services/api'
+
+interface RouteParams {
+    reloadList?: boolean
+}
 
 interface AuthorProps {
     id: string
@@ -94,8 +98,10 @@ const NewsItem: React.FC<NewsItemProps> = ({
 }
 
 export const NewsList: React.FC = () => {
-    const navigation = useNavigation()
     const { user } = useAuth()
+    const navigation = useNavigation()
+    const route = useRoute()
+    const routeParams = route.params as RouteParams
 
     const [newsList, setNewsList] = useState<NewsProps[]>([])
 
@@ -117,7 +123,7 @@ export const NewsList: React.FC = () => {
         }
 
         handleGetNewsList()
-    }, [])
+    }, [routeParams?.reloadList])
 
     return (
         <ScreenContainer>

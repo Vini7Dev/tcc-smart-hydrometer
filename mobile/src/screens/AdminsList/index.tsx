@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 
 import { NavigationHeader } from '../../components/NavigationHeader'
 import {
@@ -21,6 +21,10 @@ import { backgroundColor, errorColor } from '../../styles/variables'
 import { Button } from '../../components/Button'
 import { api } from '../../services/api'
 import { API_FILES_URL } from '../../utils/constants'
+
+interface RouteParams {
+    reloadList?: boolean
+}
 
 interface AdminItemProps {
     name: string
@@ -63,6 +67,8 @@ const AdminItem: React.FC<AdminItemProps> = ({
 
 export const AdminsList: React.FC = () => {
     const navigation = useNavigation()
+    const route = useRoute()
+    const routeParams = route.params as RouteParams
 
     const [adminList, setAdminList] = useState<AdminProps[]>([])
 
@@ -80,7 +86,7 @@ export const AdminsList: React.FC = () => {
         }
 
         handleGetAdminsList()
-    }, [])
+    }, [routeParams?.reloadList])
 
     return (
         <ScreenContainer>

@@ -41,7 +41,13 @@ export const SignUpAdmin: React.FC = () => {
     }, [])
 
     const handleGoBackToAdminList = useCallback(() => {
-        navigation.goBack()
+        navigation.reset({
+            index: 1,
+            routes: [
+                { name: 'Home' as never },
+                { name: 'AdminsList' as never, params: { reloadList: true } },
+            ]
+        })
     }, [navigation])
 
     const handleCreateAdmin = useCallback(async () => {

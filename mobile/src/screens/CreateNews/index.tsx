@@ -71,7 +71,13 @@ export const CreateNews: React.FC = () => {
     }, [newsImages])
 
     const handleGoBackToNewsList = useCallback(() => {
-        navigation.goBack()
+        navigation.reset({
+            index: 1,
+            routes: [
+                { name: 'Home' as never },
+                { name: 'NewsList' as never, params: { reloadList: true } },
+            ]
+        })
     }, [navigation])
 
     const handleCreateNews = useCallback(async () => {
