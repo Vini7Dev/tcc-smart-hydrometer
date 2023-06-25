@@ -3,16 +3,29 @@ import AsyncStorage from '@react-native-community/async-storage'
 
 import { api } from '../services/api'
 
+type AccountType = 'ADMIN' | 'CUSTOMER'
+
 interface User {
     id: string
     name: string
     email: string
-    account_type: 'ADMIN' | 'CUSTOMER'
+    account_type: AccountType
+}
+
+interface Profile {
+    id: string
+    name: string
+    email: string
+    avatar_file: string
+    account_type: AccountType
+    created_at: Date
+    updated_at: Date
 }
 
 interface AuthData {
     token: string
     user: User
+    profile?: Profile
 }
 
 interface LoginCredentials {
@@ -22,6 +35,7 @@ interface LoginCredentials {
 
 interface AuthValue {
     user: User
+    profile?: Profile
     loading: boolean
     login(credentials: LoginCredentials): Promise<void>
     logout(): void
@@ -40,9 +54,11 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
             const [token, user] = await AsyncStorage.multiGet(['@Inteliagua:token', '@Inteliagua:user'])
 
             if(token[1] && user[1]){
-                api.defaults.headers.authorization = `Bearer ${token}`
+                api.defaults.headers.authorization = `Bearer ${token[1]}`
 
-                setData({ token: token[1], user: JSON.parse(user[1]) })
+                const { data: profileData } = await api.get('/profile')
+
+                setData({ token: token[1], user: JSON.parse(user[1]), profile: profileData })
             }
 
             setLoading(false)
@@ -82,13 +98,21 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
     }, [])
 
     return (
-        <AuthContext.Provider value={ { user: data.user, loading, login, logout } }>
+        <AuthContext.Provider value={
+            {
+                user: data.user,
+                profile: data.profile,
+                loading,
+                login,
+                logout,
+            }
+        }>
             {children}
         </AuthContext.Provider>
     )
 }
 
-export function useAuth():  AuthValue{
+export function useAuth(): AuthValue {
     const context = useContext(AuthContext)
 
     if(!context)

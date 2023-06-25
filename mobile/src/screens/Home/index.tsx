@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
 import { adminNavigationOptions, customerNavigationOptions } from '../../utils/navigationOptions'
@@ -13,13 +13,13 @@ import {
     UserAvatarContainer
 } from './styles'
 import { useAuth } from '../../hooks/Auth'
-import { ADMIN_ACCOUNT_TYPE } from '../../utils/constants'
+import { ADMIN_ACCOUNT_TYPE, API_FILES_URL } from '../../utils/constants'
 
 const EmptyAvatarImage = require('../../../assets/avatar-user.png')
 
 export const Home: React.FC = () => {
     const navigation = useNavigation()
-    const { user } = useAuth()
+    const { user, profile } = useAuth()
 
     const navigationOptions = user.account_type === ADMIN_ACCOUNT_TYPE
         ? adminNavigationOptions
@@ -35,7 +35,10 @@ export const Home: React.FC = () => {
 
             <ScreenContent>
                 <UserAvatarContainer>
-                    <UserAvatar source={EmptyAvatarImage} />
+                    <UserAvatar source={profile?.avatar_file
+                        ? { uri: `${API_FILES_URL}/${profile.avatar_file}` }
+                        : EmptyAvatarImage
+                    }/>
                 </UserAvatarContainer>
 
                 <Title>Bem Vindo(a)</Title>

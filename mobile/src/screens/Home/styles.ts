@@ -16,14 +16,14 @@ export const UserAvatarContainer = styled.View`
     width: 80px;
     height: 80px;
     margin-bottom: 20px;
-    padding: 10px;
     border-radius: 40px;
     background-color: ${whiteColor};
 `
 
 export const UserAvatar = styled.Image`
-    width: 50px;
-    height: 50px;
+    width: 80px;
+    height: 80px;
+    border-radius: 80px;
 `
 
 export const Title = styled.Text`
