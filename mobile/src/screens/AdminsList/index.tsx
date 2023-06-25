@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
+import { Alert } from 'react-native'
 
 import { NavigationHeader } from '../../components/NavigationHeader'
 import {
@@ -30,6 +31,7 @@ interface AdminItemProps {
     name: string
     email: string
     avatar: string
+    handleDeleteAdmin: () => void
     handleGoToCreateAdmin: () => void
 }
 
@@ -46,20 +48,28 @@ const AdminItem: React.FC<AdminItemProps> = ({
     name,
     email,
     avatar,
+    handleDeleteAdmin,
     handleGoToCreateAdmin,
 }) => {
     return (
-        <AdminItemContainer onPress={handleGoToCreateAdmin}>
+        <AdminItemContainer>
             <>
                 <AdminAvatar source={avatar ? { uri: avatar } : EmptyAvatarImage} />
 
-                <AdminNameContainer>
-                    <AdminName>{name}</AdminName>
+                <AdminNameContainer onPress={handleGoToCreateAdmin}>
+                    <>
+                        <AdminName>{name}</AdminName>
 
-                    <AdminEmail>{email}</AdminEmail>
+                        <AdminEmail>{email}</AdminEmail>
+                    </>
                 </AdminNameContainer>
 
-                <DeleteAdminIcon name="trash-2" size={16} color={errorColor} />
+                <DeleteAdminIcon
+                    name="trash-2"
+                    size={16}
+                    color={errorColor}
+                    onPress={handleDeleteAdmin}
+                />
             </>
         </AdminItemContainer>
     )
@@ -75,6 +85,28 @@ export const AdminsList: React.FC = () => {
     const handleGoToCreateAdmin = useCallback((adminData?: AdminProps) => {
         navigation.navigate('SignUpAdmin' as never, { ...adminData } as never)
     }, [navigation])
+
+    const handleDeleteAdmin = useCallback((adminId: string) => {
+        const deleteAdminCallback = async (id: string) => {
+            try {
+                await api.delete(`/admins/${id}`)
+            } catch(err) {
+                console.error(err)
+            }
+        }
+
+        Alert.alert(
+            'Deseja apagar a imagem?',
+            'Esta ação não pode ser desfeita!',
+            [
+                {
+                    text: 'Sim',
+                    onPress: () => deleteAdminCallback(adminId),
+                },
+                { text: 'Não' },
+            ],
+        )
+    }, [])
 
     useEffect(() => {
         const handleGetAdminsList = async () => {
@@ -111,6 +143,7 @@ export const AdminsList: React.FC = () => {
                             name={item.name}
                             email={item.email}
                             avatar={API_FILES_URL(item.avatar_file ?? '')}
+                            handleDeleteAdmin={() => handleDeleteAdmin(item.id)}
                             handleGoToCreateAdmin={() => handleGoToCreateAdmin({
                                 id: item.id,
                                 name: item.name,

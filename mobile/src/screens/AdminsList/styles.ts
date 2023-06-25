@@ -30,7 +30,7 @@ export const SearchResultContainer = styled.FlatList`
     width: 100%;
 `
 
-export const AdminItemContainer = styled.TouchableHighlight`
+export const AdminItemContainer = styled.View`
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
@@ -47,7 +47,7 @@ export const AdminAvatar = styled.Image`
     border-radius: 50px;
 `
 
-export const AdminNameContainer = styled.View`
+export const AdminNameContainer = styled.TouchableHighlight`
     flex: 1;
     padding: 0 24px;
 `
