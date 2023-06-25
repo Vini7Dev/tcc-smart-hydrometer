@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
+import { Alert } from 'react-native'
 
 import {
     ScreenContainer,
@@ -14,9 +15,8 @@ import {
     DisassociateHydrometerIcon,
     AssociateHydrometerButtonMargin,
     HydrometerItemActionsContainer,
-    EditHydrometerIcon,
 } from './styles'
-import { backgroundColor, errorColor, secondaryColor } from '../../styles/variables'
+import { backgroundColor, errorColor } from '../../styles/variables'
 import { NavigationHeader } from '../../components/NavigationHeader'
 import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
@@ -50,26 +50,37 @@ interface HydrometerItemProps {
     name: string
     address: AddressProps
     handleGoToCreateHydrometer: () => void
+    handleDisassociateFromUserHydrometer: () => void
 }
 
 const HydrometerItem: React.FC<HydrometerItemProps> = ({
     name,
     address,
     handleGoToCreateHydrometer,
+    handleDisassociateFromUserHydrometer,
 }) => {
     return (
-        <HydrometerItemContainer onPress={handleGoToCreateHydrometer}>
+        <HydrometerItemContainer>
             <>
-                <HydrometerNameContainer>
-                    <HydrometerName>{name}</HydrometerName>
+                <HydrometerNameContainer onPress={handleGoToCreateHydrometer}>
+                    <>
+                        <HydrometerName>
+                            {name}
+                        </HydrometerName>
 
-                    <HydrometerAddress>{address.street} - {address.number ?? 'S/N'}</HydrometerAddress>
+                        <HydrometerAddress>
+                            {address.street} - {address.number ?? 'S/N'}
+                        </HydrometerAddress>
+                    </>
                 </HydrometerNameContainer>
 
                 <HydrometerItemActionsContainer>
-                    <EditHydrometerIcon name="edit-2" size={20} color={secondaryColor} />
-
-                    <DisassociateHydrometerIcon name="delete" size={20} color={errorColor} />
+                    <DisassociateHydrometerIcon
+                        name="delete"
+                        size={20}
+                        color={errorColor}
+                        onPress={handleDisassociateFromUserHydrometer}
+                    />
                 </HydrometerItemActionsContainer>
             </>
         </HydrometerItemContainer>
@@ -83,7 +94,7 @@ export const PersonalHydrometersList: React.FC = () => {
 
     const [userHydrometerList, setUserHydrometerList] = useState<HydrometerProps[]>([])
 
-    const handleGetAdminsList = async () => {
+    const handleGetUserHydrometerList = async () => {
         const {
             data: userHydrometerListResponse
         } = await api.get<HydrometerProps[]>('/user-hydrometers')
@@ -92,7 +103,7 @@ export const PersonalHydrometersList: React.FC = () => {
     }
 
     useEffect(() => {
-        handleGetAdminsList()
+        handleGetUserHydrometerList()
     }, [routeParams?.reloadList])
 
     const handleGoToCreateHydrometer = useCallback((
@@ -104,6 +115,30 @@ export const PersonalHydrometersList: React.FC = () => {
             hydrometerData,
         } as never)
     }, [navigation])
+
+    const handleDisassociateFromUserHydrometer = useCallback(async (hydrometerId: string) => {
+        const desassoiateHydrometerFromUserCallback = async (id: string) => {
+            try {
+                await api.delete(`/user-hydrometers/${id}`)
+
+                await handleGetUserHydrometerList()
+            } catch(err) {
+                console.error(err)
+            }
+        }
+
+        Alert.alert(
+            'Deseja desassociar esse hidrômetro de sua conta??',
+            'Esta ação não pode ser desfeita!',
+            [
+                {
+                    text: 'Sim',
+                    onPress: () => desassoiateHydrometerFromUserCallback(hydrometerId),
+                },
+                { text: 'Não' },
+            ],
+        )
+    }, [handleGetUserHydrometerList])
 
     return (
         <ScreenContainer>
@@ -135,6 +170,9 @@ export const PersonalHydrometersList: React.FC = () => {
                                     consumption_category: item.consumption_category,
                                     share_consumption: item.share_consumption,
                                 })
+                            }
+                            handleDisassociateFromUserHydrometer={
+                                () => handleDisassociateFromUserHydrometer(item.id)
                             }
                         />
                     )}

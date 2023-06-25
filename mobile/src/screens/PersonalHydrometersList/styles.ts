@@ -30,7 +30,7 @@ export const SearchResultContainer = styled.FlatList`
     width: 100%;
 `
 
-export const HydrometerItemContainer = styled.TouchableHighlight`
+export const HydrometerItemContainer = styled.View`
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
@@ -40,7 +40,7 @@ export const HydrometerItemContainer = styled.TouchableHighlight`
     background-color: ${whiteColor};
 `
 
-export const HydrometerNameContainer = styled.View`
+export const HydrometerNameContainer = styled.TouchableHighlight`
     margin-bottom: auto;
 `
 
