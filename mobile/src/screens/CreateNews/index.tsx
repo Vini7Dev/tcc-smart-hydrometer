@@ -167,7 +167,7 @@ export const CreateNews: React.FC = () => {
 
                 <ButtonMargin>
                     <Button
-                        text={isLoadingCreateNews ? 'PUBLICANDO' : 'PUBLICAR' }
+                        text={isLoadingCreateNews ? 'PUBLICANDO...' : 'PUBLICAR' }
                         onPress={handleCreateNews}
                     />
                 </ButtonMargin>

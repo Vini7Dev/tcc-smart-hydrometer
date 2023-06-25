@@ -48,10 +48,10 @@ export const OptionButton = styled.TouchableHighlight`
 `
 
 export const OptionText = styled.Text`
+    height: 38px;
     font-family: 'Roboto';
     font-weight: 500;
     font-size: 16px;
-    line-height: 38px;
     text-transform: uppercase;
     color: ${whiteColor};
 `

@@ -12,16 +12,20 @@ interface OptionProps {
 interface ButtonProps extends TouchableHighlightProps {
     placeholder: string
     options: OptionProps[]
+    defaultValue?: string
     onSelect: (value?: string) => void
 }
 
 export const Select: React.FC<ButtonProps> = ({
     placeholder,
     options,
+    defaultValue,
     onSelect,
 }) => {
     const [optionsIsOpen, setOptionsIsOpen] = useState(false)
-    const [selectedOption, setSelectedOption] = useState<OptionProps>()
+    const [selectedOption, setSelectedOption] = useState<OptionProps | undefined>(
+        () => options.find(option => option.value === defaultValue)
+    )
 
     const toggleOptionsIsOpen = useCallback(() => {
         setOptionsIsOpen(!optionsIsOpen)

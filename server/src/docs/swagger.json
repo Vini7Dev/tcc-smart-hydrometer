@@ -2157,9 +2157,6 @@
           "name": {
             "type": "string"
           },
-          "password": {
-            "type": "string"
-          },
           "consumption_category": {
             "type": "string",
             "enum": [

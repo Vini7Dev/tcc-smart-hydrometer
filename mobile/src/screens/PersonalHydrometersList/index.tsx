@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useNavigation, useRoute } from '@react-navigation/native'
 
 import {
     ScreenContainer,
@@ -20,25 +20,37 @@ import { backgroundColor, errorColor, secondaryColor } from '../../styles/variab
 import { NavigationHeader } from '../../components/NavigationHeader'
 import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
+import { api } from '../../services/api'
+
+type FormsAction = 'ASSOCIATE' | 'UPDATE'
+
+interface RouteParams {
+    reloadList?: boolean
+}
+
+interface AddressProps {
+    id: string
+    postal_code: string
+    street: string
+    number?: string
+    neighborhood: string
+    city: string
+    state: string
+}
+
+interface HydrometerProps {
+    id: string
+    name: string
+    consumption_category: string
+    share_consumption: boolean
+    address?: AddressProps
+}
 
 interface HydrometerItemProps {
     name: string
-    address: string
+    address: AddressProps
     handleGoToCreateHydrometer: () => void
 }
-
-const mockUsers = [
-    {
-        id: '1',
-        name: 'Casa 1',
-        address: 'Rua Palestra Itália, 777 - Pompéia. Franca-SP',
-    },
-    {
-        id: '2',
-        name: 'Casa 2',
-        address: 'Rua Palestra Itália, 777 - Pompéia. Franca-SP',
-    },
-]
 
 const HydrometerItem: React.FC<HydrometerItemProps> = ({
     name,
@@ -51,7 +63,7 @@ const HydrometerItem: React.FC<HydrometerItemProps> = ({
                 <HydrometerNameContainer>
                     <HydrometerName>{name}</HydrometerName>
 
-                    <HydrometerAddress>{address}</HydrometerAddress>
+                    <HydrometerAddress>{address.street} - {address.number ?? 'S/N'}</HydrometerAddress>
                 </HydrometerNameContainer>
 
                 <HydrometerItemActionsContainer>
@@ -66,9 +78,31 @@ const HydrometerItem: React.FC<HydrometerItemProps> = ({
 
 export const PersonalHydrometersList: React.FC = () => {
     const navigation = useNavigation()
+    const route = useRoute()
+    const routeParams = route.params as RouteParams
 
-    const handleGoToCreateHydrometer = useCallback(() => {
-        navigation.navigate('AssociateHydrometer' as never)
+    const [userHydrometerList, setUserHydrometerList] = useState<HydrometerProps[]>([])
+
+    const handleGetAdminsList = async () => {
+        const {
+            data: userHydrometerListResponse
+        } = await api.get<HydrometerProps[]>('/user-hydrometers')
+
+        setUserHydrometerList(userHydrometerListResponse)
+    }
+
+    useEffect(() => {
+        handleGetAdminsList()
+    }, [routeParams?.reloadList])
+
+    const handleGoToCreateHydrometer = useCallback((
+        formsAction: FormsAction,
+        hydrometerData?: HydrometerProps,
+    ) => {
+        navigation.navigate('AssociateHydrometer' as never, {
+            formsAction,
+            hydrometerData,
+        } as never)
     }, [navigation])
 
     return (
@@ -83,17 +117,25 @@ export const PersonalHydrometersList: React.FC = () => {
                         backgroundColor={backgroundColor}
                     />
 
-                    <ResultCountText>{mockUsers.length} resultados encontrados</ResultCountText>
+                    <ResultCountText>{userHydrometerList.length} resultados encontrados</ResultCountText>
                 </SearchInputContainer>
 
                 <SearchResultContainer
-                    data={mockUsers}
+                    data={userHydrometerList}
                     renderItem={({ item }: any) => (
                         <HydrometerItem
                             key={item.id}
                             name={item.name}
                             address={item.address}
-                            handleGoToCreateHydrometer={handleGoToCreateHydrometer}
+                            handleGoToCreateHydrometer={
+                                () => handleGoToCreateHydrometer('UPDATE', {
+                                    id: item.id,
+                                    address: item.address,
+                                    name: item.name,
+                                    consumption_category: item.consumption_category,
+                                    share_consumption: item.share_consumption,
+                                })
+                            }
                         />
                     )}
                     keyExtractor={(item: any) => item.id}
@@ -104,7 +146,7 @@ export const PersonalHydrometersList: React.FC = () => {
                         text="ASSOCIAR HIDRÔMETRO"
                         iconName="plus-circle"
                         style={{ width: '100%' }}
-                        onPress={handleGoToCreateHydrometer}
+                        onPress={() => handleGoToCreateHydrometer('ASSOCIATE')}
                     />
                 </AssociateHydrometerButtonMargin>
             </ScreenContent>

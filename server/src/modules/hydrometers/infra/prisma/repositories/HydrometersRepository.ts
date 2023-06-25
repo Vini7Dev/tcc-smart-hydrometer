@@ -4,6 +4,7 @@ import { IUpdateHydrometerDTO } from '@modules/hydrometers/dtos/IUpdateHydromete
 import { IHydrometersRepository } from '@modules/hydrometers/repositories/IHydrometersRepository';
 import { AppRepository } from '@shared/infra/prisma/repositories/AppRepository'
 import { Hydrometer } from '../entities/Hydrometer';
+import { Hydrometers } from '@prisma/client';
 
 const LIST_FIRST_PAGE = 0
 const LIST_DEFAULT_PER_PAGE = 10
@@ -28,10 +29,13 @@ export class HydrometersRepository extends AppRepository implements IHydrometers
     const hydrometerList = await this.client.hydrometers.findMany({
       skip: page,
       take: perPage,
-      where: filters
+      where: filters,
+      include: {
+        address: true,
+      }
     })
 
-    return hydrometerList
+    return hydrometerList as Hydrometers[]
   }
 
   public async create({

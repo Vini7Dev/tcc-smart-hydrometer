@@ -15,7 +15,6 @@ export class UpdateUserHydrometerController {
 
     const {
       name,
-      password,
       share_consumption,
       consumption_category,
       address,
@@ -27,7 +26,6 @@ export class UpdateUserHydrometerController {
       id: Number(hydrometer_id),
       user_id,
       name,
-      password,
       share_consumption,
       consumption_category,
       address,
