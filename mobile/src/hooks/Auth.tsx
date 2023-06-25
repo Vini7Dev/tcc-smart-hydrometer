@@ -39,6 +39,7 @@ interface AuthValue {
     loading: boolean
     login(credentials: LoginCredentials): Promise<void>
     logout(): void
+    reloadProfile(): Promise<void>
 }
 
 const AuthContext = createContext<AuthValue>({} as AuthValue)
@@ -97,6 +98,15 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
         setData({} as AuthData)
     }, [])
 
+    const reloadProfile = useCallback(async () => {
+        const { data: updatedProfileData } = await api.get('/profile')
+
+        setData({
+            ...data,
+            profile: updatedProfileData,
+        })
+    }, [data])
+
     return (
         <AuthContext.Provider value={
             {
@@ -105,6 +115,7 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
                 loading,
                 login,
                 logout,
+                reloadProfile,
             }
         }>
             {children}

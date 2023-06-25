@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 
 import { adminNavigationOptions, customerNavigationOptions } from '../../utils/navigationOptions'
 import { NavigationHeader } from '../../components/NavigationHeader'
@@ -15,11 +15,17 @@ import {
 import { useAuth } from '../../hooks/Auth'
 import { ADMIN_ACCOUNT_TYPE, API_FILES_URL } from '../../utils/constants'
 
+interface RouteParams {
+    reloadAvatar?: boolean
+}
+
 const EmptyAvatarImage = require('../../../assets/avatar-user.png')
 
 export const Home: React.FC = () => {
+    const { user, profile, reloadProfile } = useAuth()
     const navigation = useNavigation()
-    const { user, profile } = useAuth()
+    const route = useRoute()
+    const routeParams = route.params as RouteParams
 
     const navigationOptions = user.account_type === ADMIN_ACCOUNT_TYPE
         ? adminNavigationOptions
@@ -28,6 +34,10 @@ export const Home: React.FC = () => {
     const handleGoToSelectedOption = useCallback((screenName: string) => {
         navigation.navigate(screenName as never)
     }, [navigation])
+
+    useEffect(() => {
+        reloadProfile()
+    }, [routeParams?.reloadAvatar, reloadProfile])
 
     return (
         <ScreenContainer>

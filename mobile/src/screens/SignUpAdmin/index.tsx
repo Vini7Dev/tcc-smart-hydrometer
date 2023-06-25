@@ -44,7 +44,7 @@ export const SignUpAdmin: React.FC = () => {
         navigation.reset({
             index: 1,
             routes: [
-                { name: 'Home' as never },
+                { name: 'Home' as never, params: { reloadAvatar: true } },
                 { name: 'AdminsList' as never, params: { reloadList: true } },
             ]
         })
