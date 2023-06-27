@@ -1,11 +1,52 @@
 import { ConsumptionMarking } from '@modules/consumptionMarkings/infra/prisma/entities/ConsumptionMarking'
+import { differenceInDays, differenceInMonths, format } from 'date-fns'
 
-export const groupConsumptionByDate = (consumptions: ConsumptionMarking[]): ConsumptionMarking[] => {
-  const groupedData: { [date: string]: ConsumptionMarking } = {}
+interface IGroupConsumptionByDateProps {
+  afterDate: Date
+  beforeDate: Date
+  consumptions: ConsumptionMarking[]
+}
+
+interface IGroupedConsumptionsProps {
+  dateGroupFormat: string
+  dateGroup: string
+  consumption: number
+  monetary_value: number
+}
+
+const DATE_GROUP_FOTMATS = {
+  perHour: 'yyyy-MM-dd HH:mm',
+  perDate: 'yyyy-MM-dd',
+  perWeekDay: 'yyyy-MM-iii',
+  perMonth: 'yyyy-MM',
+}
+
+export const groupConsumptionByDate = ({
+  afterDate,
+  beforeDate,
+  consumptions,
+}: IGroupConsumptionByDateProps): IGroupedConsumptionsProps[] => {
+  const totalOfMonthsBeetweenInterval = differenceInMonths(afterDate, beforeDate)
+  const totalOfDaysBeetweenInterval = differenceInDays(afterDate, beforeDate)
+
+  let dateGroupFormat = ''
+
+  if (totalOfDaysBeetweenInterval < 3) {
+    dateGroupFormat = DATE_GROUP_FOTMATS.perHour
+  } else if (totalOfMonthsBeetweenInterval < 2) {
+    dateGroupFormat = DATE_GROUP_FOTMATS.perDate
+  } else if (totalOfMonthsBeetweenInterval < 6) {
+    dateGroupFormat = DATE_GROUP_FOTMATS.perWeekDay
+  } else {
+    dateGroupFormat = DATE_GROUP_FOTMATS.perMonth
+  }
+
+  const groupedConsumptions: { [dateGroup: string]: IGroupedConsumptionsProps } = {}
 
   for (const consumption of consumptions) {
-    const date = new Date(consumption.created_at).toISOString().split('T')[0]
-    const existingData = groupedData[date]
+    const dateGroup = format(new Date(consumption.created_at), dateGroupFormat)
+
+    const existingData = groupedConsumptions[dateGroup]
 
     if (existingData) {
       existingData.consumption += consumption.consumption
@@ -14,9 +55,14 @@ export const groupConsumptionByDate = (consumptions: ConsumptionMarking[]): Cons
         consumption.monetary_value
       )
     } else {
-      groupedData[date] = { ...consumption }
+      groupedConsumptions[dateGroup] = {
+        dateGroupFormat,
+        dateGroup,
+        consumption: consumption.consumption,
+        monetary_value: consumption.monetary_value,
+      }
     }
   }
 
-  return Object.values(groupedData)
+  return Object.values(groupedConsumptions)
 }

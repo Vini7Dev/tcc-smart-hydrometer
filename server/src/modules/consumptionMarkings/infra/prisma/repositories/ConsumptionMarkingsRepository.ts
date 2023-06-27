@@ -5,7 +5,7 @@ import { AppRepository } from '@shared/infra/prisma/repositories/AppRepository'
 import { ConsumptionMarking } from '../entities/ConsumptionMarking'
 
 const LIST_FIRST_PAGE = 0
-const LIST_DEFAULT_PER_PAGE = 1000
+const LIST_DEFAULT_PER_PAGE = 17568
 
 export class ConsumptionMarkingsRepository extends AppRepository implements IConsumptionMarkingsRepository {
   public async list({

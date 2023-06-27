@@ -9,6 +9,8 @@ import { calculateConsumptionMonetaryByCity } from '@utils/calculateConsumptionM
 const prismaClient = new PrismaClient()
 
 const createCitiesAndConsumptionConversions = async () => {
+  console.log('===> [START] Create Cities And Consumption Conversions')
+
   const RESIDENTIAL_NORMAL = 'RESIDENTIAL_NORMAL'
   const A_TRILLION_TO_DECREASE_NUMBER = 100000000000
   const CONVERSION_RULES = [
@@ -51,6 +53,8 @@ const createCitiesAndConsumptionConversions = async () => {
 
   await prismaClient.consumptionConversions.createMany({ data: consumptionConversionList })
 
+  console.log('===> [OK] Create Cities And Consumption Conversions')
+
   return {
     cityForConversionData,
     categoryForConversionData,
@@ -59,11 +63,13 @@ const createCitiesAndConsumptionConversions = async () => {
 }
 
 const createCustomer = async () => {
+  console.log('===> [START] Create Customer')
+
   const GITHUB_AVATAR_BASE_URL = 'https://avatars.githubusercontent.com/'
   const EMPTY_STRING = ''
 
-  const CUSTOMER_MOCK_EMAIL = 'test@mail.com'
-  const CUSTOMER_MOCK_PASSWORD = 'test1234'
+  const CUSTOMER_MOCK_EMAIL = 'mock@mail.com'
+  const CUSTOMER_MOCK_PASSWORD = 'mock1234'
 
   const avatarFileFormat = faker.image
     .avatarGitHub()
@@ -82,10 +88,14 @@ const createCustomer = async () => {
 
   await prismaClient.users.create({ data: customerData })
 
+  console.log('===> [OK] Create Customer')
+
   return { customerData }
 }
 
 const createHydrometer = async (customerData: any) => {
+  console.log('===> [START] Create Hydrometer')
+
   const RESIDENTIAL_NORMAL = 'RESIDENTIAL_NORMAL'
   const ACCEPT_SHARE_CONCUMPTION = true
   const A_TRILLION_TO_DECREASE_NUMBER = 100000000000
@@ -126,14 +136,23 @@ const createHydrometer = async (customerData: any) => {
     }]
   })
 
+  console.log('===> [OK] Create Hydrometer')
+
   return { addressData, hydrometerData }
 }
 
 const createConsumptionMarkings = async (
   hydrometerData: any,
-  count = 1,
-  addressData: any
+  addressData: any,
 ) => {
+  console.log('===> [START] Create Consumption Markings')
+
+  const TOTAL_OF_CONSUMPTION_MARKINGS = process.argv[2]
+    ? Number(process.argv[2])
+    : 48
+
+  console.log('=> TOTAL_OF_CONSUMPTION_MARKINGS', TOTAL_OF_CONSUMPTION_MARKINGS)
+
   const FIRST_DAY_OF_THE_YEAR = new Date(2023, 0, 1, 0)
   const LAST_HOUR_OF_THE_DAY_TO_COMPARE = 21
 
@@ -142,7 +161,7 @@ const createConsumptionMarkings = async (
   let sumOfHours = 0
   let consumptionSum = 0
 
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < TOTAL_OF_CONSUMPTION_MARKINGS; i++) {
     const markingDate = addHours(FIRST_DAY_OF_THE_YEAR, sumOfHours)
 
     if (
@@ -175,23 +194,19 @@ const createConsumptionMarkings = async (
 
   await prismaClient.consumptionMarkings.createMany({ data: consumptionMarkings })
 
+  console.log('===> [OK] Create Consumption Markings')
+
   return { consumptionMarkings }
 }
 
 const sendToDataBase = async () => {
-  const TOTAL_OF_CONSUMPTION_MARKINGS = 756
-
   await createCitiesAndConsumptionConversions()
 
   const { customerData } = await createCustomer()
 
   const { hydrometerData, addressData } = await createHydrometer(customerData)
 
-  await createConsumptionMarkings(
-    hydrometerData,
-    TOTAL_OF_CONSUMPTION_MARKINGS,
-    addressData
-  )
+  await createConsumptionMarkings(hydrometerData, addressData)
 }
 
 sendToDataBase()

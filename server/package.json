@@ -48,9 +48,8 @@
   "scripts": {
     "seed:admin": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/shared/infra/prisma/seeds/createAdmin.ts",
     "migrate:dev": "prisma migrate dev && prisma generate",
-
-    "mock:faker": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/shared/infra/prisma/mock/fakerDatabase.ts",
-    "mock:reset": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/shared/infra/prisma/mock/clearDatabase.ts && npm-run-all migrate:dev",
+    "mock:reset": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/shared/infra/prisma/mock/resetDatabase.ts && npm-run-all migrate:dev",
+    "mock:consumptions": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/shared/infra/prisma/mock/mockConsumptions.ts",
 
     "dev": "npm-run-all -p dev:*",
     "dev:server": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/shared/infra/http/server.ts",

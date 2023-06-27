@@ -22,7 +22,6 @@ interface IUseCaseProps {
 const USER_NOT_FOUND_ERROR = 'User not found!'
 const HYDROMETER_NOT_FOUND_ERROR = 'Hydrometer not found!'
 const WITHOUT_PERMISSION_TO_ACCESS_THIS_HYDROMETER_MARKINGS = 'You have no permission to access this hydrometer markings!'
-const LIMIT_OF_MARKINGS_TO_GROUP_BY_DATE = 100
 
 @injectable()
 export class SeePersonalConsumptionUseCase {
@@ -69,21 +68,30 @@ export class SeePersonalConsumptionUseCase {
       endDate: end_date,
     })
 
-    let consumptionMarkingList = await this.consumptionMarkingsRepository.list({
+    const consumptionMarkingList = await this.consumptionMarkingsRepository.list({
       hydrometer_id,
-      before_date: beforeDate,
       after_date: afterDate,
+      before_date: beforeDate,
     })
 
-    if (consumptionMarkingList.length > LIMIT_OF_MARKINGS_TO_GROUP_BY_DATE) {
-      consumptionMarkingList = groupConsumptionByDate(consumptionMarkingList)
-    }
-
-    const groupsOfConsumptionMarkings = groupConsumptionMarkingsByTimeDivision({
+    const consumptionMarkingsByTimeDivision = groupConsumptionMarkingsByTimeDivision({
       consumptionMarkings: consumptionMarkingList,
       timeDivision: middleIntervalDate,
     })
 
-    return groupsOfConsumptionMarkings
+    const groupedConsumptionMarkings = {
+      pastGroup: groupConsumptionByDate({
+        afterDate,
+        beforeDate,
+        consumptions: consumptionMarkingsByTimeDivision.pastGroup,
+      }),
+      presentGroup: groupConsumptionByDate({
+        afterDate,
+        beforeDate,
+        consumptions: consumptionMarkingsByTimeDivision.presentGroup,
+      }),
+    }
+
+    return groupedConsumptionMarkings
   }
 }

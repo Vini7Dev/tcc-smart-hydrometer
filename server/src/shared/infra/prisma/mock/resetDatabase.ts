@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 
-const clearDatabase = async () => {
+const resetDatabase = async () => {
   const prismaClient = new PrismaClient()
 
   await prismaClient.$queryRawUnsafe(`DROP SCHEMA public CASCADE;`)
@@ -12,4 +12,4 @@ const clearDatabase = async () => {
   await prismaClient.$queryRawUnsafe(`GRANT ALL ON SCHEMA public TO public;`)
 }
 
-clearDatabase()
+resetDatabase()
