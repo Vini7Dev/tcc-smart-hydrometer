@@ -12,6 +12,10 @@ import {
 } from './styles'
 import { Input } from '../Input'
 
+interface CompareByOptionsProps {
+    onSelectCompareOption(value: string): void
+}
+
 interface CompareOptionItemProps {
     value: string
     label: string
@@ -32,20 +36,23 @@ const CompareOptionItem: React.FC<CompareOptionItemProps> = ({
     )
 }
 
-export const CompareByOptions: React.FC = () => {
+export const CompareByOptions: React.FC<CompareByOptionsProps> = ({
+    onSelectCompareOption,
+}) => {
+    const compareOptions = [
+        { label: 'Dia', value: 'YESTERDAY' },
+        { label: 'Semana', value: 'PAST_WEEK' },
+        { label: 'Mês', value: 'PAST_MONTH' },
+        { label: 'Ano', value: 'PAST_YEAR' },
+        { label: 'Customizado', value: 'CUSTOM' },
+    ]
+
     const [selectedIndex, setSelectedIndex] = useState(0)
 
     const handleChangeSelectedOptionIndex = useCallback((index: number) => {
         setSelectedIndex(index)
+        onSelectCompareOption(compareOptions[index].value)
     }, [])
-
-    const compareOptions = [
-        { label: 'Dia', value: 'day' },
-        { label: 'Semana', value: 'week' },
-        { label: 'Mês', value: 'month' },
-        { label: 'Ano', value: 'year' },
-        { label: 'Customizado', value: 'custom' },
-    ]
 
     return (
         <Container>

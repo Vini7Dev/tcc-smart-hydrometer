@@ -8,8 +8,8 @@ interface IGroupConsumptionByDateProps {
 }
 
 interface IGroupedConsumptionsProps {
-  dateGroupFormat: string
-  dateGroup: string
+  created_at_reference: Date
+  date_group: string
   consumption: number
   monetary_value: number
 }
@@ -56,10 +56,10 @@ export const groupConsumptionByDate = ({
       )
     } else {
       groupedConsumptions[dateGroup] = {
-        dateGroupFormat,
-        dateGroup,
+        date_group: dateGroup,
         consumption: consumption.consumption,
         monetary_value: consumption.monetary_value,
+        created_at_reference: consumption.created_at
       }
     }
   }

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { format } from 'date-fns'
 import { LineChart } from 'react-native-gifted-charts'
+import { format } from 'date-fns'
 
 import {
     ChartContainer,
@@ -16,15 +16,30 @@ import {
 import { blackColor, errorColor, grayColor, infoColor, successColor } from '../../styles/variables'
 import { NavigationHeader } from '../../components/NavigationHeader'
 import { CompareByOptions } from '../../components/CompareByOptions'
-import { MOCK_CONSUMPTIONS } from './MOCK_CONSUMPTIONS'
 import { Select } from '../../components/Select'
 import { api } from '../../services/api'
 
 interface ConsumptionProps {
-    id: string
+    created_at_reference: Date
+    date_group: string
     consumption: number
     monetary_value: number
-    created_at: string
+}
+
+interface ConsumptionChartProps {
+    groupedConsumptionMarkings?: GroupedConsumptionMarkings
+}
+
+interface GroupedConsumptionMarkings {
+    pastGroup: ConsumptionMarking[]
+    presentGroup: ConsumptionMarking[]
+}
+
+interface ConsumptionMarking {
+    created_at_reference: Date
+    date_group: string
+    consumption: number
+    monetary_value: number
 }
 
 interface HydrometerProps {
@@ -32,27 +47,18 @@ interface HydrometerProps {
     name: string
 }
 
-const ChartComponent: React.FC = () => {
-    const {
-        pastGroup,
-        presentGroup,
-    } = MOCK_CONSUMPTIONS
-
-    const buildChartConsumptionData = useCallback(({
-        consumption,
-        created_at,
-    }: ConsumptionProps) => {
-        return {
-            value: consumption,
-            label: `${format(new Date(created_at), 'HH')}h`
-        }
-    }, [])
-
+const ConsumptionChart: React.FC<ConsumptionChartProps> = ({
+    groupedConsumptionMarkings = { pastGroup: [], presentGroup: [] },
+}) => {
     const calculateMonetaryValueTotal = useCallback((
         consumptionsGroup: ConsumptionProps[],
         reverse = false,
     ) => {
         let lastConsumption = consumptionsGroup[0]
+
+        if (!lastConsumption) {
+            return 0
+        }
 
         if (reverse) {
             lastConsumption = consumptionsGroup[consumptionsGroup.length-1]
@@ -71,6 +77,29 @@ const ChartComponent: React.FC = () => {
         return consumptionTotal
     }, [])
 
+    const buildChartConsumptionData = useCallback(({
+        consumption,
+        created_at_reference,
+    }: ConsumptionProps) => {
+        return {
+            value: consumption,
+            label: `${format(new Date(created_at_reference), 'HH')}h`,
+        }
+    }, [])
+
+    const { pastGroup, presentGroup } = groupedConsumptionMarkings
+
+    if (!pastGroup.length || !presentGroup.length) {
+        return <></>
+    }
+
+    const pastGroupFormatted = pastGroup
+        .reverse()
+        .map(consumption => buildChartConsumptionData(consumption))
+
+    const presentGroupFormatted = presentGroup
+        .map(consumption => buildChartConsumptionData(consumption))
+
     return (
         <ChartContainer>
             <ChrtTitle>Consumo X Tempo</ChrtTitle>
@@ -78,14 +107,13 @@ const ChartComponent: React.FC = () => {
             <LineChart
                 areaChart
                 showVerticalLines
-                data={pastGroup.reverse().map(consumption => buildChartConsumptionData(consumption)) as any}
-                data2={presentGroup.map(consumption => buildChartConsumptionData(consumption)) as any}
+                data={presentGroupFormatted as any}
+                data2={pastGroupFormatted as any}
                 height={300}
                 spacing={44}
                 initialSpacing={0}
                 color1={infoColor}
                 color2={successColor}
-                textColor1={blackColor}
                 hideDataPoints
                 dataPointsColor1={grayColor}
                 dataPointsColor2={errorColor}
@@ -95,6 +123,8 @@ const ChartComponent: React.FC = () => {
                 endFillColor2={successColor}
                 startOpacity={1}
                 endOpacity={0.5}
+                yAxisTextStyle={{ color: grayColor }}
+                xAxisLabelTextStyle={{ color: grayColor }}
             />
 
             <ChartLabelContainer>
@@ -127,24 +157,51 @@ const ChartComponent: React.FC = () => {
 };
 
 export const PersonalConsumption: React.FC = () => {
+    const [compareBy, setCompareBy] = useState('YESTERDAY')
     const [selectedHydrometerId, setSelectedHydrometerId] = useState<string>()
-
     const [userHydrometerList, setUserHydrometerList] = useState<HydrometerProps[]>([])
-
-    const handleGetUserHydrometerList = async () => {
-        const {
-            data: userHydrometerListResponse
-        } = await api.get<HydrometerProps[]>('/user-hydrometers')
-
-        setUserHydrometerList(userHydrometerListResponse)
-    }
+    const [groupedConsumptionMarkings, setGroupedConsumptionMarkings] = useState<GroupedConsumptionMarkings>()
+    const [isLoadingConsumptions, setIsLoadingConsumptions] = useState(false)
 
     useEffect(() => {
+        const handleGetUserHydrometerList = async () => {
+            const {
+                data: userHydrometerListResponse
+            } = await api.get<HydrometerProps[]>('/user-hydrometers')
+
+            setUserHydrometerList(userHydrometerListResponse)
+        }
+
         handleGetUserHydrometerList()
     }, [])
 
+    useEffect(() => {
+        const handleGetConsumptionMarkings = async () => {
+            if (!selectedHydrometerId) {
+                return
+            }
+
+            setIsLoadingConsumptions(true)
+
+            const {
+                data: groupedConsumptionMarkingsResponse
+            } = await api.get<GroupedConsumptionMarkings>(
+                `/personal-consumption-markings?hydrometer_id=${selectedHydrometerId}&period_type=${compareBy}`
+            )
+
+            setGroupedConsumptionMarkings(groupedConsumptionMarkingsResponse)
+            setIsLoadingConsumptions(false)
+        }
+
+        handleGetConsumptionMarkings()
+    }, [compareBy, selectedHydrometerId])
+
     const handleSelectHydrometer = useCallback((value?: string) => {
         setSelectedHydrometerId(value)
+    }, [])
+
+    const handleUpdateCompareBy = useCallback((value: string) => {
+        setCompareBy(value)
     }, [])
 
     return (
@@ -165,9 +222,17 @@ export const PersonalConsumption: React.FC = () => {
                     {
                         selectedHydrometerId && (
                             <>
-                                <CompareByOptions />
+                                <CompareByOptions
+                                    onSelectCompareOption={handleUpdateCompareBy}
+                                />
 
-                                <ChartComponent />
+                                {
+                                    !isLoadingConsumptions && (
+                                        <ConsumptionChart
+                                            groupedConsumptionMarkings={groupedConsumptionMarkings}
+                                        />
+                                    )
+                                }
                             </>
                         )
                     }
