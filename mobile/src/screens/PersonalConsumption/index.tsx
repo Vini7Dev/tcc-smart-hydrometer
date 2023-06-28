@@ -13,7 +13,7 @@ import {
     ChartLabelSquareText,
     ChrtTitle,
 } from './styles'
-import { blackColor, errorColor, grayColor, infoColor, successColor } from '../../styles/variables'
+import { errorColor, grayColor, infoColor, successColor } from '../../styles/variables'
 import { NavigationHeader } from '../../components/NavigationHeader'
 import { CompareByOptions } from '../../components/CompareByOptions'
 import { Select } from '../../components/Select'
@@ -47,6 +47,13 @@ interface HydrometerProps {
     name: string
 }
 
+const DATE_GROUP_FOTMATS = {
+    perHour: { raw: 'yyyy-MM-dd HH:mm', toFormat: 'H', sufix: 'h' },
+    perDate: { raw: 'yyyy-MM-dd', toFormat: 'MM/dd', sufix: '' },
+    perWeekDay: { raw: 'yyyy-MM-iii', toFormat: 'MM/dd', sufix: '' },
+    perMonth: { raw: 'yyyy-MM', toFormat: 'yy/MM', sufix: '' },
+}
+
 const ConsumptionChart: React.FC<ConsumptionChartProps> = ({
     groupedConsumptionMarkings = { pastGroup: [], presentGroup: [] },
 }) => {
@@ -77,13 +84,33 @@ const ConsumptionChart: React.FC<ConsumptionChartProps> = ({
         return consumptionTotal
     }, [])
 
+    const formatChartLabelOfConsumption = useCallback((dateGroup: string) => {
+        const dateGroupLength = dateGroup.length
+
+        if (dateGroupLength === DATE_GROUP_FOTMATS.perHour.raw.length) {
+            return DATE_GROUP_FOTMATS.perHour
+        } else if (dateGroupLength === DATE_GROUP_FOTMATS.perDate.raw.length) {
+            return DATE_GROUP_FOTMATS.perDate
+        } else if (dateGroupLength === DATE_GROUP_FOTMATS.perWeekDay.raw.length) {
+            return DATE_GROUP_FOTMATS.perWeekDay
+        } else {
+            return DATE_GROUP_FOTMATS.perMonth
+        }
+    }, [])
+
     const buildChartConsumptionData = useCallback(({
         consumption,
         created_at_reference,
+        date_group,
     }: ConsumptionProps) => {
+        const {
+            toFormat,
+            sufix,
+        } = formatChartLabelOfConsumption(date_group)
+
         return {
             value: consumption,
-            label: `${format(new Date(created_at_reference), 'HH')}h`,
+            label: `${format(new Date(created_at_reference), toFormat)}${sufix}`,
         }
     }, [])
 
@@ -94,10 +121,10 @@ const ConsumptionChart: React.FC<ConsumptionChartProps> = ({
     }
 
     const pastGroupFormatted = pastGroup
-        .reverse()
         .map(consumption => buildChartConsumptionData(consumption))
 
     const presentGroupFormatted = presentGroup
+        .reverse()
         .map(consumption => buildChartConsumptionData(consumption))
 
     return (
@@ -110,7 +137,7 @@ const ConsumptionChart: React.FC<ConsumptionChartProps> = ({
                 data={presentGroupFormatted as any}
                 data2={pastGroupFormatted as any}
                 height={300}
-                spacing={44}
+                spacing={80}
                 initialSpacing={0}
                 color1={infoColor}
                 color2={successColor}
