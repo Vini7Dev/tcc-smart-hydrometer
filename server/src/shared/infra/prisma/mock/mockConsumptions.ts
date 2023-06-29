@@ -154,7 +154,7 @@ const createConsumptionMarkings = async (
   console.log('=> TOTAL_OF_CONSUMPTION_MARKINGS', TOTAL_OF_CONSUMPTION_MARKINGS)
 
   const FIRST_DAY_OF_THE_YEAR = new Date(2023, 0, 1, 0)
-  const LAST_HOUR_OF_THE_DAY_TO_COMPARE = 21
+  const LAST_HOUR_OF_THE_DAY_TO_COMPARE = 23
 
   const consumptionMarkings = []
 
@@ -171,7 +171,7 @@ const createConsumptionMarkings = async (
       consumptionSum = 0
     }
 
-    const newConsumptionValue = Number(Math.random().toFixed(1)) * 10 * 2
+    const newConsumptionValue = Math.floor(Math.random() * 4)
 
     consumptionSum += newConsumptionValue
 

@@ -34,8 +34,8 @@ export const calculateConsumptionMonetaryByCity = ({
         maxConsumpmition,
       ] = consumptionConversion.rule.split(BETWEEN_VALUE_RULE)
 
-      const minConsumpmitionNum = Number(minConsumpmition)
-      const maxConsumpmitionNum = Number(maxConsumpmition)
+      const minConsumpmitionNum = Number(minConsumpmition) * 100
+      const maxConsumpmitionNum = Number(maxConsumpmition) * 100
 
       let ruleRangeInLiters = 0
 
