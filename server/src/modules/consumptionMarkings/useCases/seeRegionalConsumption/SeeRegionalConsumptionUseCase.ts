@@ -3,7 +3,7 @@ import { injectable, inject } from 'tsyringe'
 import { IConsumptionMarkingsRepository } from '@modules/consumptionMarkings/repositories/IConsumptionMarkingsRepository'
 import { groupConsumptionMarkingsByTimeDivision } from '@utils/groupConsumptionMarkingsByIimeDivision'
 import { periodFilterBuilder } from '@utils/periodFilterBuilder'
-import { groupConsumptionMarkingsByHydrometerId } from '@utils/groupConsumptionMarkingsByHydrometerId'
+import { groupConsumptionByDate } from '@utils/groupConsumptionByDate'
 
 type PeriodType = 'YESTERDAY' | 'PAST_MONTH' | 'PAST_YEAR' | 'CUSTOM'
 
@@ -47,17 +47,19 @@ export class SeeRegionalConsumptionUseCase {
       timeDivision: middleIntervalDate,
     })
 
-    const pastConsumptionByHydrometerId = groupConsumptionMarkingsByHydrometerId({
-      consumptionMarkingList: groupsOfConsumptionMarkings.pastGroup
-    })
-
-    const presentConsumptionByHydrometerId = groupConsumptionMarkingsByHydrometerId({
-      consumptionMarkingList: groupsOfConsumptionMarkings.presentGroup
-    })
-
-    return {
-      pastGroup: pastConsumptionByHydrometerId,
-      presentGroup: presentConsumptionByHydrometerId,
+    const groupedConsumptionMarkings = {
+      pastGroup: groupConsumptionByDate({
+        afterDate,
+        beforeDate,
+        consumptions: groupsOfConsumptionMarkings.pastGroup,
+      }),
+      presentGroup: groupConsumptionByDate({
+        afterDate,
+        beforeDate,
+        consumptions: groupsOfConsumptionMarkings.presentGroup,
+      }),
     }
+
+    return groupedConsumptionMarkings
   }
 }
