@@ -7,7 +7,7 @@ import { HTTP_STATUS_CODE } from '@utils/constants'
 import { IHashProvider } from '@shared/containers/providers/HashProvider/models/IHashProvider'
 
 interface IUseCaseProps {
-  token: string
+  token: number
   password: string
 }
 

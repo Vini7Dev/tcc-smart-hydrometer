@@ -4,7 +4,7 @@ import { AppRepository } from '@shared/infra/prisma/repositories/AppRepository'
 import { ForgotPasswordToken } from '../entities/ForgotPasswordToken'
 
 export class ForgotPasswordTokensRepository extends AppRepository implements IForgotPasswordTokensRepository {
-  public async findById(id: string): Promise<ForgotPasswordToken | null> {
+  public async findById(id: number): Promise<ForgotPasswordToken | null> {
     const findedForgotPasswordToken = await this.client.forgotPasswordTokens.findFirst({
       where: { id }
     })
@@ -23,10 +23,12 @@ export class ForgotPasswordTokensRepository extends AppRepository implements IFo
   }
 
   public async create({
-    user_id
+    token,
+    user_id,
   }: ICreateForgotPasswordTokenDTO): Promise<ForgotPasswordToken> {
     const createdForgotPasswordToken = await this.client.forgotPasswordTokens.create({
       data: {
+        id: token,
         user_id,
       }
     })
@@ -34,7 +36,7 @@ export class ForgotPasswordTokensRepository extends AppRepository implements IFo
     return createdForgotPasswordToken
   }
 
-  public async delete(id: string): Promise<void> {
+  public async delete(id: number): Promise<void> {
     await this.client.forgotPasswordTokens.delete({
       where: { id }
     })

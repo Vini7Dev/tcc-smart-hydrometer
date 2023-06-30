@@ -10,9 +10,8 @@ interface IUseCaseProps {
 
 const VERIFY_EMAIL_MESSAGE = 'We sent you an email to reset your account password!'
 const RESET_PASSWORD_MAIL_SUBJECT = 'Reset Password'
-const FORGOT_PASSWORD_PAGE_BASE_URL = 'http://localhost:3333/password/forgot'
-const RESET_PASSWORD_MAIL_HTML = (token: string) =>
-  `Click <strong><a href="${FORGOT_PASSWORD_PAGE_BASE_URL}/${token}" target="_blank">here</a></strong> to reset your password`
+const RESET_PASSWORD_MAIL_HTML = (token: number) =>
+  `<div><p>Your forgot token to reset the password is <strong>${token}</strong></p></div>`
 
 @injectable()
 export class ForgotPasswordUseCase {
@@ -42,7 +41,10 @@ export class ForgotPasswordUseCase {
       await this.forgotPasswordTokensRepository.delete(tokenAlreadyExists.id)
     }
 
+    const token = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000
+
     const createdForgotPasswordToken = await this.forgotPasswordTokensRepository.create({
+      token,
       user_id: userForgotPassword.id
     })
 

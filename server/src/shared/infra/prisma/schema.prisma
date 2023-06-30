@@ -43,7 +43,7 @@ model Users {
 }
 
 model ForgotPasswordTokens {
-  id          String    @id @default(uuid())
+  id          Int       @id
   user_id     String    @unique
   user        Users     @relation(fields: [user_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
   created_at  DateTime  @default(now())

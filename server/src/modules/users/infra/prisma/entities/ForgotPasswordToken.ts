@@ -1,5 +1,5 @@
 export class ForgotPasswordToken {
-  public id: string
+  public id: number
 
   public user_id: string
 
