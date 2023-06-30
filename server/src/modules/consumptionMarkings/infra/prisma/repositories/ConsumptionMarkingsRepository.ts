@@ -51,22 +51,24 @@ export class ConsumptionMarkingsRepository extends AppRepository implements ICon
       orderBy: { created_at: 'desc' },
     })
 
-    return consumptionMarkingList
+    return consumptionMarkingList as ConsumptionMarking[]
   }
 
   public async create({
     hydrometer_id,
     consumption,
     monetary_value,
+    marking_region,
   }: ICreateConsumptionMarkingDTO): Promise<ConsumptionMarking> {
     const createdConsumptionMarking = await this.client.consumptionMarkings.create({
       data: {
         hydrometer_id,
         consumption,
         monetary_value,
+        marking_region,
       }
     })
 
-    return createdConsumptionMarking
+    return createdConsumptionMarking as ConsumptionMarking
   }
 }

@@ -10,6 +10,8 @@ import { ICitiesForConversionRepository } from '@modules/citiesForConversion/rep
 import { calculateConsumptionMonetaryByCity } from '@utils/calculateConsumptionMonetaryByCity'
 import { format } from 'date-fns'
 
+type MarkingRegion = 'NORTH' | 'SOUTH' | 'EAST' | 'WEST' | 'CENTER'
+
 interface IUseCaseProps {
   hydrometer_id: number
   hydrometer_password: string
@@ -70,11 +72,31 @@ export class CreateConsumptionMarkingUseCase {
       formattedCityName
     )
 
+    const postalCodeRegion = hydrometerToAssociate.address?.postal_code.slice(
+      3,
+      5,
+    )
+
+    let hydrometerRegion: MarkingRegion | undefined
+
+    if (postalCodeRegion === '07' || postalCodeRegion === '09') {
+      hydrometerRegion = 'NORTH'
+    } else if (postalCodeRegion === '03' || postalCodeRegion === '04' || postalCodeRegion === '12') {
+      hydrometerRegion = 'SOUTH'
+    } else if (postalCodeRegion === '02' || postalCodeRegion === '10') {
+      hydrometerRegion = 'EAST'
+    } else if (postalCodeRegion === '05' || postalCodeRegion === '06' || postalCodeRegion === '08') {
+      hydrometerRegion = 'WEST'
+    } else if (postalCodeRegion === '00' || postalCodeRegion === '01') {
+      hydrometerRegion = 'CENTER'
+    }
+
     if (!hydrometerCity) {
       const createdConsumptionMarking = await this.consumptionMarkingsRepository.create({
         hydrometer_id: hydrometerToAssociate.id,
-        consumption,
+        marking_region: hydrometerRegion,
         monetary_value: EMPTY_MONETARY_CONVERSION,
+        consumption,
       })
 
       return createdConsumptionMarking
@@ -97,6 +119,7 @@ export class CreateConsumptionMarkingUseCase {
 
     const createdConsumptionMarking = await this.consumptionMarkingsRepository.create({
       hydrometer_id: hydrometerToAssociate.id,
+      marking_region: hydrometerRegion,
       consumption,
       monetary_value: calculateConsumptionMonetaryByCity({
         city: hydrometerCity,
