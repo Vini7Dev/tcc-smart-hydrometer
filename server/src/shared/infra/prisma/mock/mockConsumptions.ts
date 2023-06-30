@@ -153,7 +153,7 @@ const createConsumptionMarkings = async (
 
   console.log('=> TOTAL_OF_CONSUMPTION_MARKINGS', TOTAL_OF_CONSUMPTION_MARKINGS)
 
-  const FIRST_DAY_OF_THE_YEAR = new Date(2023, 0, 1, 0)
+  const FIRST_DAY_OF_THE_YEAR = new Date(2022, 0, 1, 0)
   const LAST_HOUR_OF_THE_DAY_TO_COMPARE = 23
 
   const consumptionMarkings = []

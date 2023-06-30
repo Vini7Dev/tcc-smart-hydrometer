@@ -12,12 +12,14 @@ import {
 } from './styles'
 import { Input } from '../Input'
 
+type CompareBy = 'YESTERDAY' | 'PAST_MONTH' | 'PAST_YEAR' | 'CUSTOM'
+
 interface CompareByOptionsProps {
-    onSelectCompareOption(value: string): void
+    onSelectCompareOption(value: CompareBy): void
 }
 
 interface CompareOptionItemProps {
-    value: string
+    value: CompareBy
     label: string
     selected: boolean
     handleSelectOption: () => void
@@ -41,7 +43,6 @@ export const CompareByOptions: React.FC<CompareByOptionsProps> = ({
 }) => {
     const compareOptions = [
         { label: 'Dia', value: 'YESTERDAY' },
-        { label: 'Semana', value: 'PAST_WEEK' },
         { label: 'Mês', value: 'PAST_MONTH' },
         { label: 'Ano', value: 'PAST_YEAR' },
         { label: 'Customizado', value: 'CUSTOM' },
@@ -51,7 +52,7 @@ export const CompareByOptions: React.FC<CompareByOptionsProps> = ({
 
     const handleChangeSelectedOptionIndex = useCallback((index: number) => {
         setSelectedIndex(index)
-        onSelectCompareOption(compareOptions[index].value)
+        onSelectCompareOption(compareOptions[index].value as CompareBy)
     }, [])
 
     return (
@@ -63,7 +64,7 @@ export const CompareByOptions: React.FC<CompareByOptionsProps> = ({
                     compareOptions.map((compareOption, idx) => (
                         <CompareOptionItem
                             key={compareOption.value}
-                            value={compareOption.value}
+                            value={compareOption.value as CompareBy}
                             label={compareOption.label}
                             selected={selectedIndex === idx}
                             handleSelectOption={() => handleChangeSelectedOptionIndex(idx)}
@@ -73,7 +74,7 @@ export const CompareByOptions: React.FC<CompareByOptionsProps> = ({
             </CompareOptionsList>
 
             {
-                selectedIndex === 4 && (
+                selectedIndex === compareOptions.length - 1 && (
                     <FromToContainer>
                         <FromToInputContainer>
                             <FromLabel>De</FromLabel>

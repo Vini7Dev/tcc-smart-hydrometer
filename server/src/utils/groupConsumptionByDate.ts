@@ -17,7 +17,6 @@ interface IGroupedConsumptionsProps {
 const DATE_GROUP_FOTMATS = {
   perHour: 'yyyy-MM-dd HH:mm',
   perDate: 'yyyy-MM-dd',
-  perWeekDay: 'yyyy-MM-iii',
   perMonth: 'yyyy-MM',
 }
 
@@ -33,10 +32,8 @@ export const groupConsumptionByDate = ({
 
   if (totalOfDaysBeetweenInterval < 3) {
     dateGroupFormat = DATE_GROUP_FOTMATS.perHour
-  } else if (totalOfMonthsBeetweenInterval < 2) {
+  } else if (totalOfMonthsBeetweenInterval < 4) {
     dateGroupFormat = DATE_GROUP_FOTMATS.perDate
-  } else if (totalOfMonthsBeetweenInterval < 6) {
-    dateGroupFormat = DATE_GROUP_FOTMATS.perWeekDay
   } else {
     dateGroupFormat = DATE_GROUP_FOTMATS.perMonth
   }

@@ -27,7 +27,7 @@ export const CompareOptionsList = styled.View`
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 8px;
 `
 
 export const CompareOption = styled.TouchableHighlight<CompareOptionProps>`

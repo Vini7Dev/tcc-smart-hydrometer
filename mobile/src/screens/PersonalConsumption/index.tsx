@@ -12,12 +12,15 @@ import {
     ChartLabelSquareColor,
     ChartLabelSquareText,
     ChrtTitle,
+    ChrtSubtitle,
 } from './styles'
 import { errorColor, grayColor, infoColor, successColor } from '../../styles/variables'
 import { NavigationHeader } from '../../components/NavigationHeader'
 import { CompareByOptions } from '../../components/CompareByOptions'
 import { Select } from '../../components/Select'
 import { api } from '../../services/api'
+
+type CompareBy = 'YESTERDAY' | 'PAST_MONTH' | 'PAST_YEAR' | 'CUSTOM'
 
 interface ConsumptionProps {
     created_at_reference: Date
@@ -28,6 +31,7 @@ interface ConsumptionProps {
 
 interface ConsumptionChartProps {
     groupedConsumptionMarkings?: GroupedConsumptionMarkings
+    compareBy: CompareBy
 }
 
 interface GroupedConsumptionMarkings {
@@ -49,18 +53,41 @@ interface HydrometerProps {
 
 const DATE_GROUP_FOTMATS = {
     perHour: { raw: 'yyyy-MM-dd HH:mm', toFormat: 'H', sufix: 'h' },
-    perDate: { raw: 'yyyy-MM-dd', toFormat: 'MM/dd', sufix: '' },
-    perWeekDay: { raw: 'yyyy-MM-iii', toFormat: 'MM/dd', sufix: '' },
-    perMonth: { raw: 'yyyy-MM', toFormat: 'yy/MM', sufix: '' },
+    perDate: { raw: 'yyyy-MM-dd', toFormat: 'dd', sufix: 'd' },
+    perMonth: { raw: 'yyyy-MM', toFormat: 'MM', sufix: 'm' },
 }
 
 const ConsumptionChart: React.FC<ConsumptionChartProps> = ({
     groupedConsumptionMarkings = { pastGroup: [], presentGroup: [] },
+    compareBy,
 }) => {
+    const getCompareByLabel = useCallback(() => {
+        switch (compareBy) {
+            case 'YESTERDAY':
+                return 'hora'
+            case 'PAST_MONTH':
+                return 'dia'
+            case 'PAST_YEAR':
+                return 'mês'
+            case 'CUSTOM':
+                return 'tempo'
+            default:
+                return 'data'
+        }
+    }, [compareBy])
+
     const calculateMonetaryValueTotal = useCallback((
         consumptionsGroup: ConsumptionProps[],
         reverse = false,
     ) => {
+        if (compareBy === 'PAST_YEAR') {
+            const { total: totalOfMoneraty } = consumptionsGroup.reduce((acc, cur) => {
+                return { total: acc.total + cur.monetary_value }
+            }, { total: 0 })
+
+            return totalOfMoneraty / 100
+        }
+
         let lastConsumption = consumptionsGroup[0]
 
         if (!lastConsumption) {
@@ -71,8 +98,8 @@ const ConsumptionChart: React.FC<ConsumptionChartProps> = ({
             lastConsumption = consumptionsGroup[consumptionsGroup.length-1]
         }
 
-        return lastConsumption.monetary_value
-    }, [])
+        return lastConsumption.monetary_value / 100
+    }, [compareBy])
 
     const calculateConsumptionsTotal = useCallback((
         consumptionsGroup: ConsumptionProps[],
@@ -81,7 +108,22 @@ const ConsumptionChart: React.FC<ConsumptionChartProps> = ({
             return { total: acc.total + cur.consumption }
         }, { total: 0 })
 
-        return consumptionTotal
+
+        return compareBy === 'PAST_YEAR' ? consumptionTotal / 10 : consumptionTotal / 100
+    }, [compareBy])
+
+    const getMonetaryValueAndConsumptionTotals = useCallback((
+        consumptionsGroup: ConsumptionProps[],
+        reverse = false,
+    ) => {
+        const consumptionTotal = calculateConsumptionsTotal(consumptionsGroup)
+        const totalOfMoneraty = calculateMonetaryValueTotal(consumptionsGroup, reverse)
+
+        return `R$ ${
+            totalOfMoneraty.toLocaleString('pt-br', { minimumFractionDigits: 2 })
+        } | ${
+            consumptionTotal.toFixed(2).replace('.', ',')
+        }/m³`
     }, [])
 
     const formatChartLabelOfConsumption = useCallback((dateGroup: string) => {
@@ -91,8 +133,6 @@ const ConsumptionChart: React.FC<ConsumptionChartProps> = ({
             return DATE_GROUP_FOTMATS.perHour
         } else if (dateGroupLength === DATE_GROUP_FOTMATS.perDate.raw.length) {
             return DATE_GROUP_FOTMATS.perDate
-        } else if (dateGroupLength === DATE_GROUP_FOTMATS.perWeekDay.raw.length) {
-            return DATE_GROUP_FOTMATS.perWeekDay
         } else {
             return DATE_GROUP_FOTMATS.perMonth
         }
@@ -130,6 +170,7 @@ const ConsumptionChart: React.FC<ConsumptionChartProps> = ({
     return (
         <ChartContainer>
             <ChrtTitle>Consumo X Tempo</ChrtTitle>
+            <ChrtSubtitle>m³ X {getCompareByLabel()}</ChrtSubtitle>
 
             <LineChart
                 areaChart
@@ -137,7 +178,7 @@ const ConsumptionChart: React.FC<ConsumptionChartProps> = ({
                 data={presentGroupFormatted as any}
                 data2={pastGroupFormatted as any}
                 height={300}
-                spacing={80}
+                spacing={50}
                 initialSpacing={0}
                 color1={infoColor}
                 color2={successColor}
@@ -148,8 +189,8 @@ const ConsumptionChart: React.FC<ConsumptionChartProps> = ({
                 startFillColor2={successColor}
                 endFillColor1={infoColor}
                 endFillColor2={successColor}
-                startOpacity={1}
-                endOpacity={0.5}
+                startOpacity={0.75}
+                endOpacity={0.4}
                 yAxisTextStyle={{ color: grayColor }}
                 xAxisLabelTextStyle={{ color: grayColor }}
             />
@@ -159,11 +200,7 @@ const ConsumptionChart: React.FC<ConsumptionChartProps> = ({
                     <ChartLabelSquareColor backgroundColor={'success'} />
 
                     <ChartLabelSquareText>
-                        Ontem ( R${
-                            (calculateMonetaryValueTotal(pastGroup) / 100).toFixed(2).toString().replace('.', ',')
-                        } | {
-                            calculateConsumptionsTotal(pastGroup)
-                        }/m3 )
+                        Ontem ({getMonetaryValueAndConsumptionTotals(pastGroup)})
                     </ChartLabelSquareText>
                 </ChartLabelItem>
 
@@ -171,11 +208,7 @@ const ConsumptionChart: React.FC<ConsumptionChartProps> = ({
                     <ChartLabelSquareColor backgroundColor={'info'} />
 
                     <ChartLabelSquareText>
-                        Hoje ( R${
-                            (calculateMonetaryValueTotal(presentGroup, true) / 100).toFixed(2).toString().replace('.', ',')
-                        } | {
-                            calculateConsumptionsTotal(presentGroup)
-                        }/m3 )
+                        Hoje ({getMonetaryValueAndConsumptionTotals(presentGroup, true)})
                     </ChartLabelSquareText>
                 </ChartLabelItem>
             </ChartLabelContainer>
@@ -184,7 +217,7 @@ const ConsumptionChart: React.FC<ConsumptionChartProps> = ({
 };
 
 export const PersonalConsumption: React.FC = () => {
-    const [compareBy, setCompareBy] = useState('YESTERDAY')
+    const [compareBy, setCompareBy] = useState<CompareBy>('YESTERDAY')
     const [selectedHydrometerId, setSelectedHydrometerId] = useState<string>()
     const [userHydrometerList, setUserHydrometerList] = useState<HydrometerProps[]>([])
     const [groupedConsumptionMarkings, setGroupedConsumptionMarkings] = useState<GroupedConsumptionMarkings>()
@@ -227,7 +260,7 @@ export const PersonalConsumption: React.FC = () => {
         setSelectedHydrometerId(value)
     }, [])
 
-    const handleUpdateCompareBy = useCallback((value: string) => {
+    const handleUpdateCompareBy = useCallback((value: CompareBy) => {
         setCompareBy(value)
     }, [])
 
@@ -257,6 +290,7 @@ export const PersonalConsumption: React.FC = () => {
                                     !isLoadingConsumptions && (
                                         <ConsumptionChart
                                             groupedConsumptionMarkings={groupedConsumptionMarkings}
+                                            compareBy={compareBy}
                                         />
                                     )
                                 }

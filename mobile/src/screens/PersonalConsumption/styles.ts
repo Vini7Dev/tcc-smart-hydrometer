@@ -1,6 +1,6 @@
 import styled from 'styled-components/native'
 
-import { blackColor, infoColor, successColor, whiteColor } from '../../styles/variables'
+import { blackColor, grayColor, infoColor, successColor, whiteColor } from '../../styles/variables'
 
 interface ChartLabelSquareColorProps {
     backgroundColor: 'success' | 'info'
@@ -31,6 +31,14 @@ export const ChrtTitle = styled.Text`
     font-weight: 500;
     font-size: 22px;
     color: ${blackColor};
+    text-align: center;
+`
+
+export const ChrtSubtitle = styled.Text`
+    margin-bottom: 14px;
+    font-family: 'Roboto';
+    font-weight: 400;
+    color: ${grayColor};
     text-align: center;
 `
 
