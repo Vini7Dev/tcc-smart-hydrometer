@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import { format } from 'date-fns'
 
 import {
     ScreenScrollView,
@@ -50,26 +51,36 @@ export const PersonalConsumption: React.FC = () => {
         handleGetUserHydrometerList()
     }, [])
 
-    useEffect(() => {
-        const handleGetConsumptionMarkings = async () => {
-            if (!selectedHydrometerId) {
-                return
-            }
-
-            setIsLoadingConsumptions(true)
-
-            const {
-                data: groupedConsumptionMarkingsResponse
-            } = await api.get<GroupedConsumptionMarkings>(
-                `/personal-consumption-markings?hydrometer_id=${selectedHydrometerId}&period_type=${compareBy}`
-            )
-
-            setGroupedConsumptionMarkings(groupedConsumptionMarkingsResponse)
-            setIsLoadingConsumptions(false)
+    const handleGetConsumptionMarkings = async (query?: string) => {
+        if (!selectedHydrometerId) {
+            return
         }
 
+        setIsLoadingConsumptions(true)
+
+        const {
+            data: groupedConsumptionMarkingsResponse
+        } = await api.get<GroupedConsumptionMarkings>(
+            `/personal-consumption-markings?hydrometer_id=${selectedHydrometerId}&period_type=${compareBy}&${query}`
+        )
+
+        setGroupedConsumptionMarkings(groupedConsumptionMarkingsResponse)
+        setIsLoadingConsumptions(false)
+    }
+
+    useEffect(() => {
         handleGetConsumptionMarkings()
     }, [compareBy, selectedHydrometerId])
+
+    const handleLoadConsumptionsByCustomInterval = useCallback(async (
+        start: Date,
+        end: Date,
+    ) => {
+        const formatStartDate = `${format(start, 'yyyy-MM-dd')}T00:00:00.000Z`
+        const formatEndDate = `${format(end, 'yyyy-MM-dd')}T23:59:59.999Z`
+
+        handleGetConsumptionMarkings(`start_date=${formatStartDate}&end_date=${formatEndDate}`)
+    }, [handleGetConsumptionMarkings])
 
     const handleSelectHydrometer = useCallback((value?: string) => {
         setSelectedHydrometerId(value)
@@ -99,6 +110,7 @@ export const PersonalConsumption: React.FC = () => {
                             <>
                                 <CompareByOptions
                                     onSelectCompareOption={handleUpdateCompareBy}
+                                    onSelectValidCustomInterval={handleLoadConsumptionsByCustomInterval}
                                 />
 
                                 {

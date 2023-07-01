@@ -56,13 +56,30 @@ export const FromToContainer = styled.View`
 `
 
 export const FromToInputContainer = styled.View`
-    width: 100px;
+    width: 110px;
 `
 
 export const FromLabel = styled.Text`
     font-family: 'Roboto';
     font-weight: 500;
     font-size: 16px;
+    line-height: 19px;
+    color: ${blackColor};
+`
+
+export const CustomIntervalInputButton = styled.TouchableOpacity`
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 50px;
+    margin: 8px 0;
+    background-color: ${whiteColor};
+`
+
+export const CustomIntervalInputButtonText = styled.Text`
+    font-family: 'Roboto';
+    font-weight: 500;
+    font-size: 12px;
     line-height: 19px;
     color: ${blackColor};
 `

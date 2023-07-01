@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
+import DateTimePicker from '@react-native-community/datetimepicker'
 
 import {
     Container,
@@ -9,13 +10,16 @@ import {
     FromToContainer,
     FromToInputContainer,
     FromLabel,
+    CustomIntervalInputButton,
+    CustomIntervalInputButtonText,
 } from './styles'
-import { Input } from '../Input'
+import { format } from 'date-fns'
 
 type CompareBy = 'YESTERDAY' | 'PAST_MONTH' | 'PAST_YEAR' | 'CUSTOM'
 
 interface CompareByOptionsProps {
     onSelectCompareOption(value: CompareBy): void
+    onSelectValidCustomInterval: (start: Date, end: Date) => void
 }
 
 interface CompareOptionItemProps {
@@ -40,6 +44,7 @@ const CompareOptionItem: React.FC<CompareOptionItemProps> = ({
 
 export const CompareByOptions: React.FC<CompareByOptionsProps> = ({
     onSelectCompareOption,
+    onSelectValidCustomInterval,
 }) => {
     const compareOptions = [
         { label: 'Dia', value: 'YESTERDAY' },
@@ -49,11 +54,44 @@ export const CompareByOptions: React.FC<CompareByOptionsProps> = ({
     ]
 
     const [selectedIndex, setSelectedIndex] = useState(0)
+    const [isOpenCalendarStart, setIsOpenCalendarStart] = useState(false)
+    const [isOpenCalendarEnd, setIsOpenCalendarEnd] = useState(false)
+
+    const [customStartDate, setCustomStartDate] = useState<Date>(new Date())
+    const [customEndDate, setCustomEndDate] = useState<Date>(new Date())
 
     const handleChangeSelectedOptionIndex = useCallback((index: number) => {
         setSelectedIndex(index)
         onSelectCompareOption(compareOptions[index].value as CompareBy)
     }, [])
+
+    const handleUpdateCustomStartDate = useCallback((_: any, date: Date | undefined) => {
+        if(date) {
+            setCustomStartDate(date)
+        }
+    }, [])
+
+    const handleUpdateCustomEndDate = useCallback((_: any, date: Date | undefined) => {
+        if(date) {
+            setCustomEndDate(date)
+        }
+    }, [])
+
+    useEffect(() => {
+        if (customStartDate >= customEndDate) {
+            return
+        }
+
+        onSelectValidCustomInterval(customStartDate, customEndDate)
+    }, [customStartDate, customEndDate])
+
+    const toggleIsOpenCalendarStart = useCallback(() => {
+        setIsOpenCalendarStart(!isOpenCalendarStart)
+    }, [isOpenCalendarStart])
+
+    const toggleIsOpenCalendarEnd = useCallback(() => {
+        setIsOpenCalendarEnd(!isOpenCalendarEnd)
+    }, [isOpenCalendarEnd])
 
     return (
         <Container>
@@ -79,19 +117,51 @@ export const CompareByOptions: React.FC<CompareByOptionsProps> = ({
                         <FromToInputContainer>
                             <FromLabel>De</FromLabel>
 
-                            <Input
-                                placeholder="00/00/0000"
+                            <CustomIntervalInputButton
                                 style={{ width: 100 }}
-                            />
+                                onPress={toggleIsOpenCalendarStart}
+                            >
+                                <CustomIntervalInputButtonText>
+                                    {format(customStartDate, 'dd/MM/yyyy')}
+                                </CustomIntervalInputButtonText>
+                            </CustomIntervalInputButton>
+
+                            {
+                                isOpenCalendarStart && (
+                                    <DateTimePicker
+                                        mode="date"
+                                        display="calendar"
+                                        value={customStartDate}
+                                        onChange={handleUpdateCustomStartDate}
+                                        is24Hour
+                                    />
+                                )
+                            }
                         </FromToInputContainer>
 
                         <FromToInputContainer>
                             <FromLabel>Até</FromLabel>
 
-                            <Input
-                                placeholder="00/00/0000"
+                            <CustomIntervalInputButton
                                 style={{ width: 100 }}
-                            />
+                                onPress={toggleIsOpenCalendarEnd}
+                            >
+                                <CustomIntervalInputButtonText>
+                                    {format(customEndDate, 'dd/MM/yyyy')}
+                                </CustomIntervalInputButtonText>
+                            </CustomIntervalInputButton>
+
+                            {
+                                isOpenCalendarEnd && (
+                                    <DateTimePicker
+                                        mode="date"
+                                        display="calendar"
+                                        value={customEndDate}
+                                        onChange={handleUpdateCustomEndDate}
+                                        is24Hour
+                                    />
+                                )
+                            }
                         </FromToInputContainer>
                     </FromToContainer>
                 )
