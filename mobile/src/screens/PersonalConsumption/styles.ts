@@ -1,4 +1,5 @@
 import styled from 'styled-components/native'
+import { whiteColor } from '../../styles/variables'
 
 export const ScreenContainer = styled.View``
 

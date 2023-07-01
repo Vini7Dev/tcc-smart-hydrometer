@@ -10,6 +10,7 @@ import { CompareByOptions } from '../../components/CompareByOptions'
 import { ConsumptionChart } from '../../components/ConsumptionChart'
 import { Select } from '../../components/Select'
 import { api } from '../../services/api'
+import { ConsumptionChartLabel } from '../../components/ConsumptionChartLabel'
 
 type CompareBy = 'YESTERDAY' | 'PAST_MONTH' | 'PAST_YEAR' | 'CUSTOM'
 
@@ -102,10 +103,17 @@ export const PersonalConsumption: React.FC = () => {
 
                                 {
                                     !isLoadingConsumptions && (
-                                        <ConsumptionChart
-                                            groupedConsumptionMarkings={groupedConsumptionMarkings}
-                                            compareBy={compareBy}
-                                        />
+                                        <>
+                                            <ConsumptionChart
+                                                groupedConsumptionMarkings={groupedConsumptionMarkings}
+                                                compareBy={compareBy}
+                                            />
+
+                                            <ConsumptionChartLabel
+                                                groupedConsumptionMarkings={groupedConsumptionMarkings}
+                                                compareBy={compareBy}
+                                            />
+                                        </>
                                     )
                                 }
                             </>

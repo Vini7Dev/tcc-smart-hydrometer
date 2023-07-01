@@ -1,7 +1,8 @@
 import { format } from 'date-fns'
 import React, { useCallback } from 'react'
-import { ChartContainer, ChartLabelContainer, ChartLabelItem, ChartLabelSquareColor, ChartLabelSquareText, ChrtSubtitle, ChrtTitle } from './styles'
+import { ChartContainer, ChrtSubtitle, ChrtTitle } from './styles'
 import { LineChart } from 'react-native-gifted-charts'
+
 import { errorColor, grayColor, infoColor, successColor } from '../../styles/variables'
 
 type CompareBy = 'YESTERDAY' | 'PAST_MONTH' | 'PAST_YEAR' | 'CUSTOM'
@@ -54,56 +55,6 @@ export const ConsumptionChart: React.FC<ConsumptionChartProps> = ({
                 return 'data'
         }
     }, [compareBy])
-
-    const calculateMonetaryValueTotal = useCallback((
-        consumptionsGroup: ConsumptionProps[],
-        reverse = false,
-    ) => {
-        if (compareBy === 'PAST_YEAR') {
-            const { total: totalOfMoneraty } = consumptionsGroup.reduce((acc, cur) => {
-                return { total: acc.total + cur.monetary_value }
-            }, { total: 0 })
-
-            return totalOfMoneraty / 100
-        }
-
-        let lastConsumption = consumptionsGroup[0]
-
-        if (!lastConsumption) {
-            return 0
-        }
-
-        if (reverse) {
-            lastConsumption = consumptionsGroup[consumptionsGroup.length-1]
-        }
-
-        return lastConsumption.monetary_value / 100
-    }, [compareBy])
-
-    const calculateConsumptionsTotal = useCallback((
-        consumptionsGroup: ConsumptionProps[],
-    ) => {
-        const { total: consumptionTotal } = consumptionsGroup.reduce((acc, cur) => {
-            return { total: acc.total + cur.consumption }
-        }, { total: 0 })
-
-
-        return compareBy === 'PAST_YEAR' ? consumptionTotal / 10 : consumptionTotal / 100
-    }, [compareBy])
-
-    const getMonetaryValueAndConsumptionTotals = useCallback((
-        consumptionsGroup: ConsumptionProps[],
-        reverse = false,
-    ) => {
-        const consumptionTotal = calculateConsumptionsTotal(consumptionsGroup)
-        const totalOfMoneraty = calculateMonetaryValueTotal(consumptionsGroup, reverse)
-
-        return `R$ ${
-            totalOfMoneraty.toLocaleString('pt-br', { minimumFractionDigits: 2 })
-        } | ${
-            consumptionTotal.toFixed(2).replace('.', ',')
-        }/m³`
-    }, [])
 
     const formatChartLabelOfConsumption = useCallback((dateGroup: string) => {
         const dateGroupLength = dateGroup.length
@@ -173,24 +124,6 @@ export const ConsumptionChart: React.FC<ConsumptionChartProps> = ({
                 yAxisTextStyle={{ color: grayColor }}
                 xAxisLabelTextStyle={{ color: grayColor }}
             />
-
-            <ChartLabelContainer>
-                <ChartLabelItem>
-                    <ChartLabelSquareColor backgroundColor={'success'} />
-
-                    <ChartLabelSquareText>
-                        Ontem ({getMonetaryValueAndConsumptionTotals(pastGroup)})
-                    </ChartLabelSquareText>
-                </ChartLabelItem>
-
-                <ChartLabelItem>
-                    <ChartLabelSquareColor backgroundColor={'info'} />
-
-                    <ChartLabelSquareText>
-                        Hoje ({getMonetaryValueAndConsumptionTotals(presentGroup, true)})
-                    </ChartLabelSquareText>
-                </ChartLabelItem>
-            </ChartLabelContainer>
         </ChartContainer>
     );
 };
