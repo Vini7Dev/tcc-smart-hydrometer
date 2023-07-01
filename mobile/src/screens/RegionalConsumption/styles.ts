@@ -19,7 +19,7 @@ export const ScreenContent = styled.View`
 
 export const CityMapContainer = styled.View`
     width: 100%;
-    margin: 32px 16px 0;
+    margin: 0 16px;
     padding: 16px 8px;
     background-color: ${whiteColor};
 `
@@ -58,9 +58,27 @@ export const MapLabelSquareColor = styled.View<MapLabelSquareColorProps>`
     background-color: ${props => props.backgroundColor};
 `
 
-export const MapLabelSquareText = styled.Text`
+export const MapLabelSquareLabel = styled.Text`
     font-family: 'Roboto';
     font-weight: 500;
     font-size: 18px;
     color: ${blackColor};
+`
+
+export const MapLabelSquareValue = styled.Text`
+    font-family: 'Roboto';
+    font-weight: 500;
+    font-size: 14px;
+    color: ${blackColor};
+    margin-left: auto;
+`
+
+export const MapLabelTitle = styled.Text`
+    margin-bottom: 12px;
+    font-family: 'Roboto';
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 21px;
+    color: ${blackColor};
+    text-align: center;
 `

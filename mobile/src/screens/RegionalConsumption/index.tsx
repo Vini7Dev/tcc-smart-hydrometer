@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import {
     ScreenScrollView,
@@ -8,80 +8,192 @@ import {
     MapLabelContainer,
     MapLabelItem,
     MapLabelSquareColor,
-    MapLabelSquareText,
+    MapLabelSquareLabel,
     CityMapTitle,
     CityMapContainer,
+    MapLabelSquareValue,
+    MapLabelTitle,
 } from './styles'
 import { NavigationHeader } from '../../components/NavigationHeader'
 import { CompareByOptions } from '../../components/CompareByOptions'
-import { errorColor, infoColor, lightGray3, primaryColor, secondaryColor, successColor } from '../../styles/variables'
+import { errorColor, lightGray3, primaryColor, secondaryColor, successColor } from '../../styles/variables'
+import { api } from '../../services/api'
+import { ConsumptionChart } from '../../components/ConsumptionChart'
+import { ConsumptionChartLabel } from '../../components/ConsumptionChartLabel'
+
+type CompareBy = 'YESTERDAY' | 'PAST_MONTH' | 'PAST_YEAR' | 'CUSTOM'
+
+type Region = 'NORTH' | 'SOUTH' | 'EAST' | 'WEST' | 'CENTER'
+
+interface GroupedConsumptionMarkings {
+    pastGroup: ConsumptionMarking[]
+    presentGroup: ConsumptionMarking[]
+    presentTotals: Totals
+    pastTotals: Totals
+}
+
+interface ConsumptionMarking {
+    created_at_reference: Date
+    date_group: string
+    consumption: number
+    monetary_value: number
+}
+
+interface Totals {
+    NORTH: Total
+    SOUTH: Total
+    EAST: Total
+    WEST: Total
+    CENTER: Total
+}
+
+interface Total {
+    consumption: number
+    monetary_value: number
+}
 
 const CityMap = require('../../../assets/cityMaps/franca-city-map.png')
 
 export const RegionalConsumption: React.FC = () => {
+    const [compareBy, setCompareBy] = useState<CompareBy>('YESTERDAY')
+    const [groupedConsumptionMarkings, setGroupedConsumptionMarkings] = useState<GroupedConsumptionMarkings>({} as GroupedConsumptionMarkings)
+    const [isLoadingConsumptions, setIsLoadingConsumptions] = useState(false)
+
+    const getConsumptionValueTotalByRegion = useCallback((region: Region) => {
+        const presentRegionTotals = groupedConsumptionMarkings.presentTotals?.[region]
+        const pastRegionTotals = groupedConsumptionMarkings.pastTotals?.[region]
+
+        const presentConsumptionValueFormat = (
+            compareBy === 'PAST_YEAR'
+                ? presentRegionTotals?.consumption / 10
+                : presentRegionTotals?.consumption / 100
+        ).toFixed(2).replace('.', ',')
+
+        const pastConsumptionValueFormat = (
+            compareBy === 'PAST_YEAR'
+                ? pastRegionTotals?.consumption / 10
+                : pastRegionTotals?.consumption / 100
+        ).toFixed(2).replace('.', ',')
+
+        return `Antes: ${pastConsumptionValueFormat}/m³ → Atual: ${presentConsumptionValueFormat}/m³`
+    }, [compareBy, groupedConsumptionMarkings])
+
+    useEffect(() => {
+        const handleGetConsumptionMarkings = async () => {
+            setIsLoadingConsumptions(true)
+
+            const {
+                data: groupedConsumptionMarkingsResponse
+            } = await api.get<GroupedConsumptionMarkings>(
+                `/regional-consumption-markings?period_type=${compareBy}`
+            )
+
+            setGroupedConsumptionMarkings(groupedConsumptionMarkingsResponse)
+            setIsLoadingConsumptions(false)
+        }
+
+        handleGetConsumptionMarkings()
+    }, [compareBy])
+
+    const handleUpdateCompareBy = useCallback((value: CompareBy) => {
+        setCompareBy(value)
+    }, [])
+
     return (
         <ScreenContainer>
             <NavigationHeader title="Consumo Reginonal" />
 
             <ScreenScrollView>
                 <ScreenContent>
-                    <CompareByOptions />
+                    <CompareByOptions
+                        onSelectCompareOption={handleUpdateCompareBy}
+                    />
 
-                    <CityMapContainer>
-                        <CityMapTitle>Mapa da cidade de Franca</CityMapTitle>
-
-                        <CityMapImage source={CityMap} resizeMode="center" />
-
-                        <MapLabelContainer>
-                            <MapLabelItem>
-                                <MapLabelSquareColor
-                                    backgroundColor={infoColor}
+                    {
+                        !isLoadingConsumptions && (
+                            <>
+                                <ConsumptionChart
+                                    groupedConsumptionMarkings={groupedConsumptionMarkings}
+                                    compareBy={compareBy}
                                 />
 
-                                <MapLabelSquareText>Total</MapLabelSquareText>
-                            </MapLabelItem>
-
-                            <MapLabelItem>
-                                <MapLabelSquareColor
-                                    backgroundColor={primaryColor}
+                                <ConsumptionChartLabel
+                                    groupedConsumptionMarkings={groupedConsumptionMarkings}
+                                    compareBy={compareBy}
                                 />
 
-                                <MapLabelSquareText>Zona Central</MapLabelSquareText>
-                            </MapLabelItem>
+                                <CityMapContainer>
+                                    <CityMapTitle>Mapa da cidade de Franca</CityMapTitle>
 
-                            <MapLabelItem>
-                                <MapLabelSquareColor
-                                    backgroundColor={secondaryColor}
-                                />
+                                    <CityMapImage source={CityMap} resizeMode="center" />
 
-                                <MapLabelSquareText>Zona Norte</MapLabelSquareText>
-                            </MapLabelItem>
+                                    <MapLabelContainer>
+                                        <MapLabelTitle>Consumo do intervalo</MapLabelTitle>
 
-                            <MapLabelItem>
-                                <MapLabelSquareColor
-                                    backgroundColor={errorColor}
-                                />
+                                        <MapLabelItem>
+                                            <MapLabelSquareColor
+                                                backgroundColor={primaryColor}
+                                            />
 
-                                <MapLabelSquareText>Zona Sul</MapLabelSquareText>
-                            </MapLabelItem>
+                                            <MapLabelSquareLabel>Centro</MapLabelSquareLabel>
 
-                            <MapLabelItem>
-                                <MapLabelSquareColor
-                                    backgroundColor={lightGray3}
-                                />
+                                            <MapLabelSquareValue>
+                                                {getConsumptionValueTotalByRegion('CENTER')}
+                                            </MapLabelSquareValue>
+                                        </MapLabelItem>
 
-                                <MapLabelSquareText>Zona Leste</MapLabelSquareText>
-                            </MapLabelItem>
+                                        <MapLabelItem>
+                                            <MapLabelSquareColor
+                                                backgroundColor={secondaryColor}
+                                            />
 
-                            <MapLabelItem>
-                                <MapLabelSquareColor
-                                    backgroundColor={successColor}
-                                />
+                                            <MapLabelSquareLabel>Norte</MapLabelSquareLabel>
 
-                                <MapLabelSquareText>Zona Oeste</MapLabelSquareText>
-                            </MapLabelItem>
-                        </MapLabelContainer>
-                    </CityMapContainer>
+                                            <MapLabelSquareValue>
+                                                {getConsumptionValueTotalByRegion('NORTH')}
+                                            </MapLabelSquareValue>
+                                        </MapLabelItem>
+
+                                        <MapLabelItem>
+                                            <MapLabelSquareColor
+                                                backgroundColor={errorColor}
+                                            />
+
+                                            <MapLabelSquareLabel>Sul</MapLabelSquareLabel>
+
+                                            <MapLabelSquareValue>
+                                                {getConsumptionValueTotalByRegion('SOUTH')}
+                                            </MapLabelSquareValue>
+                                        </MapLabelItem>
+
+                                        <MapLabelItem>
+                                            <MapLabelSquareColor
+                                                backgroundColor={lightGray3}
+                                            />
+
+                                            <MapLabelSquareLabel>Leste</MapLabelSquareLabel>
+
+                                            <MapLabelSquareValue>
+                                                {getConsumptionValueTotalByRegion('EAST')}
+                                            </MapLabelSquareValue>
+                                        </MapLabelItem>
+
+                                        <MapLabelItem>
+                                            <MapLabelSquareColor
+                                                backgroundColor={successColor}
+                                            />
+
+                                            <MapLabelSquareLabel>Oeste</MapLabelSquareLabel>
+
+                                            <MapLabelSquareValue>
+                                                {getConsumptionValueTotalByRegion('WEST')}
+                                            </MapLabelSquareValue>
+                                        </MapLabelItem>
+                                    </MapLabelContainer>
+                                </CityMapContainer>
+                            </>
+                        )
+                    }
                 </ScreenContent>
             </ScreenScrollView>
         </ScreenContainer>

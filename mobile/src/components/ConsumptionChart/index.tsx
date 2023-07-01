@@ -33,8 +33,8 @@ interface ConsumptionMarking {
 
 const DATE_GROUP_FOTMATS = {
     perHour: { raw: 'yyyy-MM-dd HH:mm', toFormat: 'H', sufix: 'h' },
-    perDate: { raw: 'yyyy-MM-dd', toFormat: 'dd', sufix: 'd' },
-    perMonth: { raw: 'yyyy-MM', toFormat: 'MM', sufix: 'm' },
+    perDate: { raw: 'yyyy-MM-dd', toFormat: 'dd', sufix: '' },
+    perMonth: { raw: 'yyyy-MM', toFormat: 'MM', sufix: '' },
 }
 
 export const ConsumptionChart: React.FC<ConsumptionChartProps> = ({
@@ -86,7 +86,7 @@ export const ConsumptionChart: React.FC<ConsumptionChartProps> = ({
 
     const { pastGroup, presentGroup } = groupedConsumptionMarkings
 
-    if (!pastGroup.length || !presentGroup.length) {
+    if (!pastGroup?.length || !presentGroup?.length) {
         return <></>
     }
 

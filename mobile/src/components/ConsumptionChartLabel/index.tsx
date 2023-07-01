@@ -1,14 +1,17 @@
-import React, { useCallback } from 'react'
-import { ChartLabelContainer, ChartLabelItem, ChartLabelSquareColor, ChartLabelSquareText, ChartLabelTitle, ChartLabelTitleMargin } from './styles'
+import React from 'react'
+
+import {
+    ChartLabelContainer,
+    ChartLabelItem,
+    ChartLabelSquareColor,
+    ChartLabelSquareText,
+    ChartLabelTitle,
+    ChartLabelTitleMargin
+} from './styles'
+import { calculateMonetaryValueTotal } from '../../utils/calculateMonetaryValueTotal'
+import { calculateConsumptionsTotal } from '../../utils/calculateConsumptionsTotal'
 
 type CompareBy = 'YESTERDAY' | 'PAST_MONTH' | 'PAST_YEAR' | 'CUSTOM'
-
-interface ConsumptionProps {
-    created_at_reference: Date
-    date_group: string
-    consumption: number
-    monetary_value: number
-}
 
 interface ConsumptionChartProps {
     groupedConsumptionMarkings?: GroupedConsumptionMarkings
@@ -31,46 +34,9 @@ export const ConsumptionChartLabel: React.FC<ConsumptionChartProps> = ({
     groupedConsumptionMarkings = { pastGroup: [], presentGroup: [] },
     compareBy,
 }) => {
-    const calculateMonetaryValueTotal = useCallback((
-        consumptionsGroup: ConsumptionProps[],
-        reverse = false,
-    ) => {
-        if (compareBy === 'PAST_YEAR') {
-            const { total: totalOfMoneraty } = consumptionsGroup.reduce((acc, cur) => {
-                return { total: acc.total + cur.monetary_value }
-            }, { total: 0 })
-
-            return (totalOfMoneraty / 100).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
-        }
-
-        let lastConsumption = consumptionsGroup[0]
-
-        if (!lastConsumption) {
-            return 0
-        }
-
-        if (reverse) {
-            lastConsumption = consumptionsGroup[consumptionsGroup.length-1]
-        }
-
-        return (lastConsumption.monetary_value / 100).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
-    }, [compareBy])
-
-    const calculateConsumptionsTotal = useCallback((
-        consumptionsGroup: ConsumptionProps[],
-    ) => {
-        const { total: consumptionTotal } = consumptionsGroup.reduce((acc, cur) => {
-            return { total: acc.total + cur.consumption }
-        }, { total: 0 })
-
-        const result = compareBy === 'PAST_YEAR' ? consumptionTotal / 10 : consumptionTotal / 100
-
-        return `${result.toFixed(2).replace('.', ',')}/m³`
-    }, [compareBy])
-
     const { pastGroup, presentGroup } = groupedConsumptionMarkings
 
-    if (!pastGroup.length || !presentGroup.length) {
+    if (!pastGroup?.length || !presentGroup?.length) {
         return <></>
     }
 
@@ -82,7 +48,10 @@ export const ConsumptionChartLabel: React.FC<ConsumptionChartProps> = ({
                 <ChartLabelSquareColor backgroundColor={'success'} />
 
                 <ChartLabelSquareText>
-                    Ontem: {calculateConsumptionsTotal(pastGroup)}
+                    Ontem: {calculateConsumptionsTotal({
+                        consumptionsGroup: pastGroup,
+                        compareBy,
+                    })}
                 </ChartLabelSquareText>
             </ChartLabelItem>
 
@@ -90,7 +59,10 @@ export const ConsumptionChartLabel: React.FC<ConsumptionChartProps> = ({
                 <ChartLabelSquareColor backgroundColor={'info'} />
 
                 <ChartLabelSquareText>
-                    Hoje: {'   '} {calculateConsumptionsTotal(presentGroup)}
+                    Hoje: {'   '} {calculateConsumptionsTotal({
+                        consumptionsGroup: presentGroup,
+                        compareBy,
+                    })}
                 </ChartLabelSquareText>
             </ChartLabelItem>
 
@@ -102,7 +74,10 @@ export const ConsumptionChartLabel: React.FC<ConsumptionChartProps> = ({
                 <ChartLabelSquareColor backgroundColor={'success'} />
 
                 <ChartLabelSquareText>
-                    Anterior: {calculateMonetaryValueTotal(pastGroup)}
+                    Anterior: {calculateMonetaryValueTotal({
+                        consumptionsGroup: pastGroup,
+                        compareBy,
+                    })}
                 </ChartLabelSquareText>
             </ChartLabelItem>
 
@@ -110,7 +85,11 @@ export const ConsumptionChartLabel: React.FC<ConsumptionChartProps> = ({
                 <ChartLabelSquareColor backgroundColor={'info'} />
 
                 <ChartLabelSquareText>
-                    Atual: {'     '} {calculateMonetaryValueTotal(presentGroup, true)}
+                    Atual: {'     '} {calculateMonetaryValueTotal({
+                        consumptionsGroup: presentGroup,
+                        reverse: true,
+                        compareBy,
+                    })}
                 </ChartLabelSquareText>
             </ChartLabelItem>
         </ChartLabelContainer>
