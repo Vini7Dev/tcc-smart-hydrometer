@@ -80,7 +80,7 @@ export const PersonalConsumption: React.FC = () => {
         const formatEndDate = `${format(end, 'yyyy-MM-dd')}T23:59:59.999Z`
 
         handleGetConsumptionMarkings(`start_date=${formatStartDate}&end_date=${formatEndDate}`)
-    }, [handleGetConsumptionMarkings])
+    }, [compareBy, handleGetConsumptionMarkings])
 
     const handleSelectHydrometer = useCallback((value?: string) => {
         setSelectedHydrometerId(value)

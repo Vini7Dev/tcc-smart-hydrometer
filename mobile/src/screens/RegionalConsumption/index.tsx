@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import { format } from 'date-fns'
 
 import {
     ScreenScrollView,
@@ -78,22 +79,32 @@ export const RegionalConsumption: React.FC = () => {
         return `Antes: ${pastConsumptionValueFormat}/m³ → Atual: ${presentConsumptionValueFormat}/m³`
     }, [compareBy, groupedConsumptionMarkings])
 
+    const handleGetConsumptionMarkings = async (query?: string) => {
+        setIsLoadingConsumptions(true)
+
+        const {
+            data: groupedConsumptionMarkingsResponse
+        } = await api.get<GroupedConsumptionMarkings>(
+            `/regional-consumption-markings?period_type=${compareBy}&${query}`
+        )
+
+        setGroupedConsumptionMarkings(groupedConsumptionMarkingsResponse)
+        setIsLoadingConsumptions(false)
+    }
+
     useEffect(() => {
-        const handleGetConsumptionMarkings = async () => {
-            setIsLoadingConsumptions(true)
-
-            const {
-                data: groupedConsumptionMarkingsResponse
-            } = await api.get<GroupedConsumptionMarkings>(
-                `/regional-consumption-markings?period_type=${compareBy}`
-            )
-
-            setGroupedConsumptionMarkings(groupedConsumptionMarkingsResponse)
-            setIsLoadingConsumptions(false)
-        }
-
         handleGetConsumptionMarkings()
     }, [compareBy])
+
+    const handleLoadConsumptionsByCustomInterval = useCallback(async (
+        start: Date,
+        end: Date,
+    ) => {
+        const formatStartDate = `${format(start, 'yyyy-MM-dd')}T00:00:00.000Z`
+        const formatEndDate = `${format(end, 'yyyy-MM-dd')}T23:59:59.999Z`
+
+        handleGetConsumptionMarkings(`start_date=${formatStartDate}&end_date=${formatEndDate}`)
+    }, [compareBy, handleGetConsumptionMarkings])
 
     const handleUpdateCompareBy = useCallback((value: CompareBy) => {
         setCompareBy(value)
@@ -107,6 +118,7 @@ export const RegionalConsumption: React.FC = () => {
                 <ScreenContent>
                     <CompareByOptions
                         onSelectCompareOption={handleUpdateCompareBy}
+                        onSelectValidCustomInterval={handleLoadConsumptionsByCustomInterval}
                     />
 
                     {
