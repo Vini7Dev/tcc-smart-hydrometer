@@ -4,11 +4,14 @@ import { IConsumptionMarkingsRepository } from '@modules/consumptionMarkings/rep
 import { groupConsumptionMarkingsByTimeDivision } from '@utils/groupConsumptionMarkingsByIimeDivision'
 import { periodFilterBuilder } from '@utils/periodFilterBuilder'
 import { groupConsumptionByDate } from '@utils/groupConsumptionByDate'
+import { calculateConsumptionTotalsByRegion } from '@utils/calculateConsumptionTotalsByRegion'
 
 type PeriodType = 'YESTERDAY' | 'PAST_MONTH' | 'PAST_YEAR' | 'CUSTOM'
 
+type MarkingRegion = 'NORTH' | 'SOUTH' | 'EAST' | 'WEST' | 'CENTER'
+
 interface IUseCaseProps {
-  marking_region: string
+  marking_region?: MarkingRegion
   period_type?: PeriodType
   start_date?: string
   end_date?: string
@@ -60,6 +63,18 @@ export class SeeRegionalConsumptionUseCase {
       }),
     }
 
-    return groupedConsumptionMarkings
+    const presentTotals = calculateConsumptionTotalsByRegion(
+      groupsOfConsumptionMarkings.presentGroup
+    )
+
+    const pastTotals = calculateConsumptionTotalsByRegion(
+      groupsOfConsumptionMarkings.pastGroup
+    )
+
+    return {
+      ...groupedConsumptionMarkings,
+      presentTotals,
+      pastTotals,
+    }
   }
 }

@@ -147,6 +147,14 @@ const createConsumptionMarkings = async (
 ) => {
   console.log('===> [START] Create Consumption Markings')
 
+  const CONSUMPTION_MARKINGS_REGIONS = [
+    'NORTH',
+    'SOUTH',
+    'EAST',
+    'WEST',
+    'CENTER',
+  ]
+
   const TOTAL_OF_CONSUMPTION_MARKINGS = process.argv[2]
     ? Number(process.argv[2])
     : 48
@@ -171,13 +179,16 @@ const createConsumptionMarkings = async (
       consumptionSum = 0
     }
 
-    const newConsumptionValue = Math.floor(Math.random() * 4)
+    const newConsumptionValue = Math.floor(Math.random() * 5)
 
     consumptionSum += newConsumptionValue
+
+    const consumptionMarkingRegion = CONSUMPTION_MARKINGS_REGIONS[Math.floor(Math.random() * 5)]
 
     const consumptionMarkingData = {
       id: faker.string.uuid(),
       hydrometer_id: hydrometerData.id,
+      marking_region: consumptionMarkingRegion,
       consumption: newConsumptionValue,
       monetary_value: calculateConsumptionMonetaryByCity({
         city: addressData,
