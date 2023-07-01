@@ -8,6 +8,7 @@
 # define SECONDS_PER_MINUTE 60
 # define MINUTES_PER_HOUR 60
 # define MILILITER_PER_LITER 1000
+# define METERS_PER_LITER 0.001
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
@@ -75,6 +76,7 @@ void calculateFlow() {
   totalFlow = totalFlow * SECONDS_PER_MINUTE;
   totalFlow = totalFlow * MINUTES_PER_HOUR;
   totalFlow = totalFlow / MILILITER_PER_LITER;
+  totalFlow = totalFlow * METERS_PER_LITER;
   
   flowRate = totalFlow / (elapsedTime / 3600000.0);
   
