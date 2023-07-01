@@ -10,7 +10,7 @@ const LIST_DEFAULT_PER_PAGE = 17568
 export class ConsumptionMarkingsRepository extends AppRepository implements IConsumptionMarkingsRepository {
   public async list({
     hydrometer_id,
-    region,
+    marking_region,
     share_consumption,
     before_date,
     after_date,
@@ -19,6 +19,7 @@ export class ConsumptionMarkingsRepository extends AppRepository implements ICon
   }: IListConsumptionMarkingsDTO): Promise<ConsumptionMarking[]> {
     const filters = {
       hydrometer_id,
+      marking_region,
       created_at: {
         gte: before_date,
         lte: after_date,
@@ -29,14 +30,6 @@ export class ConsumptionMarkingsRepository extends AppRepository implements ICon
 
     if (share_consumption) {
       Object.assign(hydrometerFilters, { share_consumption })
-    }
-
-    if (region) {
-      Object.assign(hydrometerFilters, {
-        address: {
-          neighborhood: { contains: region, mode: 'insensitive' },
-        },
-      })
     }
 
     const consumptionMarkingList = await this.client.consumptionMarkings.findMany({

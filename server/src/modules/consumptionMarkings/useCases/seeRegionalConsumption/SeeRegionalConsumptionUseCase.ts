@@ -8,7 +8,7 @@ import { groupConsumptionByDate } from '@utils/groupConsumptionByDate'
 type PeriodType = 'YESTERDAY' | 'PAST_MONTH' | 'PAST_YEAR' | 'CUSTOM'
 
 interface IUseCaseProps {
-  region: string
+  marking_region: string
   period_type?: PeriodType
   start_date?: string
   end_date?: string
@@ -24,7 +24,7 @@ export class SeeRegionalConsumptionUseCase {
   ) {}
 
   public async execute({
-    region,
+    marking_region,
     period_type,
     start_date,
     end_date,
@@ -36,7 +36,7 @@ export class SeeRegionalConsumptionUseCase {
     })
 
     const consumptionMarkingList = await this.consumptionMarkingsRepository.list({
-      region,
+      marking_region,
       share_consumption: HYDROMETER_HAS_SHARE_CONSUMPTION,
       before_date: beforeDate,
       after_date: afterDate,

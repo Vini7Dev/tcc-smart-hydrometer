@@ -7,7 +7,7 @@ import { SeeRegionalConsumptionUseCase } from './SeeRegionalConsumptionUseCase'
 export class SeeRegionalConsumptionController {
   public async handle(request: Request, response: Response) {
     const {
-      region,
+      marking_region,
       period_type,
       start_date,
       end_date
@@ -16,7 +16,7 @@ export class SeeRegionalConsumptionController {
     const seeRegionalConsumptionUseCase = container.resolve(SeeRegionalConsumptionUseCase)
 
     const consumptionMarkingList = await seeRegionalConsumptionUseCase.execute({
-      region,
+      marking_region,
       period_type,
       start_date,
       end_date,

@@ -1,6 +1,8 @@
+type MarkingRegion = 'NORTH' | 'SOUTH' | 'EAST' | 'WEST' | 'CENTER'
+
 export interface IListConsumptionMarkingsDTO {
   hydrometer_id?: number
-  region?: string
+  marking_region?: MarkingRegion
   share_consumption?: boolean
   before_date?: Date
   after_date?: Date
