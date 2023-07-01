@@ -1,15 +1,20 @@
-# define FLOW_SENSOR_PIN 2
-# define INTERUPT_PIN 0
+# define FLOW_SENSOR_PIN 16
+# define INTERUPT_PIN 16
 
 # define SERIAL_BEGIN 9600
 # define START_COUNT_ZERO 0
 
 # define FLOW_PER_PULSE 2.25
 # define SECONDS_PER_MINUTE 60
+# define MINUTES_PER_HOUR 60
 # define MILILITER_PER_LITER 1000
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
+
+unsigned long lastSentTime;
+unsigned long elapsedTime;
+const unsigned long hourInterval = 3600000;
 
 const char* ssid = "WIFI_NAME_HERE";
 const char* password = "WIFI_PASSWORD_HERE";
@@ -27,6 +32,7 @@ volatile int count;
 void setup() {
   pinMode(FLOW_SENSOR_PIN, INPUT);
   attachInterrupt(INTERUPT_PIN, getFlow, RISING);
+  lastSentTime = millis();
   Serial.begin(SERIAL_BEGIN);
   
   delay(10);
@@ -51,8 +57,12 @@ void setup() {
 }
 
 void loop() {
-  calculateFlow();
-  sendDataToMQTT();
+  elapsedTime = millis() - lastSentTime;
+  if (elapsedTime >= hourInterval) {
+    calculateFlow();
+    sendDataToMQTT();
+    lastSentTime = millis();
+  }
 }
 
 void getFlow()
@@ -61,15 +71,13 @@ void getFlow()
 }
 
 void calculateFlow() {
-  count = START_COUNT_ZERO;
-  interrupts();
-  delay (1000);
-  noInterrupts();
-
-  flowRate = (count * FLOW_PER_PULSE);
-  flowRate = flowRate * SECONDS_PER_MINUTE;
-  flowRate = flowRate / MILILITER_PER_LITER;
-
+  double totalFlow = (count * FLOW_PER_PULSE);
+  totalFlow = totalFlow * SECONDS_PER_MINUTE;
+  totalFlow = totalFlow * MINUTES_PER_HOUR;
+  totalFlow = totalFlow / MILILITER_PER_LITER;
+  
+  flowRate = totalFlow / (elapsedTime / 3600000.0);
+  
   Serial.println(flowRate);
 }
 
