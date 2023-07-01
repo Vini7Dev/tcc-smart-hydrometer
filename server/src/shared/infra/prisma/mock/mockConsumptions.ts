@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { addHours, format, isLastDayOfMonth } from 'date-fns'
+import { addHours, format, isFirstDayOfMonth } from 'date-fns'
 import { AccountType, ConsumptionCategory, PrismaClient } from '@prisma/client'
 
 import { CUSTOMER_ACCOUNT_TYPE } from '@utils/constants'
@@ -162,7 +162,7 @@ const createConsumptionMarkings = async (
   console.log('=> TOTAL_OF_CONSUMPTION_MARKINGS', TOTAL_OF_CONSUMPTION_MARKINGS)
 
   const FIRST_DAY_OF_THE_YEAR = new Date(2022, 0, 1, 0)
-  const LAST_HOUR_OF_THE_DAY_TO_COMPARE = 23
+  const FIRST_HOUR_OF_THE_DAY_TO_COMPARE = 0
 
   const consumptionMarkings = []
 
@@ -173,8 +173,8 @@ const createConsumptionMarkings = async (
     const markingDate = addHours(FIRST_DAY_OF_THE_YEAR, sumOfHours)
 
     if (
-      isLastDayOfMonth(markingDate)
-      && markingDate.getHours() === LAST_HOUR_OF_THE_DAY_TO_COMPARE
+      isFirstDayOfMonth(markingDate)
+      && markingDate.getHours() === FIRST_HOUR_OF_THE_DAY_TO_COMPARE
     ) {
       consumptionSum = 0
     }
