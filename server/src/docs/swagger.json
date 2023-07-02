@@ -1898,12 +1898,13 @@
         "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
-            "name": "region",
+            "name": "marking_region",
             "in": "query",
             "description": "Região de filtro",
-            "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": ["NORTH", "SOUTH", "EAST", "WEST", "CENTER"],
+              "default": null
             }
           },
           {
