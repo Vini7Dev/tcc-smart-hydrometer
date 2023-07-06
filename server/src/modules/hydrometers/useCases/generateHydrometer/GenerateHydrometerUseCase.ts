@@ -1,8 +1,8 @@
 import crypto from 'crypto'
 import { inject, injectable } from 'tsyringe'
 
-import { IHydrometersRepository } from '@modules/hydrometers/repositories/IHydrometersRepository';
-import { IHashProvider } from '@shared/containers/providers/HashProvider/models/IHashProvider';
+import { IHydrometersRepository } from '@modules/hydrometers/repositories/IHydrometersRepository'
+import { IHashProvider } from '@shared/containers/providers/HashProvider/models/IHashProvider'
 
 const DEFAULT_PRE_NAME_STRING = 'MEU NOVO HIDRÔMETRO'
 const DEFAULT_CONSUMPTION_CATEGORY = 'EMPTY'

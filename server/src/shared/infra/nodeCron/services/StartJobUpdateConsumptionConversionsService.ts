@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe'
 
-import { IQueueProvider } from '@shared/containers/providers/QueueProvider/models/IQueueProvider';
-import { JOB_UPDATE_CONSUPTION_CONVERSIONS } from '@utils/constants';
+import { IQueueProvider } from '@shared/containers/providers/QueueProvider/models/IQueueProvider'
+import { JOB_UPDATE_CONSUPTION_CONVERSIONS } from '@utils/constants'
 
 @injectable()
 export class StartJobUpdateConsumptionConversionsService {

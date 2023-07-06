@@ -1,9 +1,9 @@
 import { inject, injectable } from 'tsyringe'
 
-import { IHydrometersRepository } from '@modules/hydrometers/repositories/IHydrometersRepository';
-import { IUsersRepository } from '@modules/users/repositories/IUsersRepository';
-import { AppError } from '@shared/errors/AppError';
-import { HTTP_STATUS_CODE } from '@utils/constants';
+import { IHydrometersRepository } from '@modules/hydrometers/repositories/IHydrometersRepository'
+import { IUsersRepository } from '@modules/users/repositories/IUsersRepository'
+import { AppError } from '@shared/errors/AppError'
+import { HTTP_STATUS_CODE } from '@utils/constants'
 
 interface IUseCaseProps {
   user_id: string

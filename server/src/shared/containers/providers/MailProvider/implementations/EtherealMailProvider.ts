@@ -39,7 +39,7 @@ export class EtherealMailProvider implements IMailProvider {
       html
     })
 
-    console.log('====>', message.messageId);
-    console.log('====>', nodemailer.getTestMessageUrl(message));
+    console.log('====>', message.messageId)
+    console.log('====>', nodemailer.getTestMessageUrl(message))
   }
 }

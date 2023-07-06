@@ -256,7 +256,7 @@ export const AssociateHydrometer: React.FC = () => {
                             </InputInSameRowContainer>
 
                             <CheckBox
-                                placeholder="Compartilhar de forma anônima o consumo do hidrômetro?"
+                                placeholder="Compartilhar anônimamente o consumo?"
                                 value={shareConsumption}
                                 onPress={toggleShareConsumption}
                             />

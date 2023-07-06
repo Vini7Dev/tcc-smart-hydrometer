@@ -1,10 +1,10 @@
-import { ICreateHydrometerDTO } from '@modules/hydrometers/dtos/ICreateHydrometerDTO';
-import { IListHydrometersDTO } from '@modules/hydrometers/dtos/IListHydrometersDTO';
-import { IUpdateHydrometerDTO } from '@modules/hydrometers/dtos/IUpdateHydrometerDTO';
-import { IHydrometersRepository } from '@modules/hydrometers/repositories/IHydrometersRepository';
+import { ICreateHydrometerDTO } from '@modules/hydrometers/dtos/ICreateHydrometerDTO'
+import { IListHydrometersDTO } from '@modules/hydrometers/dtos/IListHydrometersDTO'
+import { IUpdateHydrometerDTO } from '@modules/hydrometers/dtos/IUpdateHydrometerDTO'
+import { IHydrometersRepository } from '@modules/hydrometers/repositories/IHydrometersRepository'
 import { AppRepository } from '@shared/infra/prisma/repositories/AppRepository'
-import { Hydrometer } from '../entities/Hydrometer';
-import { Hydrometers } from '@prisma/client';
+import { Hydrometer } from '../entities/Hydrometer'
+import { Hydrometers } from '@prisma/client'
 
 const LIST_FIRST_PAGE = 0
 const LIST_DEFAULT_PER_PAGE = 10
