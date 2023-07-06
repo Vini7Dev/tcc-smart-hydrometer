@@ -23,6 +23,7 @@ const char* mqtt_server = "MQTT_SERVER_HERE";
 const char* mqtt_username = "MQTT_USERNAME";
 const char* mqtt_password = "MQTT_PASSWORD";
 const int mqtt_port = 1883;
+const char* mqtt_create_consumption_marking_topic = "createConsumptionMarking";
 
 const int HYROMETER_ID = 1;
 const char* HYDROMETER_PASSWORD = "example";
@@ -93,29 +94,19 @@ void sendDataToMQTT() {
   client.loop();
 
   String message = String(HYROMETER_ID) + "|" + HYDROMETER_PASSWORD + "|" + String(flowRate);
-  client.publish("createConsumptionMarking", message.c_str());
+  client.publish(mqtt_create_consumption_marking_topic, message.c_str());
 
   delay(5000);
 }
 
-void callbackMQTT(char* topic, byte* payload, unsigned int length) {
-  Serial.print("Message received [");
-  Serial.print(topic);
-  Serial.print("]: ");
-
-  for (int i = 0; i < length; i++) {
-    Serial.print((char)payload[i]);
-  }
-
-  Serial.println();
-}
+void callbackMQTT(char* topic, byte* payload, unsigned int length) {}
 
 void reconnect() {
   while (!client.connected()) {
     Serial.print("Connecting on MQTT...");
     if (client.connect("ESP8266Client", mqtt_username, mqtt_password)) {
       Serial.println("Connected!");
-      client.subscribe("createConsumptionMarking");
+      client.subscribe(mqtt_create_consumption_marking_topic);
     } else {
       Serial.print("Failed, rc=");
       Serial.print(client.state());
