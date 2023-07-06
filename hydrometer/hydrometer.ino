@@ -24,6 +24,9 @@ const char* mqtt_username = "MQTT_USERNAME";
 const char* mqtt_password = "MQTT_PASSWORD";
 const int mqtt_port = 1883;
 
+const int HYROMETER_ID = 1;
+const char* HYDROMETER_PASSWORD = "example";
+
 WiFiClient espClient;
 PubSubClient client(espClient);
 
@@ -89,9 +92,9 @@ void sendDataToMQTT() {
   }
   client.loop();
 
-  char msg[10];
-  sprintf(msg, "%.2f", flowRate);
-  client.publish("createConsumptionMarking", msg);
+  String message = String(HYROMETER_ID) + "|" + HYDROMETER_PASSWORD + "|" + String(flowRate);
+  client.publish("createConsumptionMarking", message.c_str());
+
   delay(5000);
 }
 
