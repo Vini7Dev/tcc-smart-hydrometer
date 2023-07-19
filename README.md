@@ -1,3 +1,9 @@
+<img
+  src="/docs/assets/readme_banner.png"
+  width="100%;"
+  alt="Hidrômetro Inteligente"
+/>
+
 # TCC: Smart Hydrometer
 
 > Trabalho de Conclusão de Curso (TCC) - Uni-FACEF
