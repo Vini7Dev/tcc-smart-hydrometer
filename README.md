@@ -67,7 +67,7 @@ Desenvolver uma solução que auxilie os usuários a **controlar o seu consumo d
   * Flow Sensor
   * 5 Volt Source
 
-## 🤝 Colaboradores
+# 🤝 Colaboradores
 
 <table>
   <tr>
