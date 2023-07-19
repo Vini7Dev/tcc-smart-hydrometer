@@ -2,7 +2,7 @@
 
 > Trabalho de Conclusão de Curso (TCC) - Uni-FACEF
 
-Veja o artigo completo [AQUI](/docs/__Article__.pdf)
+**Veja o artigo completo [AQUI](/docs/__Article__.pdf)**
 
 ## 🎯 Objetivo Geral
 
@@ -16,7 +16,7 @@ Desenvolver uma solução que auxilie os usuários a **controlar o seu consumo d
 
 # 📁 Documentações
 
-**Veja todas as documentações: [AQUI](/docs/)**
+**Veja todas as documentações [AQUI](/docs/)**
 
 * Engenharia de Software: [AQUI](/docs/01-software-engineering/)
   * 5W1H: [AQUI](/docs/01-software-engineering/01%205W1H.xlsx)
