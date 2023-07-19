@@ -4,7 +4,7 @@
   alt="Hidrômetro Inteligente"
 />
 
-# TCC: Smart Hydrometer
+# 🌊 [TCC] Hidrômetro Inteligente
 
 > Trabalho de Conclusão de Curso (TCC) - Uni-FACEF
 
