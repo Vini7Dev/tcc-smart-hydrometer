@@ -80,13 +80,13 @@ Desenvolver uma solução que auxilie os usuários a **controlar o seu consumo d
       </a>
     </td>
 
-    <td align="center">
-      <a href="https://github.com/PedroSMarcal">
-        <img src="https://avatars.githubusercontent.com/u/62404639" width="100px;" alt="Foto do Pedro Marçal no GitHub"/><br>
-        <sub>
-          <b>Pedro Marçal</b>
-        </sub>
-      </a>
-    </td>
+  <td align="center">
+    <a href="https://github.com/PedroSMarcal">
+      <img src="https://avatars.githubusercontent.com/u/62404639" width="100px;" alt="Foto do Pedro Marçal no GitHub"/><br>
+      <sub>
+        <b>Pedro Marçal</b>
+      </sub>
+    </a>
+  </td>
   </tr>
 </table>
